@@ -2,414 +2,280 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta
         name="description"
-        content="Scopri e richiedi le migliori esperienze a Napoli e in Campania."
+        content="Scopri le migliori esperienze a Napoli e in Campania."
     >
 
-    <title>Esperienze Napoli & Campania</title>
+    <title>Napoli Experience</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- =========================
-         HEADER
-    ========================== -->
+<header class="site-header">
+    <div class="container header-inner">
 
-    <header class="site-header">
+        <a href="#top" class="brand">
+            Napoli Experience
+        </a>
 
-        <div class="container header-inner">
+        <nav class="main-nav">
+            <a href="#esperienze">Esperienze</a>
+            <a href="#come-funziona">Come funziona</a>
+        </nav>
 
-            <a
-                href="#top"
-                class="brand"
-            >
-                Napoli Experience
-            </a>
+    </div>
+</header>
 
-            <nav class="main-nav">
 
-                <a href="#esperienze">
-                    Esperienze
-                </a>
+<main id="top">
 
-                <a href="#come-funziona">
-                    Come funziona
-                </a>
+    <!-- HERO -->
+    <section class="hero">
 
-            </nav>
+        <div class="hero-gradient"></div>
+
+        <div class="container hero-content">
+
+            <span class="eyebrow">
+                SCEGLI LA TUA ESPERIENZA
+            </span>
 
         </div>
 
-    </header>
+    </section>
 
 
-    <!-- =========================
-         CONTENUTO PRINCIPALE
-    ========================== -->
-
-    <main id="top">
-
-
-        <!-- =========================
-             INTRODUZIONE
-        ========================== -->
-
-        <section class="hero">
-
-            <div class="container hero-content">
-
-                <span class="eyebrow">
-                    SCEGLI LA TUA ESPERIENZA
-                </span>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             ESPERIENZE / CATALOGO
-        ========================== -->
-
-        <section
-            class="experiences-section"
-            id="esperienze"
-        >
-
-            <div class="container">
-
-
-                <!-- FILTRI -->
-
-                <div
-                    class="filters"
-                    id="categorie"
-                    role="tablist"
-                    aria-label="Filtra esperienze"
-                >
-
-                    <button
-                        class="filter-button active"
-                        type="button"
-                        data-filter="all"
-                        role="tab"
-                        aria-selected="true"
-                    >
-                        TUTTE
-                    </button>
-
-                    <button
-                        class="filter-button"
-                        type="button"
-                        data-filter="minibus"
-                        role="tab"
-                        aria-selected="false"
-                    >
-                        Tour in Minibus
-                    </button>
-
-                    <button
-                        class="filter-button"
-                        type="button"
-                        data-filter="boat"
-                        role="tab"
-                        aria-selected="false"
-                    >
-                        Tour in Barca
-                    </button>
-
-                    <button
-                        class="filter-button"
-                        type="button"
-                        data-filter="walking"
-                        role="tab"
-                        aria-selected="false"
-                    >
-                        Tour a Piedi
-                    </button>
-
-                    <button
-                        class="filter-button"
-                        type="button"
-                        data-filter="cooking"
-                        role="tab"
-                        aria-selected="false"
-                    >
-                        Corsi di Cucina
-                    </button>
-
-                    <button
-                        class="filter-button"
-                        type="button"
-                        data-filter="private"
-                        role="tab"
-                        aria-selected="false"
-                    >
-                        Tour Privati
-                    </button>
-
-                </div>
-
-
-                <!-- CATALOGO GENERATO DA JAVASCRIPT -->
-
-                <div
-                    class="catalog-grid"
-                    id="catalog-grid"
-                >
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             COME FUNZIONA
-        ========================== -->
-
-        <section
-            class="how-it-works"
-            id="come-funziona"
-        >
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <span class="eyebrow">
-                        COME FUNZIONA
-                    </span>
-
-                    <h2>
-                        Organizza la tua esperienza
-                    </h2>
-
-                    <p>
-                        Scegli l'esperienza che preferisci e inviaci
-                        una richiesta. Verificheremo personalmente
-                        la disponibilità e ti confermeremo tutto
-                        su WhatsApp.
-                    </p>
-
-                </div>
-
-
-                <div class="steps-grid">
-
-
-                    <!-- STEP 1 -->
-
-                    <div class="step-card">
-
-                        <span class="step-number">
-                            01
-                        </span>
-
-                        <h3>
-                            Scegli l’esperienza
-                        </h3>
-
-                        <p>
-                            Esplora il catalogo e scegli
-                            l’attività più adatta al tuo viaggio.
-                        </p>
-
-                    </div>
-
-
-                    <!-- STEP 2 -->
-
-                    <div class="step-card">
-
-                        <span class="step-number">
-                            02
-                        </span>
-
-                        <h3>
-                            Scopri tutti i dettagli
-                        </h3>
-
-                        <p>
-                            Apri la scheda dell’esperienza
-                            e consulta tutte le informazioni disponibili.
-                        </p>
-
-                    </div>
-
-
-                    <!-- STEP 3 -->
-
-                    <div class="step-card">
-
-                        <span class="step-number">
-                            03
-                        </span>
-
-                        <h3>
-                            Seleziona data e partecipanti
-                        </h3>
-
-                        <p>
-                            Indicaci la data desiderata
-                            e il numero di partecipanti.
-                        </p>
-
-                    </div>
-
-
-                    <!-- STEP 4 -->
-
-                    <div class="step-card">
-
-                        <span class="step-number">
-                            04
-                        </span>
-
-                        <h3>
-                            Controlla il totale
-                        </h3>
-
-                        <p>
-                            Verifica il prezzo dell’esperienza
-                            prima di inviare la richiesta.
-                        </p>
-
-                    </div>
-
-
-                    <!-- STEP 5 -->
-
-                    <div class="step-card">
-
-                        <span class="step-number">
-                            05
-                        </span>
-
-                        <h3>
-                            Invia la richiesta
-                        </h3>
-
-                        <p>
-                            Contattaci direttamente tramite WhatsApp
-                            per richiedere la disponibilità.
-                        </p>
-
-                    </div>
-
-
-                    <!-- STEP 6 -->
-
-                    <div class="step-card">
-
-                        <span class="step-number">
-                            06
-                        </span>
-
-                        <h3>
-                            Ricevi conferma
-                        </h3>
-
-                        <p>
-                            Verificheremo la disponibilità con
-                            l’organizzatore e ti risponderemo su WhatsApp.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer class="site-footer">
+    <!-- CATALOGO -->
+    <section
+        class="experiences-section"
+        id="esperienze"
+    >
 
         <div class="container">
 
-            <p>
-                © 2026 Pianifica il tuo viaggio napoletano.
-                Tutti i diritti riservati.
-            </p>
+            <!-- FILTRI -->
+            <div
+                class="filters"
+                id="categorie"
+                role="tablist"
+                aria-label="Filtra esperienze"
+            >
+
+                <button
+                    class="filter-button active"
+                    type="button"
+                    data-filter="all"
+                    role="tab"
+                    aria-selected="true"
+                >
+                    TUTTE
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="minibus"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Tour in Minibus
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="boat"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Tour in Barca
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="walking"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Tour a Piedi
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="cooking"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Corsi di Cucina
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-filter="private"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Tour Privati
+                </button>
+
+            </div>
+
+
+            <!-- CARDS -->
+            <div
+                class="catalog-grid"
+                id="catalog-grid"
+            ></div>
 
         </div>
 
-    </footer>
+    </section>
 
 
-    <!-- =========================
-         MODAL ESPERIENZA
-    ========================== -->
-
-    <div
-        class="modal"
-        id="experience-modal"
-        aria-hidden="true"
+    <!-- COME FUNZIONA -->
+    <section
+        class="how-it-works"
+        id="come-funziona"
     >
 
-        <div
-            class="modal-overlay"
-            data-close-modal
-        ></div>
+        <div class="container">
+
+            <div class="section-heading">
+
+                <span class="eyebrow">
+                    COME FUNZIONA
+                </span>
+
+                <h2>
+                    Organizza la tua esperienza
+                </h2>
+
+                <p>
+                    Scegli l’esperienza che preferisci e inviaci una richiesta.
+                    Verificheremo personalmente la disponibilità e ti confermeremo tutto su WhatsApp.
+                </p>
+
+            </div>
 
 
-        <div
-            class="modal-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-title"
-        >
+            <div class="steps-grid">
 
-            <button
-                class="modal-close"
-                type="button"
-                aria-label="Chiudi"
-                data-close-modal
-            >
-                ×
-            </button>
+                <article class="step-card">
+                    <span class="step-number">01</span>
+                    <h3>Scegli l’esperienza</h3>
+                    <p>
+                        Esplora il catalogo e scegli l’attività più adatta al tuo viaggio.
+                    </p>
+                </article>
 
+                <article class="step-card">
+                    <span class="step-number">02</span>
+                    <h3>Scopri tutti i dettagli</h3>
+                    <p>
+                        Apri la scheda dell’esperienza e consulta tutte le informazioni disponibili.
+                    </p>
+                </article>
 
-            <div class="modal-body">
+                <article class="step-card">
+                    <span class="step-number">03</span>
+                    <h3>Seleziona data e partecipanti</h3>
+                    <p>
+                        Indicaci la data desiderata e il numero di partecipanti.
+                    </p>
+                </article>
 
-                <!-- CONTENUTO INSERITO DA JAVASCRIPT -->
+                <article class="step-card">
+                    <span class="step-number">04</span>
+                    <h3>Controlla il totale</h3>
+                    <p>
+                        Verifica il prezzo dell’esperienza prima di inviare la richiesta.
+                    </p>
+                </article>
 
-                <div
-                    id="modal-content"
-                >
-                </div>
+                <article class="step-card">
+                    <span class="step-number">05</span>
+                    <h3>Invia la richiesta</h3>
+                    <p>
+                        Contattaci direttamente tramite WhatsApp per richiedere la disponibilità.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <span class="step-number">06</span>
+                    <h3>Ricevi conferma</h3>
+                    <p>
+                        Verificheremo la disponibilità con l’organizzatore e ti risponderemo su WhatsApp.
+                    </p>
+                </article>
 
             </div>
 
         </div>
 
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+    <div class="container">
+
+        <p>
+            © 2026 Pianifica il tuo viaggio napoletano.
+            Tutti i diritti riservati.
+        </p>
+
     </div>
 
+</footer>
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
 
-    <script src="script.js"></script>
+<!-- MODAL -->
+<div
+    class="modal"
+    id="experience-modal"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal-overlay"
+        data-close-modal
+    ></div>
+
+    <div
+        class="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+    >
+
+        <button
+            class="modal-close"
+            type="button"
+            aria-label="Chiudi"
+            data-close-modal
+        >
+            ×
+        </button>
+
+        <div id="modal-content"></div>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
