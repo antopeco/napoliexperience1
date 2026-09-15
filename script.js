@@ -27,7 +27,21 @@ const experiences = [
             "Impara a preparare la vera pizza napoletana insieme a uno chef locale, dall'impasto alla cottura, e gusta il risultato finale.",
 
         description:
-            "Questa esperienza ti porta nel cuore della tradizione della pizza napoletana attraverso una lezione pratica di circa due ore, guidata da uno chef locale all’interno di un laboratorio di cucina attrezzato. Durante il corso scoprirai come nasce una vera pizza napoletana, partendo dalla conoscenza degli ingredienti fondamentali e dalla preparazione dell’impasto. Lo chef ti accompagnerà passo dopo passo nella lavorazione manuale, spiegandoti le principali fasi necessarie per ottenere un impasto correttamente lavorato. Durante il riposo dell’impasto potrai gustare un antipasto tipico napoletano composto da bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva, accompagnato dalle bevande previste dall’esperienza. La lezione prosegue con la stesura dell’impasto e la preparazione della pizza, imparando a lavorare correttamente il disco e a preparare il condimento con pomodoro San Marzano, mozzarella, olio e basilico. La pizza preparata verrà cotta in un forno professionale e potrai gustare direttamente il risultato del tuo lavoro. Al termine dell’esperienza riceverai un diploma di pizzaiolo come ricordo della tua esperienza napoletana. Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata per essere semplice, pratica e adatta a chi viaggia da solo, alle coppie e alle famiglie.",
+            `Questa esperienza ti porta nel cuore della tradizione della pizza napoletana attraverso una lezione pratica di circa due ore, guidata da uno chef locale all’interno di un laboratorio di cucina attrezzato.
+
+Durante il corso scoprirai come nasce una vera pizza napoletana, partendo dalla conoscenza degli ingredienti fondamentali e dalla preparazione dell’impasto.
+
+Lo chef ti accompagnerà passo dopo passo nella lavorazione manuale, spiegandoti le principali fasi necessarie per ottenere un impasto correttamente lavorato.
+
+Durante il riposo dell’impasto potrai gustare un antipasto tipico napoletano composto da bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva, accompagnato dalle bevande previste dall’esperienza.
+
+La lezione prosegue con la stesura dell’impasto e la preparazione della pizza, imparando a lavorare correttamente il disco e a preparare il condimento con pomodoro San Marzano, mozzarella, olio e basilico.
+
+La pizza preparata verrà cotta in un forno professionale e potrai gustare direttamente il risultato del tuo lavoro.
+
+Al termine dell’esperienza riceverai un diploma di pizzaiolo come ricordo della tua esperienza napoletana.
+
+Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata per essere semplice, pratica e adatta a chi viaggia da solo, alle coppie e alle famiglie.`,
 
         preparation: [
             "Preparazione dell’impasto",
@@ -79,7 +93,7 @@ const experiences = [
    ========================================================= */
 
 function getRandomImage(images) {
-    if (!images || images.length === 0) {
+    if (!Array.isArray(images) || images.length === 0) {
         return "";
     }
 
@@ -115,30 +129,22 @@ function formatDateItalian(dateValue) {
 
 
 /* =========================================================
-   RENDER CATALOGO
+   RENDER CARD
+   Compatibile con index.html e style.css attuali
    ========================================================= */
 
-function renderExperiences(filter = "all") {
+function renderExperiences() {
 
     const grid = document.getElementById("catalog-grid");
 
     if (!grid) {
+        console.error("Elemento #catalog-grid non trovato.");
         return;
     }
 
     grid.innerHTML = "";
 
-    const filteredExperiences = experiences.filter((experience) => {
-
-        if (filter === "all") {
-            return true;
-        }
-
-        return experience.category === filter;
-    });
-
-
-    filteredExperiences.forEach((experience) => {
+    experiences.forEach((experience) => {
 
         const card = document.createElement("article");
 
@@ -147,67 +153,46 @@ function renderExperiences(filter = "all") {
         card.dataset.category = experience.category;
         card.dataset.id = experience.id;
 
-
         const randomImage = getRandomImage(experience.images);
 
-
         card.innerHTML = `
-
-            <div class="experience-image-wrapper">
-
+            <div class="experience-card-image">
                 <img
-                    class="experience-image"
                     src="${randomImage}"
                     alt="${experience.title}"
                     loading="lazy"
                 >
-
             </div>
-
 
             <div class="experience-card-content">
 
-                <div class="experience-category">
+                <div class="experience-card-category">
                     ${experience.categoryLabel}
                 </div>
 
-
-                <h3 class="experience-title">
+                <h3 class="experience-card-title">
                     ${experience.title}
                 </h3>
 
-
-                <div class="experience-meta">
-
-                    <span>
-                        ${experience.duration}
-                    </span>
-
-                    <span>•</span>
-
-                    <span>
-                        ${experience.type}
-                    </span>
-
-                </div>
-
-
-                <p class="experience-short-description">
+                <p class="experience-card-description">
                     ${experience.shortDescription}
                 </p>
 
+                <div class="experience-card-footer">
 
-                <div class="experience-card-bottom">
+                    <div>
+                        <div class="experience-price">
+                            ${formatPrice(experience.price)} / persona
+                        </div>
 
-                    <div class="experience-price">
-                        ${formatPrice(experience.price)} / persona
+                        <div class="experience-duration">
+                            ${experience.duration}
+                        </div>
                     </div>
-
 
                     <button
                         class="experience-button"
                         type="button"
-                        onclick="openExperienceModal('${experience.id}')"
                     >
                         Scopri
                     </button>
@@ -217,11 +202,15 @@ function renderExperiences(filter = "all") {
             </div>
         `;
 
+        /*
+         * L'intera card è cliccabile.
+         * Il pulsante "Scopri" apre la stessa modal.
+         */
 
-        card.addEventListener("click", function(event) {
+        card.addEventListener("click", function (event) {
 
-            if (event.target.closest("button")) {
-                return;
+            if (event.target.closest(".experience-button")) {
+                event.preventDefault();
             }
 
             openExperienceModal(experience.id);
@@ -229,55 +218,7 @@ function renderExperiences(filter = "all") {
 
 
         grid.appendChild(card);
-
     });
-}
-
-
-/* =========================================================
-   FILTRI
-   ========================================================= */
-
-function setupFilters() {
-
-    const filterButtons =
-        document.querySelectorAll(".filter-button");
-
-
-    filterButtons.forEach((button) => {
-
-        button.addEventListener("click", function() {
-
-            const selectedFilter =
-                button.dataset.filter;
-
-
-            filterButtons.forEach((item) => {
-
-                item.classList.remove("active");
-
-                item.setAttribute(
-                    "aria-selected",
-                    "false"
-                );
-
-            });
-
-
-            button.classList.add("active");
-
-            button.setAttribute(
-                "aria-selected",
-                "true"
-            );
-
-
-            renderExperiences(selectedFilter);
-
-        });
-
-    });
-
 }
 
 
@@ -287,398 +228,529 @@ function setupFilters() {
 
 function openExperienceModal(id) {
 
-    const experience =
-        experiences.find(
-            (item) => item.id === id
-        );
-
+    const experience = experiences.find(
+        (item) => item.id === id
+    );
 
     if (!experience) {
         return;
     }
 
+    const modal = document.getElementById("experience-modal");
 
-    const modal =
-        document.getElementById("experience-modal");
+    if (!modal) {
+        console.error("Modal #experience-modal non trovata.");
+        return;
+    }
 
+    /*
+     * Nel tuo index.html esiste:
+     * <div id="modal-content"></div>
+     */
 
     const modalContent =
         document.getElementById("modal-content");
 
-
-    if (!modal || !modalContent) {
+    if (!modalContent) {
+        console.error("Elemento #modal-content non trovato.");
         return;
     }
 
 
     modalContent.innerHTML = `
 
-        <div class="modal-gallery">
+        <div class="modal-body">
 
-            <div class="modal-gallery-main">
+            <div class="modal-hero">
 
-                <img
-                    src="${experience.images[0]}"
-                    alt="${experience.title}"
+                <div class="modal-hero-image">
+                    <img
+                        src="${experience.images[0]}"
+                        alt="${experience.title}"
+                    >
+                </div>
+
+                <div class="modal-hero-info">
+
+                    <div class="modal-category">
+                        ${experience.categoryLabel}
+                    </div>
+
+                    <h2 class="modal-title">
+                        ${experience.title}
+                    </h2>
+
+                    <p class="modal-short">
+                        ${experience.shortDescription}
+                    </p>
+
+                    <div class="modal-meta">
+
+                        <div class="modal-meta-item">
+                            <strong>Durata</strong>
+                            <span>${experience.duration}</span>
+                        </div>
+
+                        <div class="modal-meta-item">
+                            <strong>Lingue</strong>
+                            <span>${experience.languages}</span>
+                        </div>
+
+                        <div class="modal-meta-item">
+                            <strong>Tipologia</strong>
+                            <span>${experience.type}</span>
+                        </div>
+
+                        <div class="modal-meta-item">
+                            <strong>Prezzo</strong>
+                            <span>${formatPrice(experience.price)} / persona</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 GALLERIA FOTO
+                 ================================================= -->
+
+            <section class="modal-section">
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+                        grid-template-rows:repeat(3,110px);
+                        gap:10px;
+                        margin-bottom:30px;
+                    "
                 >
 
-            </div>
-
-
-            <div class="modal-gallery-side">
-
-                <div class="modal-gallery-small">
-
-                    <img
-                        src="${experience.images[1]}"
-                        alt="${experience.title}"
+                    <!-- FOTO 1 -->
+                    <div
+                        style="
+                            grid-row:1 / 4;
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f2f2f2;
+                        "
                     >
+                        <img
+                            src="${experience.images[0]}"
+                            alt="${experience.title} - Foto 1"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                                display:block;
+                            "
+                        >
+                    </div>
 
-                </div>
 
-
-                <div class="modal-gallery-small">
-
-                    <img
-                        src="${experience.images[2]}"
-                        alt="${experience.title}"
+                    <!-- FOTO 2 -->
+                    <div
+                        style="
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f2f2f2;
+                        "
                     >
+                        <img
+                            src="${experience.images[1]}"
+                            alt="${experience.title} - Foto 2"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                                display:block;
+                            "
+                        >
+                    </div>
 
-                </div>
 
-
-                <div class="modal-gallery-small">
-
-                    <img
-                        src="${experience.images[3]}"
-                        alt="${experience.title}"
+                    <!-- FOTO 3 -->
+                    <div
+                        style="
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f2f2f2;
+                        "
                     >
+                        <img
+                            src="${experience.images[2]}"
+                            alt="${experience.title} - Foto 3"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                                display:block;
+                            "
+                        >
+                    </div>
 
-                </div>
 
-
-                <div class="modal-gallery-small">
-
-                    <img
-                        src="${experience.images[4]}"
-                        alt="${experience.title}"
+                    <!-- FOTO 4 -->
+                    <div
+                        style="
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f2f2f2;
+                        "
                     >
+                        <img
+                            src="${experience.images[3]}"
+                            alt="${experience.title} - Foto 4"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                                display:block;
+                            "
+                        >
+                    </div>
 
-                </div>
 
-
-                <div class="modal-gallery-wide">
-
-                    <img
-                        src="${experience.images[5]}"
-                        alt="${experience.title}"
+                    <!-- FOTO 5 -->
+                    <div
+                        style="
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f2f2f2;
+                        "
                     >
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="modal-header">
-
-            <div class="experience-category">
-                ${experience.categoryLabel}
-            </div>
+                        <img
+                            src="${experience.images[4]}"
+                            alt="${experience.title} - Foto 5"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                                display:block;
+                            "
+                        >
+                    </div>
 
 
-            <h2 id="modal-title">
-                ${experience.title}
-            </h2>
-
-
-            <div class="modal-meta">
-
-                <span>
-                    ${experience.duration}
-                </span>
-
-                <span>•</span>
-
-                <span>
-                    ${experience.languages}
-                </span>
-
-                <span>•</span>
-
-                <span>
-                    ${experience.type}
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <section class="modal-section booking-section">
-
-            <div class="booking-grid">
-
-
-                <div class="booking-field">
-
-                    <label for="pizza-date">
-                        Data
-                    </label>
-
-                    <input
-                        type="date"
-                        id="pizza-date"
+                    <!-- FOTO 6 -->
+                    <div
+                        style="
+                            grid-column:2;
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f2f2f2;
+                        "
                     >
+                        <img
+                            src="${experience.images[5]}"
+                            alt="${experience.title} - Foto 6"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                                display:block;
+                            "
+                        >
+                    </div>
 
                 </div>
 
-
-                <div class="booking-field">
-
-                    <label for="pizza-participants">
-                        Partecipanti
-                    </label>
-
-                    <select id="pizza-participants">
-
-                        ${Array.from(
-                            { length: 10 },
-                            (_, index) => {
-
-                                const number =
-                                    index + 1;
-
-                                return `
-                                    <option value="${number}">
-                                        ${number}
-                                        ${number === 1
-                                            ? "persona"
-                                            : "persone"}
-                                    </option>
-                                `;
-                            }
-                        ).join("")}
-
-                    </select>
-
-                </div>
+            </section>
 
 
-                <div class="booking-total">
+            <!-- =================================================
+                 DISPONIBILITÀ
+                 ================================================= -->
 
-                    <span>
-                        Totale
-                    </span>
+            <section class="modal-section">
 
-                    <strong id="pizza-total-price">
-                        49 €
-                    </strong>
+                <div class="booking-section">
 
-                </div>
+                    <div class="booking-grid">
 
-            </div>
+                        <div class="booking-field">
 
+                            <label for="pizza-date">
+                                Data
+                            </label>
 
-            <button
-                type="button"
-                class="whatsapp-button"
-                onclick="requestPizzaAvailability()"
-            >
-                Richiedi disponibilità su WhatsApp
-            </button>
+                            <input
+                                type="date"
+                                id="pizza-date"
+                            >
 
-        </section>
-
-
-        <section class="modal-section">
-
-            <h3>
-                Preparazione
-            </h3>
-
-
-            <div class="experience-itinerary">
-
-                ${experience.preparation.map(
-                    (step, index) => `
-
-                    <div class="itinerary-step">
-
-                        <div class="itinerary-marker">
-                            ${index + 1}
                         </div>
 
 
-                        <div class="itinerary-content">
+                        <div class="booking-field">
 
-                            <span class="itinerary-label">
-                                Procedura
+                            <label for="pizza-participants">
+                                Partecipanti
+                            </label>
+
+                            <select id="pizza-participants">
+
+                                ${Array.from(
+                                    { length: 10 },
+                                    (_, index) => {
+
+                                        const number = index + 1;
+
+                                        return `
+                                            <option value="${number}">
+                                                ${number}
+                                                ${number === 1
+                                                    ? "persona"
+                                                    : "persone"}
+                                            </option>
+                                        `;
+                                    }
+                                ).join("")}
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="booking-total">
+
+                            <span>
+                                Totale
                             </span>
 
-
-                            <p>
-                                ${step}
-                            </p>
+                            <strong id="pizza-total-price">
+                                49 €
+                            </strong>
 
                         </div>
 
                     </div>
 
-                `
-                ).join("")}
 
-            </div>
+                    <button
+                        type="button"
+                        class="whatsapp-button"
+                        onclick="requestPizzaAvailability()"
+                    >
+                        Richiedi disponibilità su WhatsApp
+                    </button>
 
-        </section>
+                </div>
 
-
-        <section class="modal-section">
-
-            <h3>
-                L'attività in breve
-            </h3>
-
-
-            <p>
-                ${experience.shortDescription}
-            </p>
-
-        </section>
+            </section>
 
 
-        <section class="modal-section">
+            <!-- =================================================
+                 PREPARAZIONE
+                 ================================================= -->
 
-            <h3>
-                Descrizione completa
-            </h3>
+            <section class="modal-section">
 
+                <h3>
+                    Preparazione
+                </h3>
 
-            <p>
-                ${experience.description}
-            </p>
+                <div class="experience-itinerary">
 
-        </section>
+                    ${experience.preparation.map(
+                        (step, index) => `
+                            <div class="itinerary-step">
 
+                                <div class="itinerary-marker">
+                                    ${index + 1}
+                                </div>
 
-        <section class="modal-section">
+                                <div class="itinerary-content">
 
-            <h3>
-                Cosa è incluso
-            </h3>
+                                    <span class="itinerary-label">
+                                        Procedura
+                                    </span>
 
+                                    <p>
+                                        ${step}
+                                    </p>
 
-            <ul>
+                                </div>
 
-                ${experience.included.map(
-                    (item) => `
-                        <li>
-                            ${item}
-                        </li>
-                    `
-                ).join("")}
+                            </div>
+                        `
+                    ).join("")}
 
-            </ul>
+                </div>
 
-        </section>
-
-
-        <section class="modal-section">
-
-            <h3>
-                Cosa non è incluso
-            </h3>
+            </section>
 
 
-            <ul>
+            <!-- =================================================
+                 ATTIVITÀ IN BREVE
+                 ================================================= -->
 
-                ${experience.notIncluded.map(
-                    (item) => `
-                        <li>
-                            ${item}
-                        </li>
-                    `
-                ).join("")}
+            <section class="modal-section">
 
-            </ul>
+                <h3>
+                    L'attività in breve
+                </h3>
 
-        </section>
+                <p>
+                    ${experience.shortDescription}
+                </p>
 
-
-        <section class="modal-section">
-
-            <h3>
-                Punti di incontro
-            </h3>
+            </section>
 
 
-            <p>
-                ${experience.meetingPoint}
-            </p>
+            <!-- =================================================
+                 DESCRIZIONE COMPLETA
+                 ================================================= -->
 
-        </section>
+            <section class="modal-section">
 
+                <h3>
+                    Descrizione completa
+                </h3>
 
-        <section class="modal-section">
+                <p style="white-space:pre-line;">
+                    ${experience.description}
+                </p>
 
-            <h3>
-                Non ammesso
-            </h3>
-
-
-            <ul>
-
-                ${experience.notAllowed.map(
-                    (item) => `
-                        <li>
-                            ${item}
-                        </li>
-                    `
-                ).join("")}
-
-            </ul>
-
-        </section>
+            </section>
 
 
-        <section class="modal-section">
+            <!-- =================================================
+                 COSA È INCLUSO
+                 ================================================= -->
 
-            <h3>
-                Informazioni utili
-            </h3>
+            <section class="modal-section">
+
+                <h3>
+                    Cosa è incluso
+                </h3>
+
+                <ul>
+
+                    ${experience.included.map(
+                        (item) => `
+                            <li>
+                                ${item}
+                            </li>
+                        `
+                    ).join("")}
+
+                </ul>
+
+            </section>
 
 
-            <ul>
+            <!-- =================================================
+                 COSA NON È INCLUSO
+                 ================================================= -->
 
-                ${experience.usefulInfo.map(
-                    (item) => `
-                        <li>
-                            ${item}
-                        </li>
-                    `
-                ).join("")}
+            <section class="modal-section">
 
-            </ul>
+                <h3>
+                    Cosa non è incluso
+                </h3>
 
-        </section>
+                <ul>
 
+                    ${experience.notIncluded.map(
+                        (item) => `
+                            <li>
+                                ${item}
+                            </li>
+                        `
+                    ).join("")}
+
+                </ul>
+
+            </section>
+
+
+            <!-- =================================================
+                 PUNTI DI INCONTRO
+                 ================================================= -->
+
+            <section class="modal-section">
+
+                <h3>
+                    Punti di incontro
+                </h3>
+
+                <p>
+                    ${experience.meetingPoint}
+                </p>
+
+            </section>
+
+
+            <!-- =================================================
+                 NON AMMESSO
+                 ================================================= -->
+
+            <section class="modal-section">
+
+                <h3>
+                    Non ammesso
+                </h3>
+
+                <ul>
+
+                    ${experience.notAllowed.map(
+                        (item) => `
+                            <li>
+                                ${item}
+                            </li>
+                        `
+                    ).join("")}
+
+                </ul>
+
+            </section>
+
+
+            <!-- =================================================
+                 INFORMAZIONI UTILI
+                 ================================================= -->
+
+            <section class="modal-section">
+
+                <h3>
+                    Informazioni utili
+                </h3>
+
+                <ul>
+
+                    ${experience.usefulInfo.map(
+                        (item) => `
+                            <li>
+                                ${item}
+                            </li>
+                        `
+                    ).join("")}
+
+                </ul>
+
+            </section>
+
+        </div>
     `;
 
 
     setupPizzaBooking();
 
 
-    modal.classList.add("active");
+    /*
+     * Il CSS attuale utilizza .open
+     * e non .active.
+     */
 
-    modal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
+    modal.classList.add("open");
 
-    document.body.classList.add(
-        "modal-open"
-    );
+    modal.setAttribute("aria-hidden", "false");
+
+    document.body.classList.add("modal-open");
 }
 
 
@@ -691,22 +763,15 @@ function closeExperienceModal() {
     const modal =
         document.getElementById("experience-modal");
 
-
     if (!modal) {
         return;
     }
 
+    modal.classList.remove("open");
 
-    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
 
-    modal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-    document.body.classList.remove(
-        "modal-open"
-    );
+    document.body.classList.remove("modal-open");
 }
 
 
@@ -719,32 +784,44 @@ function setupModalEvents() {
     const modal =
         document.getElementById("experience-modal");
 
-
     if (!modal) {
         return;
     }
 
 
-    const closeElements =
-        modal.querySelectorAll(
-            "[data-close-modal]"
-        );
+    /*
+     * Chiude cliccando sull'overlay
+     * o su qualsiasi elemento con data-close-modal.
+     */
 
+    modal.addEventListener("click", function (event) {
 
-    closeElements.forEach((element) => {
+        const closeTarget =
+            event.target.closest("[data-close-modal]");
 
-        element.addEventListener(
-            "click",
-            closeExperienceModal
-        );
+        if (closeTarget) {
+            closeExperienceModal();
+        }
 
     });
-
 }
 
 
 /* =========================================================
-   PRENOTAZIONE PIZZA
+   ESC PER CHIUDERE
+   ========================================================= */
+
+document.addEventListener("keydown", function (event) {
+
+    if (event.key === "Escape") {
+        closeExperienceModal();
+    }
+
+});
+
+
+/* =========================================================
+   PRENOTAZIONE / CALCOLO TOTALE
    ========================================================= */
 
 function setupPizzaBooking() {
@@ -752,12 +829,8 @@ function setupPizzaBooking() {
     const dateInput =
         document.getElementById("pizza-date");
 
-
     const participantsSelect =
-        document.getElementById(
-            "pizza-participants"
-        );
-
+        document.getElementById("pizza-participants");
 
     if (!dateInput || !participantsSelect) {
         return;
@@ -774,7 +847,6 @@ function setupPizzaBooking() {
 
 
     updatePizzaPrice();
-
 }
 
 
@@ -787,30 +859,23 @@ function setMinimumDate() {
     const dateInput =
         document.getElementById("pizza-date");
 
-
     if (!dateInput) {
         return;
     }
 
 
-    const today =
-        new Date();
-
+    const today = new Date();
 
     const year =
         today.getFullYear();
 
-
     const month =
-        String(
-            today.getMonth() + 1
-        ).padStart(2, "0");
-
+        String(today.getMonth() + 1)
+            .padStart(2, "0");
 
     const day =
-        String(
-            today.getDate()
-        ).padStart(2, "0");
+        String(today.getDate())
+            .padStart(2, "0");
 
 
     dateInput.min =
@@ -819,22 +884,16 @@ function setMinimumDate() {
 
 
 /* =========================================================
-   PREZZO DINAMICO
+   AGGIORNA PREZZO
    ========================================================= */
 
 function updatePizzaPrice() {
 
     const participantsSelect =
-        document.getElementById(
-            "pizza-participants"
-        );
-
+        document.getElementById("pizza-participants");
 
     const totalElement =
-        document.getElementById(
-            "pizza-total-price"
-        );
-
+        document.getElementById("pizza-total-price");
 
     if (!participantsSelect || !totalElement) {
         return;
@@ -849,9 +908,7 @@ function updatePizzaPrice() {
 
 
     const total =
-        getPizzaTotal(
-            participants
-        );
+        getPizzaTotal(participants);
 
 
     totalElement.textContent =
@@ -866,16 +923,10 @@ function updatePizzaPrice() {
 function requestPizzaAvailability() {
 
     const dateInput =
-        document.getElementById(
-            "pizza-date"
-        );
-
+        document.getElementById("pizza-date");
 
     const participantsSelect =
-        document.getElementById(
-            "pizza-participants"
-        );
-
+        document.getElementById("pizza-participants");
 
     if (!dateInput || !participantsSelect) {
         return;
@@ -904,19 +955,15 @@ function requestPizzaAvailability() {
 
 
     const total =
-        getPizzaTotal(
-            participants
-        );
+        getPizzaTotal(participants);
 
 
     const formattedDate =
-        formatDateItalian(
-            selectedDate
-        );
+        formatDateItalian(selectedDate);
 
 
     const message =
-`Ciao, vorrei richiedere disponibilità per: Lezione di Pizza Napoletana
+        `Ciao, vorrei richiedere disponibilità per: Lezione di Pizza Napoletana
 
 Data richiesta: ${formattedDate}
 
@@ -944,31 +991,11 @@ Grazie.`;
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    function () {
 
-        renderExperiences("all");
-
-        setupFilters();
+        renderExperiences();
 
         setupModalEvents();
-
-    }
-);
-
-
-/* =========================================================
-   TASTO ESC
-   ========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "Escape") {
-
-            closeExperienceModal();
-
-        }
 
     }
 );
