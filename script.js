@@ -175,19 +175,92 @@ function renderExperiences() {
         card.dataset.id =
             experience.id;
 
+
         const randomImage =
             getRandomImage(experience.images);
 
+
+        const galleryImages =
+            experience.images.map(
+                (image, index) => {
+
+                    return `
+                        <img
+                            src="${image}"
+                            alt="${experience.title} - Foto ${index + 1}"
+                            loading="${index === 0 ? "eager" : "lazy"}"
+                        >
+                    `;
+
+                }
+            ).join("");
+
+
+        const galleryDots =
+            experience.images.map(
+                (_, index) => {
+
+                    return `
+                        <span
+                            class="experience-card-gallery-dot ${
+                                index === 0
+                                    ? "active"
+                                    : ""
+                            }"
+                            data-index="${index}"
+                        ></span>
+                    `;
+
+                }
+            ).join("");
+
+
         card.innerHTML = `
+
             <div class="experience-card-image">
 
-                <img
-                    src="${randomImage}"
-                    alt="${experience.title}"
-                    loading="lazy"
+                <div
+                    class="experience-card-gallery-track"
+                    data-gallery-id="${experience.id}"
+                >
+                    ${galleryImages}
+                </div>
+
+
+                <div
+                    class="experience-card-gallery-controls"
                 >
 
+                    <button
+                        type="button"
+                        class="experience-card-gallery-arrow"
+                        data-gallery-prev
+                        aria-label="Foto precedente"
+                    >
+                        ‹
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="experience-card-gallery-arrow"
+                        data-gallery-next
+                        aria-label="Foto successiva"
+                    >
+                        ›
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="experience-card-gallery-dots"
+                >
+                    ${galleryDots}
+                </div>
+
             </div>
+
 
             <div class="experience-card-content">
 
@@ -195,13 +268,16 @@ function renderExperiences() {
                     ${experience.categoryLabel}
                 </div>
 
+
                 <h3 class="experience-card-title">
                     ${experience.title}
                 </h3>
 
+
                 <p class="experience-card-description">
                     ${experience.shortDescription}
                 </p>
+
 
                 <div class="experience-card-footer">
 
@@ -217,6 +293,7 @@ function renderExperiences() {
 
                     </div>
 
+
                     <button
                         type="button"
                         class="experience-button"
@@ -228,6 +305,42 @@ function renderExperiences() {
 
             </div>
         `;
+
+
+        const gallery =
+            card.querySelector(
+                ".experience-card-gallery-track"
+            );
+
+
+        const previousButton =
+            card.querySelector(
+                "[data-gallery-prev]"
+            );
+
+
+        const nextButton =
+            card.querySelector(
+                "[data-gallery-next]"
+            );
+
+
+        const dots =
+            Array.from(
+                card.querySelectorAll(
+                    ".experience-card-gallery-dot"
+                )
+            );
+
+
+        setupCardGallery(
+            card,
+            gallery,
+            previousButton,
+            nextButton,
+            dots,
+            experience
+        );
 
 
         card.addEventListener(
@@ -245,6 +358,237 @@ function renderExperiences() {
         grid.appendChild(card);
 
     });
+}
+
+
+/* =========================================================
+   GALLERIA CARD MOBILE
+   ========================================================= */
+
+function setupCardGallery(
+    card,
+    gallery,
+    previousButton,
+    nextButton,
+    dots,
+    experience
+) {
+
+    if (
+        !card ||
+        !gallery ||
+        !previousButton ||
+        !nextButton
+    ) {
+        return;
+    }
+
+
+    let currentIndex = 0;
+
+
+    function updateDots(index) {
+
+        dots.forEach(
+            (dot, dotIndex) => {
+
+                dot.classList.toggle(
+                    "active",
+                    dotIndex === index
+                );
+
+            }
+        );
+
+    }
+
+
+    function scrollToImage(index) {
+
+        if (
+            index < 0 ||
+            index >= experience.images.length
+        ) {
+            return;
+        }
+
+
+        currentIndex = index;
+
+
+        gallery.scrollTo({
+            left:
+                gallery.clientWidth *
+                currentIndex,
+            behavior: "smooth"
+        });
+
+
+        updateDots(
+            currentIndex
+        );
+
+    }
+
+
+    function getCurrentIndexFromScroll() {
+
+        if (
+            !gallery.clientWidth
+        ) {
+            return 0;
+        }
+
+
+        return Math.max(
+            0,
+            Math.min(
+                experience.images.length - 1,
+                Math.round(
+                    gallery.scrollLeft /
+                    gallery.clientWidth
+                )
+            )
+        );
+    }
+
+
+    previousButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+            const index =
+                currentIndex <= 0
+                    ? experience.images.length - 1
+                    : currentIndex - 1;
+
+            scrollToImage(index);
+
+        }
+    );
+
+
+    nextButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+            const index =
+                currentIndex >= experience.images.length - 1
+                    ? 0
+                    : currentIndex + 1;
+
+            scrollToImage(index);
+
+        }
+    );
+
+
+    gallery.addEventListener(
+        "scroll",
+        function () {
+
+            const index =
+                getCurrentIndexFromScroll();
+
+
+            if (
+                index !== currentIndex
+            ) {
+
+                currentIndex = index;
+
+                updateDots(
+                    currentIndex
+                );
+
+            }
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    gallery.addEventListener(
+        "touchstart",
+        function (event) {
+
+            event.stopPropagation();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    gallery.addEventListener(
+        "touchmove",
+        function (event) {
+
+            event.stopPropagation();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    gallery.addEventListener(
+        "touchend",
+        function (event) {
+
+            event.stopPropagation();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    gallery.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+        }
+    );
+
+
+    dots.forEach(
+        (dot) => {
+
+            dot.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    const index =
+                        parseInt(
+                            dot.dataset.index,
+                            10
+                        );
+
+                    scrollToImage(index);
+
+                }
+            );
+
+        }
+    );
+
+
+    updateDots(0);
+
 }
 
 
@@ -382,9 +726,6 @@ function openExperienceModal(id) {
                     "
                 >
 
-
-                    <!-- FRECCIA SINISTRA -->
-
                     <button
                         type="button"
                         id="gallery-prev"
@@ -415,8 +756,6 @@ function openExperienceModal(id) {
                         ‹
                     </button>
 
-
-                    <!-- GALLERIA -->
 
                     <div
                         id="pizza-thumbnail-gallery"
@@ -493,8 +832,6 @@ function openExperienceModal(id) {
                     </div>
 
 
-                    <!-- FRECCIA DESTRA -->
-
                     <button
                         type="button"
                         id="gallery-next"
@@ -554,9 +891,6 @@ function openExperienceModal(id) {
                     "
                 >
 
-
-                    <!-- DATA -->
-
                     <div>
 
                         <label
@@ -591,8 +925,6 @@ function openExperienceModal(id) {
 
                     </div>
 
-
-                    <!-- PERSONE -->
 
                     <div>
 
@@ -653,10 +985,6 @@ function openExperienceModal(id) {
                 </div>
 
 
-                <!-- =====================================
-                     WHATSAPP
-                     ===================================== -->
-
                 <button
                     type="button"
                     class="whatsapp-button"
@@ -669,10 +997,6 @@ function openExperienceModal(id) {
                     Richiedi disponibilità su WhatsApp
                 </button>
 
-
-                <!-- =====================================
-                     TOTALE
-                     ===================================== -->
 
                 <div
                     style="
@@ -950,7 +1274,7 @@ function openExperienceModal(id) {
 
 
 /* =========================================================
-   GALLERIA FOTO
+   GALLERIA MODAL
    ========================================================= */
 
 function setupPizzaGallery(experience) {
@@ -1012,6 +1336,7 @@ function setupPizzaGallery(experience) {
 
         mainImage.src =
             experience.images[currentIndex];
+
 
         mainImage.alt =
             `${experience.title} - Foto ${currentIndex + 1}`;
@@ -1080,7 +1405,9 @@ function setupPizzaGallery(experience) {
 
             thumbnail.addEventListener(
                 "click",
-                function () {
+                function (event) {
+
+                    event.stopPropagation();
 
                     const index =
                         parseInt(
@@ -1099,7 +1426,9 @@ function setupPizzaGallery(experience) {
 
     previousButton.addEventListener(
         "click",
-        function () {
+        function (event) {
+
+            event.stopPropagation();
 
             const nextIndex =
                 currentIndex <= 1
@@ -1116,7 +1445,9 @@ function setupPizzaGallery(experience) {
 
     nextButton.addEventListener(
         "click",
-        function () {
+        function (event) {
+
+            event.stopPropagation();
 
             const nextIndex =
                 currentIndex >= experience.images.length - 1
@@ -1130,14 +1461,6 @@ function setupPizzaGallery(experience) {
         }
     );
 
-
-    /*
-     * FOTO 1 rimane inizialmente
-     * come immagine principale.
-     *
-     * Nessuna miniatura viene
-     * evidenziata all'apertura.
-     */
 
     thumbnails.forEach(
         thumbnail => {
@@ -1154,13 +1477,6 @@ function setupPizzaGallery(experience) {
         }
     );
 
-
-    /*
-     * Su smartphone la galleria
-     * viene utilizzata con lo
-     * scorrimento orizzontale
-     * tramite touch.
-     */
 
     let touchStartX = 0;
     let touchEndX = 0;
