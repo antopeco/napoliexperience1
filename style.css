@@ -1,13 +1,21 @@
 :root {
+
     --black: #111111;
+
     --dark: #191919;
+
     --text: #202020;
+
     --muted: #737373;
+
     --surface: #f8f8fa;
+
     --white: #ffffff;
 
     --accent: #8b3dff;
+
     --accent-dark: #7024df;
+
     --accent-light: #b66cff;
 
     --border: #e8e8ed;
@@ -27,18 +35,25 @@
 /* RESET */
 
 * {
+
     box-sizing: border-box;
+
     margin: 0;
+
     padding: 0;
+
 }
 
 
 html {
+
     scroll-behavior: smooth;
+
 }
 
 
 body {
+
     font-family:
         Inter,
         -apple-system,
@@ -50,54 +65,71 @@ body {
         sans-serif;
 
     background: var(--white);
+
     color: var(--text);
 
     line-height: 1.6;
 
     overflow-x: hidden;
+
 }
 
 
 img {
+
     display: block;
+
     max-width: 100%;
+
 }
 
 
 button,
 a {
+
     font: inherit;
+
 }
 
 
 button {
+
     border: 0;
+
 }
 
 
 a {
+
     color: inherit;
+
     text-decoration: none;
+
 }
 
 
 /* CONTAINER */
 
 .container {
+
     width: min(
         calc(100% - 40px),
         var(--container)
     );
 
     margin-inline: auto;
+
 }
 
 
 /* HEADER */
 
 .site-header {
+
     position: sticky;
+
     top: 0;
+
     z-index: 100;
 
     background:
@@ -107,56 +139,78 @@ a {
 
     border-bottom:
         1px solid rgba(0, 0, 0, 0.06);
+
 }
 
 
 .header-inner {
+
     min-height: 76px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     gap: 30px;
+
 }
 
 
 .brand {
+
     font-size: 18px;
+
     font-weight: 800;
+
     letter-spacing: -0.03em;
+
 }
 
 
 .main-nav {
+
     display: flex;
+
     align-items: center;
+
     gap: 28px;
+
 }
 
 
 .main-nav a {
+
     font-size: 14px;
+
     font-weight: 600;
+
     color: #555;
 
     transition:
         color 0.2s ease;
+
 }
 
 
 .main-nav a:hover {
+
     color: var(--accent);
+
 }
 
 
 /* HERO */
 
 .hero {
+
     position: relative;
 
     min-height: 280px;
 
     display: flex;
+
     align-items: center;
 
     overflow: hidden;
@@ -168,16 +222,20 @@ a {
             #faf7ff 45%,
             #f4ecff 100%
         );
+
 }
 
 
 .hero-gradient {
+
     position: absolute;
 
     width: 520px;
+
     height: 520px;
 
     top: -360px;
+
     right: -120px;
 
     border-radius: 50%;
@@ -190,22 +248,28 @@ a {
         );
 
     pointer-events: none;
+
 }
 
 
 .hero-content {
+
     position: relative;
+
     z-index: 1;
 
     padding:
         72px 0 58px;
+
 }
 
 
 .eyebrow {
+
     display: inline-block;
 
     font-size: 20px;
+
     font-weight: 800;
 
     letter-spacing: 0.08em;
@@ -213,28 +277,34 @@ a {
     color: var(--accent);
 
     text-transform: uppercase;
+
 }
 
 
 /* EXPERIENCE SECTION */
 
 .experiences-section {
+
     position: relative;
 
     padding:
         28px 0 100px;
 
     background: var(--surface);
+
 }
 
 
 .experiences-section::before {
+
     content: "";
 
     position: absolute;
 
     top: 0;
+
     left: 0;
+
     right: 0;
 
     height: 2px;
@@ -250,14 +320,18 @@ a {
         );
 
     opacity: 0.75;
+
 }
 
 
 /* FILTERS */
 
 .filters {
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     flex-wrap: wrap;
@@ -265,10 +339,12 @@ a {
     gap: 10px;
 
     margin-bottom: 42px;
+
 }
 
 
 .filter-button {
+
     cursor: pointer;
 
     padding:
@@ -284,6 +360,7 @@ a {
     color: #555;
 
     font-size: 13px;
+
     font-weight: 700;
 
     transition:
@@ -291,18 +368,23 @@ a {
         color 0.2s ease,
         border-color 0.2s ease,
         transform 0.2s ease;
+
 }
 
 
 .filter-button:hover {
+
     border-color: var(--accent);
+
     color: var(--accent);
 
     transform: translateY(-1px);
+
 }
 
 
 .filter-button.active {
+
     background:
         linear-gradient(
             135deg,
@@ -316,27 +398,32 @@ a {
 
     box-shadow:
         0 8px 22px rgba(139, 61, 255, 0.24);
+
 }
 
 
 /* CATALOG */
 
 .catalog-grid {
+
     display: grid;
 
     grid-template-columns:
         repeat(3, minmax(0, 1fr));
 
     gap: 24px;
+
 }
 
 
 /* EXPERIENCE CARD */
 
 .experience-card {
+
     position: relative;
 
     display: flex;
+
     flex-direction: column;
 
     overflow: hidden;
@@ -359,19 +446,25 @@ a {
     transition:
         transform 0.25s ease,
         box-shadow 0.25s ease;
+
 }
 
 
 .experience-card:hover {
+
     transform:
         translateY(-6px);
 
     box-shadow:
         var(--shadow-card);
+
 }
 
 
+/* CARD IMAGE / MOBILE GALLERY */
+
 .experience-card-image {
+
     position: relative;
 
     height: 235px;
@@ -379,63 +472,100 @@ a {
     overflow: hidden;
 
     background: #ececf0;
+
 }
 
 
-.experience-card-image img {
+.experience-card-gallery-track {
+
+    display: block;
+
     width: 100%;
+
+    height: 100%;
+
+}
+
+
+.experience-card-gallery-track img {
+
+    width: 100%;
+
     height: 100%;
 
     object-fit: cover;
 
-    transition:
-        transform 0.5s ease;
 }
 
 
-.experience-card:hover
-.experience-card-image img {
-    transform: scale(1.045);
+.experience-card-gallery-track img:not(:first-child) {
+
+    display: none;
+
+}
+
+
+.experience-card-gallery-controls {
+
+    display: none;
+
+}
+
+
+.experience-card-gallery-dots {
+
+    display: none;
+
 }
 
 
 .experience-card-content {
+
     display: flex;
+
     flex-direction: column;
 
     flex: 1;
 
     padding: 22px;
+
 }
 
 
 .experience-card-category {
+
     margin-bottom: 8px;
 
     color: var(--accent);
 
     font-size: 11px;
+
     font-weight: 800;
 
     letter-spacing: 0.08em;
 
     text-transform: uppercase;
+
 }
 
 
 .experience-card-title {
+
     margin-bottom: 10px;
 
     color: var(--text);
 
     font-size: 20px;
+
     line-height: 1.25;
 
     letter-spacing: -0.025em;
+
 }
 
 
 .experience-card-description {
+
     margin-bottom: 22px;
 
     color: var(--muted);
@@ -445,42 +575,53 @@ a {
     display: -webkit-box;
 
     -webkit-line-clamp: 3;
+
     -webkit-box-orient: vertical;
 
     overflow: hidden;
+
 }
 
 
 .experience-card-footer {
+
     display: flex;
 
     align-items: flex-end;
+
     justify-content: space-between;
 
     gap: 16px;
 
     margin-top: auto;
+
 }
 
 
 .experience-price {
+
     color: var(--text);
 
     font-size: 15px;
+
     font-weight: 800;
+
 }
 
 
 .experience-duration {
+
     margin-top: 3px;
 
     color: var(--muted);
 
     font-size: 12px;
+
 }
 
 
 .experience-button {
+
     flex-shrink: 0;
 
     padding:
@@ -495,51 +636,62 @@ a {
     color: white;
 
     font-size: 13px;
+
     font-weight: 700;
 
     transition:
         background 0.2s ease,
         transform 0.2s ease;
+
 }
 
 
 .experience-card:hover
 .experience-button {
+
     background:
         var(--accent);
+
 }
 
 
 /* HOW IT WORKS */
 
 .how-it-works {
+
     position: relative;
 
     padding:
         100px 0;
 
     background: white;
+
 }
 
 
 .section-heading {
+
     max-width: 720px;
 
     margin:
         0 auto 55px;
 
     text-align: center;
+
 }
 
 
 .section-heading .eyebrow {
+
     margin-bottom: 12px;
 
     font-size: 12px;
+
 }
 
 
 .section-heading h2 {
+
     margin-bottom: 14px;
 
     font-size:
@@ -548,27 +700,33 @@ a {
     line-height: 1.08;
 
     letter-spacing: -0.04em;
+
 }
 
 
 .section-heading p {
+
     color: var(--muted);
 
     font-size: 16px;
+
 }
 
 
 .steps-grid {
+
     display: grid;
 
     grid-template-columns:
         repeat(3, minmax(0, 1fr));
 
     gap: 20px;
+
 }
 
 
 .step-card {
+
     padding: 28px;
 
     background:
@@ -579,16 +737,20 @@ a {
 
     border-radius:
         18px;
+
 }
 
 
 .step-number {
+
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
     width: 40px;
+
     height: 40px;
 
     margin-bottom: 18px;
@@ -602,27 +764,34 @@ a {
         var(--accent);
 
     font-size: 12px;
+
     font-weight: 800;
+
 }
 
 
 .step-card h3 {
+
     margin-bottom: 8px;
 
     font-size: 17px;
+
 }
 
 
 .step-card p {
+
     color: var(--muted);
 
     font-size: 14px;
+
 }
 
 
 /* FOOTER */
 
 .site-footer {
+
     position: relative;
 
     padding:
@@ -635,16 +804,20 @@ a {
         rgba(255, 255, 255, 0.65);
 
     text-align: center;
+
 }
 
 
 .site-footer::before {
+
     content: "";
 
     position: absolute;
 
     top: 0;
+
     left: 0;
+
     right: 0;
 
     height: 2px;
@@ -658,17 +831,21 @@ a {
             var(--accent),
             transparent
         );
+
 }
 
 
 .site-footer p {
+
     font-size: 12px;
+
 }
 
 
 /* MODAL */
 
 .modal {
+
     position: fixed;
 
     inset: 0;
@@ -678,18 +855,23 @@ a {
     display: none;
 
     align-items: center;
+
     justify-content: center;
 
     padding: 20px;
+
 }
 
 
 .modal.open {
+
     display: flex;
+
 }
 
 
 .modal-overlay {
+
     position: absolute;
 
     inset: 0;
@@ -699,10 +881,12 @@ a {
 
     backdrop-filter:
         blur(8px);
+
 }
 
 
 .modal-dialog {
+
     position: relative;
 
     z-index: 2;
@@ -724,18 +908,22 @@ a {
 
     box-shadow:
         0 30px 100px rgba(0, 0, 0, 0.30);
+
 }
 
 
 .modal-close {
+
     position: sticky;
 
     top: 16px;
+
     float: right;
 
     z-index: 5;
 
     width: 42px;
+
     height: 42px;
 
     margin:
@@ -752,20 +940,25 @@ a {
     color: #222;
 
     font-size: 28px;
+
     line-height: 1;
 
     cursor: pointer;
+
 }
 
 
 .modal-body {
+
     padding: 34px;
+
 }
 
 
 /* MODAL HEADER */
 
 .modal-hero {
+
     display: grid;
 
     grid-template-columns:
@@ -774,51 +967,63 @@ a {
     gap: 30px;
 
     margin-bottom: 42px;
+
 }
 
 
 .modal-hero-image {
+
     min-height: 330px;
 
     overflow: hidden;
 
     border-radius:
         18px;
+
 }
 
 
 .modal-hero-image img {
+
     width: 100%;
+
     height: 100%;
 
     object-fit: cover;
+
 }
 
 
 .modal-hero-info {
+
     display: flex;
 
     flex-direction: column;
 
     justify-content: center;
+
 }
 
 
 .modal-category {
+
     margin-bottom: 10px;
 
     color: var(--accent);
 
     font-size: 12px;
+
     font-weight: 800;
 
     letter-spacing: 0.1em;
 
     text-transform: uppercase;
+
 }
 
 
 .modal-title {
+
     margin-bottom: 15px;
 
     font-size:
@@ -827,28 +1032,34 @@ a {
     line-height: 1.08;
 
     letter-spacing: -0.04em;
+
 }
 
 
 .modal-short {
+
     margin-bottom: 20px;
 
     color: var(--muted);
 
     font-size: 15px;
+
 }
 
 
 .modal-meta {
+
     display: flex;
 
     flex-wrap: wrap;
 
     gap: 10px;
+
 }
 
 
 .modal-meta-item {
+
     padding:
         8px 12px;
 
@@ -861,36 +1072,45 @@ a {
     color: #555;
 
     font-size: 12px;
+
     font-weight: 700;
+
 }
 
 
 /* MODAL SECTIONS */
 
 .modal-section {
+
     margin-top: 42px;
+
 }
 
 
 .modal-section h3 {
+
     margin-bottom: 16px;
 
     font-size: 22px;
 
     letter-spacing: -0.025em;
+
 }
 
 
 .modal-section p {
+
     color: #555;
 
     font-size: 15px;
 
     line-height: 1.75;
+
 }
 
 
 .modal-section ul {
+
     display: flex;
 
     flex-direction: column;
@@ -902,65 +1122,81 @@ a {
     color: #555;
 
     font-size: 15px;
+
 }
 
 
 .modal-section li::marker {
+
     color:
         var(--accent);
+
 }
 
 
 /* ITINERARY */
 
 .itinerary {
+
     position: relative;
 
     padding-left: 34px;
 
     margin-top: 20px;
+
 }
 
 
 .itinerary::before {
+
     content: "";
 
     position: absolute;
 
     left: 9px;
+
     top: 8px;
+
     bottom: 8px;
 
     border-left:
         2px dashed
         rgba(139, 61, 255, 0.45);
+
 }
 
 
 .itinerary-stop {
+
     position: relative;
 
     margin-bottom: 24px;
 
     padding:
         0 0 0 8px;
+
 }
 
 
 .itinerary-stop:last-child {
+
     margin-bottom: 0;
+
 }
 
 
 .itinerary-stop::before {
+
     content: "";
 
     position: absolute;
 
     left: -31px;
+
     top: 4px;
 
     width: 14px;
+
     height: 14px;
 
     border-radius: 50%;
@@ -975,10 +1211,12 @@ a {
     box-shadow:
         0 0 0 4px
         rgba(139, 61, 255, 0.08);
+
 }
 
 
 .itinerary-number {
+
     display: block;
 
     margin-bottom: 3px;
@@ -986,41 +1224,50 @@ a {
     color: var(--accent);
 
     font-size: 11px;
+
     font-weight: 800;
 
     letter-spacing: 0.08em;
 
     text-transform: uppercase;
+
 }
 
 
 .itinerary-stop h4 {
+
     margin-bottom: 4px;
 
     font-size: 16px;
+
 }
 
 
 .itinerary-stop p {
+
     font-size: 14px;
 
     line-height: 1.65;
+
 }
 
 
 /* INCLUDE / EXCLUDE */
 
 .detail-columns {
+
     display: grid;
 
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
     gap: 24px;
+
 }
 
 
 .detail-box {
+
     padding: 24px;
 
     border:
@@ -1031,31 +1278,39 @@ a {
 
     background:
         #fafafa;
+
 }
 
 
 .detail-box h3 {
+
     margin-bottom: 15px;
 
     font-size: 18px;
+
 }
 
 
 .detail-box.include h3 {
+
     color:
         #278a57;
+
 }
 
 
 .detail-box.exclude h3 {
+
     color:
         #b34040;
+
 }
 
 
 /* MEETING */
 
 .meeting-box {
+
     padding: 24px;
 
     border-radius:
@@ -1071,12 +1326,14 @@ a {
     border:
         1px solid
         rgba(139, 61, 255, 0.12);
+
 }
 
 
 /* WHATSAPP */
 
 .modal-request {
+
     margin-top: 44px;
 
     padding: 28px;
@@ -1092,28 +1349,35 @@ a {
         );
 
     color: white;
+
 }
 
 
 .modal-request h3 {
+
     margin-bottom: 8px;
 
     font-size: 22px;
+
 }
 
 
 .modal-request p {
+
     margin-bottom: 20px;
 
     color:
         rgba(255,255,255,0.72);
+
 }
 
 
 .whatsapp-button {
+
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
     min-height: 48px;
@@ -1130,27 +1394,33 @@ a {
     color: white;
 
     font-size: 14px;
+
     font-weight: 800;
 
     transition:
         transform 0.2s ease,
         background 0.2s ease;
+
 }
 
 
 .whatsapp-button:hover {
+
     background:
         var(--accent-light);
 
     transform:
         translateY(-2px);
+
 }
 
 
 /* HIDDEN CARD */
 
 .experience-card.is-hidden {
+
     display: none;
+
 }
 
 
@@ -1159,25 +1429,33 @@ a {
 @media (max-width: 980px) {
 
     .catalog-grid {
+
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
+
     }
 
 
     .steps-grid {
+
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
+
     }
 
 
     .modal-hero {
+
         grid-template-columns:
             1fr;
+
     }
 
 
     .modal-hero-image {
+
         min-height: 260px;
+
     }
 
 }
@@ -1186,57 +1464,76 @@ a {
 @media (max-width: 700px) {
 
     .container {
+
         width:
             min(
                 calc(100% - 28px),
                 var(--container)
             );
+
     }
 
 
     .header-inner {
+
         min-height: 66px;
+
     }
 
 
     .brand {
+
         font-size: 16px;
+
     }
 
 
     .main-nav {
+
         gap: 14px;
+
     }
 
 
     .main-nav a {
+
         font-size: 12px;
+
     }
 
 
     .hero {
+
         min-height: 220px;
+
     }
 
 
     .hero-content {
+
         padding:
             55px 0 38px;
+
     }
 
 
     .eyebrow {
+
         font-size: 16px;
+
     }
 
 
     .experiences-section {
+
         padding:
             22px 0 70px;
+
     }
 
 
     .filters {
+
         justify-content: flex-start;
 
         overflow-x: auto;
@@ -1248,74 +1545,415 @@ a {
         margin-bottom: 30px;
 
         scrollbar-width: none;
+
     }
 
 
     .filters::-webkit-scrollbar {
+
         display: none;
+
     }
 
 
     .filter-button {
+
         flex-shrink: 0;
+
     }
 
 
     .catalog-grid {
+
         grid-template-columns:
             1fr;
+
     }
 
+
+    /* ==============================
+       CARD MOBILE
+       ============================== */
 
     .experience-card-image {
-        height: 220px;
+
+        height: 205px;
+
+        position: relative;
+
+        overflow: hidden;
+
+        border-radius:
+            var(--radius)
+            var(--radius)
+            0
+            0;
+
     }
 
 
+    .experience-card-gallery-track {
+
+        display: flex;
+
+        width: 100%;
+
+        height: 100%;
+
+        overflow-x: auto;
+
+        overflow-y: hidden;
+
+        scroll-snap-type: x mandatory;
+
+        scrollbar-width: none;
+
+        -webkit-overflow-scrolling: touch;
+
+        touch-action: pan-x;
+
+        overscroll-behavior-x: contain;
+
+    }
+
+
+    .experience-card-gallery-track::-webkit-scrollbar {
+
+        display: none;
+
+    }
+
+
+    .experience-card-gallery-track img {
+
+        flex:
+            0 0 100%;
+
+        width: 100%;
+
+        height: 100%;
+
+        display: block !important;
+
+        object-fit: cover;
+
+        scroll-snap-align: start;
+
+        scroll-snap-stop: always;
+
+    }
+
+
+    /* Frecce */
+
+    .experience-card-gallery-controls {
+
+        position: absolute;
+
+        inset:
+            0;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding:
+            0 9px;
+
+        pointer-events: none;
+
+    }
+
+
+    .experience-card-gallery-arrow {
+
+        width: 32px;
+
+        height: 32px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background:
+            rgba(255,255,255,0.90);
+
+        color:
+            #202020;
+
+        box-shadow:
+            0 5px 16px rgba(0,0,0,0.16);
+
+        font-size: 22px;
+
+        line-height: 1;
+
+        cursor: pointer;
+
+        pointer-events: auto;
+
+        backdrop-filter:
+            blur(5px);
+
+    }
+
+
+    /* Indicatori */
+
+    .experience-card-gallery-dots {
+
+        position: absolute;
+
+        left: 50%;
+
+        bottom: 10px;
+
+        transform:
+            translateX(-50%);
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 5px;
+
+        padding:
+            5px 8px;
+
+        border-radius:
+            999px;
+
+        background:
+            rgba(0,0,0,0.28);
+
+        backdrop-filter:
+            blur(5px);
+
+        pointer-events: none;
+
+    }
+
+
+    .experience-card-gallery-dot {
+
+        width: 5px;
+
+        height: 5px;
+
+        padding: 0;
+
+        border-radius: 50%;
+
+        background:
+            rgba(255,255,255,0.60);
+
+        transition:
+            width 0.2s ease,
+            background 0.2s ease;
+
+    }
+
+
+    .experience-card-gallery-dot.active {
+
+        width: 13px;
+
+        border-radius:
+            999px;
+
+        background:
+            white;
+
+    }
+
+
+    .experience-card-content {
+
+        padding:
+            18px 18px 20px;
+
+    }
+
+
+    .experience-card-category {
+
+        margin-bottom: 6px;
+
+        font-size: 10px;
+
+    }
+
+
+    .experience-card-title {
+
+        margin-bottom: 8px;
+
+        font-size: 20px;
+
+        line-height: 1.2;
+
+    }
+
+
+    .experience-card-description {
+
+        margin-bottom: 18px;
+
+        font-size: 13px;
+
+        line-height: 1.55;
+
+        -webkit-line-clamp: 3;
+
+    }
+
+
+    .experience-card-footer {
+
+        gap: 12px;
+
+    }
+
+
+    .experience-price {
+
+        font-size: 14px;
+
+    }
+
+
+    .experience-duration {
+
+        font-size: 11px;
+
+    }
+
+
+    .experience-button {
+
+        padding:
+            9px 15px;
+
+        font-size: 12px;
+
+    }
+
+
+    /* ==============================
+       HOW IT WORKS
+       ============================== */
+
     .how-it-works {
+
         padding:
             75px 0;
+
     }
 
 
     .steps-grid {
+
         grid-template-columns:
             1fr;
+
     }
 
 
+    /* ==============================
+       MODAL MOBILE
+       ============================== */
+
     .modal {
+
         padding: 10px;
+
     }
 
 
     .modal-dialog {
+
         max-height:
             calc(100vh - 20px);
 
         border-radius:
             20px;
+
     }
 
 
     .modal-body {
+
         padding: 22px;
+
     }
 
 
     .detail-columns {
+
         grid-template-columns:
             1fr;
+
     }
 
 
     .modal-hero-image {
+
         min-height: 220px;
+
     }
 
 
     .modal-title {
+
         font-size: 30px;
+
+    }
+
+
+    /* ==============================
+       DATA / PERSONE MOBILE
+       ============================== */
+
+    #pizza-date,
+    #pizza-participants {
+
+        width:
+            calc(100% - 8px) !important;
+
+        max-width:
+            calc(100% - 8px) !important;
+
+        height:
+            46px !important;
+
+        padding:
+            0 12px !important;
+
+        font-size:
+            13px !important;
+
+    }
+
+
+    #pizza-date {
+
+        margin-right:
+            8px;
+
+    }
+
+
+    #pizza-participants {
+
+        margin-left:
+            8px;
+
     }
 
 }
