@@ -3,15 +3,21 @@ const WHATSAPP_NUMBER = "393423512684";
 const experiences = [
     {
         id: "pizza",
+
         title: "Lezione di Pizza Napoletana",
+
         category: "cooking",
+
         categoryLabel: "Corsi di Cucina",
 
         price: 49,
+
         priceType: "perPerson",
 
         duration: "2 ore",
+
         languages: "ITA / ENG / FRA / SPA",
+
         type: "Esperienza condivisa",
 
         images: [
@@ -44,12 +50,30 @@ Al termine dell’esperienza riceverai un diploma di pizzaiolo come ricordo dell
 Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata per essere semplice, pratica e adatta a chi viaggia da solo, alle coppie e alle famiglie.`,
 
         preparation: [
-            "Preparazione dell’impasto",
-            "Preparazione del pomodoro San Marzano",
-            "Stesura dell’impasto",
-            "Condimento della pizza",
-            "Cottura in forno professionale",
-            "Degustazione finale"
+            {
+                title: "Preparazione dell’impasto",
+                text: "Scopri come lavorare gli ingredienti e preparare correttamente l’impasto della pizza napoletana."
+            },
+            {
+                title: "Preparazione del pomodoro",
+                text: "Impara a preparare il condimento utilizzando il pomodoro San Marzano."
+            },
+            {
+                title: "Stesura dell’impasto",
+                text: "Lavora manualmente l’impasto fino a ottenere il caratteristico disco della pizza napoletana."
+            },
+            {
+                title: "Condimento",
+                text: "Prepara la tua pizza con pomodoro, mozzarella, olio e basilico."
+            },
+            {
+                title: "Cottura",
+                text: "La pizza viene cotta in un forno professionale secondo la tradizione napoletana."
+            },
+            {
+                title: "Degustazione finale",
+                text: "Gusta la pizza preparata da te insieme all’antipasto e alle bevande incluse."
+            }
         ],
 
         included: [
@@ -73,14 +97,14 @@ Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata p
             "NaplesBay Cooking Lab, Via delle Zite 30, 80139 Napoli, Italia",
 
         notAllowed: [
-            "Non sono disponibili bevande alcoliche per i partecipanti di età inferiore ai 18 anni"
+            "Per i partecipanti di età inferiore ai 18 anni non sono previste bevande alcoliche."
         ],
 
         usefulInfo: [
             "Accessibile con passeggino",
             "Animali domestici ammessi",
             "Non accessibile in sedia a rotelle",
-            "Laboratorio situato nel centro storico",
+            "Laboratorio situato nel centro storico di Napoli",
             "Circa 5 minuti a piedi dalla fermata Duomo della metropolitana",
             "Cancellazione con rimborso completo fino ad almeno 24 ore prima"
         ]
@@ -89,31 +113,26 @@ Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata p
 
 
 /* =========================================================
-   FUNZIONI GENERALI
+   UTILITÀ
    ========================================================= */
-
-function getRandomImage(images) {
-    if (!Array.isArray(images) || images.length === 0) {
-        return "";
-    }
-
-    const randomIndex = Math.floor(Math.random() * images.length);
-
-    return images[randomIndex];
-}
-
 
 function formatPrice(value) {
     return `${value} €`;
 }
 
 
-function getPizzaTotal(participants) {
-    return 49 * participants;
+function getRandomImage(images) {
+    if (!images || images.length === 0) {
+        return "";
+    }
+
+    return images[
+        Math.floor(Math.random() * images.length)
+    ];
 }
 
 
-function formatDateItalian(dateValue) {
+function formatItalianDate(dateValue) {
     if (!dateValue) {
         return "";
     }
@@ -128,9 +147,13 @@ function formatDateItalian(dateValue) {
 }
 
 
+function getPizzaTotal(participants) {
+    return participants * 49;
+}
+
+
 /* =========================================================
-   RENDER CARD
-   Compatibile con index.html e style.css attuali
+   CARD
    ========================================================= */
 
 function renderExperiences() {
@@ -150,10 +173,10 @@ function renderExperiences() {
 
         card.className = "experience-card";
 
-        card.dataset.category = experience.category;
         card.dataset.id = experience.id;
 
-        const randomImage = getRandomImage(experience.images);
+        const randomImage =
+            getRandomImage(experience.images);
 
         card.innerHTML = `
             <div class="experience-card-image">
@@ -191,8 +214,8 @@ function renderExperiences() {
                     </div>
 
                     <button
-                        class="experience-button"
                         type="button"
+                        class="experience-button"
                     >
                         Scopri
                     </button>
@@ -202,18 +225,13 @@ function renderExperiences() {
             </div>
         `;
 
-        /*
-         * L'intera card è cliccabile.
-         * Il pulsante "Scopri" apre la stessa modal.
-         */
 
-        card.addEventListener("click", function (event) {
+        card.addEventListener("click", function () {
 
-            if (event.target.closest(".experience-button")) {
-                event.preventDefault();
-            }
+            openExperienceModal(
+                experience.id
+            );
 
-            openExperienceModal(experience.id);
         });
 
 
@@ -228,31 +246,32 @@ function renderExperiences() {
 
 function openExperienceModal(id) {
 
-    const experience = experiences.find(
-        (item) => item.id === id
-    );
+    const experience =
+        experiences.find(
+            item => item.id === id
+        );
 
     if (!experience) {
         return;
     }
 
-    const modal = document.getElementById("experience-modal");
 
-    if (!modal) {
-        console.error("Modal #experience-modal non trovata.");
-        return;
-    }
-
-    /*
-     * Nel tuo index.html esiste:
-     * <div id="modal-content"></div>
-     */
+    const modal =
+        document.getElementById(
+            "experience-modal"
+        );
 
     const modalContent =
-        document.getElementById("modal-content");
+        document.getElementById(
+            "modal-content"
+        );
 
-    if (!modalContent) {
-        console.error("Elemento #modal-content non trovato.");
+
+    if (!modal || !modalContent) {
+        console.error(
+            "Elementi modal non trovati."
+        );
+
         return;
     }
 
@@ -261,14 +280,35 @@ function openExperienceModal(id) {
 
         <div class="modal-body">
 
-            <div class="modal-hero">
+            <!-- =========================================
+                 TESTATA
+                 ========================================= -->
 
-                <div class="modal-hero-image">
+            <div
+                class="modal-hero"
+                style="
+                    grid-template-columns:
+                    minmax(260px, 0.95fr)
+                    minmax(0, 1.05fr);
+                    align-items: center;
+                "
+            >
+
+                <div
+                    class="modal-hero-image"
+                    style="
+                        min-height: 310px;
+                        max-height: 360px;
+                    "
+                >
+
                     <img
                         src="${experience.images[0]}"
                         alt="${experience.title}"
                     >
+
                 </div>
+
 
                 <div class="modal-hero-info">
 
@@ -287,23 +327,20 @@ function openExperienceModal(id) {
                     <div class="modal-meta">
 
                         <div class="modal-meta-item">
-                            <strong>Durata</strong>
-                            <span>${experience.duration}</span>
+                            Durata:
+                            ${experience.duration}
                         </div>
 
                         <div class="modal-meta-item">
-                            <strong>Lingue</strong>
-                            <span>${experience.languages}</span>
+                            ${experience.languages}
                         </div>
 
                         <div class="modal-meta-item">
-                            <strong>Tipologia</strong>
-                            <span>${experience.type}</span>
+                            ${experience.type}
                         </div>
 
                         <div class="modal-meta-item">
-                            <strong>Prezzo</strong>
-                            <span>${formatPrice(experience.price)} / persona</span>
+                            ${formatPrice(experience.price)} / persona
                         </div>
 
                     </div>
@@ -313,52 +350,66 @@ function openExperienceModal(id) {
             </div>
 
 
-            <!-- =================================================
-                 GALLERIA FOTO
-                 ================================================= -->
+            <!-- =========================================
+                 GALLERIA
+                 FOTO PRINCIPALE A SINISTRA
+                 5 FOTO SOTTO
+                 ========================================= -->
 
-            <section class="modal-section">
+            <section
+                style="
+                    margin-top: -10px;
+                    margin-bottom: 40px;
+                "
+            >
 
                 <div
+                    class="pizza-gallery"
                     style="
                         display:grid;
-                        grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
-                        grid-template-rows:repeat(3,110px);
-                        gap:10px;
-                        margin-bottom:30px;
+                        grid-template-columns:
+                        minmax(0, 1.15fr)
+                        minmax(0, 1fr);
+                        gap:12px;
                     "
                 >
 
-                    <!-- FOTO 1 -->
+                    <!-- FOTO PRINCIPALE -->
+
                     <div
                         style="
-                            grid-row:1 / 4;
+                            grid-row:1 / 3;
+                            height:330px;
                             overflow:hidden;
-                            border-radius:14px;
-                            background:#f2f2f2;
+                            border-radius:18px;
+                            background:#f1f1f4;
                         "
                     >
+
                         <img
                             src="${experience.images[0]}"
-                            alt="${experience.title} - Foto 1"
+                            alt="${experience.title}"
                             style="
                                 width:100%;
                                 height:100%;
                                 object-fit:cover;
-                                display:block;
                             "
                         >
+
                     </div>
 
 
                     <!-- FOTO 2 -->
+
                     <div
                         style="
+                            height:158px;
                             overflow:hidden;
-                            border-radius:14px;
-                            background:#f2f2f2;
+                            border-radius:18px;
+                            background:#f1f1f4;
                         "
                     >
+
                         <img
                             src="${experience.images[1]}"
                             alt="${experience.title} - Foto 2"
@@ -366,20 +417,23 @@ function openExperienceModal(id) {
                                 width:100%;
                                 height:100%;
                                 object-fit:cover;
-                                display:block;
                             "
                         >
+
                     </div>
 
 
                     <!-- FOTO 3 -->
+
                     <div
                         style="
+                            height:158px;
                             overflow:hidden;
-                            border-radius:14px;
-                            background:#f2f2f2;
+                            border-radius:18px;
+                            background:#f1f1f4;
                         "
                     >
+
                         <img
                             src="${experience.images[2]}"
                             alt="${experience.title} - Foto 3"
@@ -387,20 +441,79 @@ function openExperienceModal(id) {
                                 width:100%;
                                 height:100%;
                                 object-fit:cover;
-                                display:block;
                             "
                         >
+
+                    </div>
+
+                </div>
+
+
+                <!-- CINQUE FOTO SOTTO LA PRINCIPALE -->
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:
+                        repeat(5, minmax(0, 1fr));
+                        gap:12px;
+                        margin-top:12px;
+                    "
+                >
+
+                    <div
+                        style="
+                            height:115px;
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f1f1f4;
+                        "
+                    >
+
+                        <img
+                            src="${experience.images[1]}"
+                            alt="${experience.title} - Foto 2"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                            "
+                        >
+
                     </div>
 
 
-                    <!-- FOTO 4 -->
                     <div
                         style="
+                            height:115px;
                             overflow:hidden;
                             border-radius:14px;
-                            background:#f2f2f2;
+                            background:#f1f1f4;
                         "
                     >
+
+                        <img
+                            src="${experience.images[2]}"
+                            alt="${experience.title} - Foto 3"
+                            style="
+                                width:100%;
+                                height:100%;
+                                object-fit:cover;
+                            "
+                        >
+
+                    </div>
+
+
+                    <div
+                        style="
+                            height:115px;
+                            overflow:hidden;
+                            border-radius:14px;
+                            background:#f1f1f4;
+                        "
+                    >
+
                         <img
                             src="${experience.images[3]}"
                             alt="${experience.title} - Foto 4"
@@ -408,20 +521,21 @@ function openExperienceModal(id) {
                                 width:100%;
                                 height:100%;
                                 object-fit:cover;
-                                display:block;
                             "
                         >
+
                     </div>
 
 
-                    <!-- FOTO 5 -->
                     <div
                         style="
+                            height:115px;
                             overflow:hidden;
                             border-radius:14px;
-                            background:#f2f2f2;
+                            background:#f1f1f4;
                         "
                     >
+
                         <img
                             src="${experience.images[4]}"
                             alt="${experience.title} - Foto 5"
@@ -429,21 +543,21 @@ function openExperienceModal(id) {
                                 width:100%;
                                 height:100%;
                                 object-fit:cover;
-                                display:block;
                             "
                         >
+
                     </div>
 
 
-                    <!-- FOTO 6 -->
                     <div
                         style="
-                            grid-column:2;
+                            height:115px;
                             overflow:hidden;
                             border-radius:14px;
-                            background:#f2f2f2;
+                            background:#f1f1f4;
                         "
                     >
+
                         <img
                             src="${experience.images[5]}"
                             alt="${experience.title} - Foto 6"
@@ -451,9 +565,9 @@ function openExperienceModal(id) {
                                 width:100%;
                                 height:100%;
                                 object-fit:cover;
-                                display:block;
                             "
                         >
+
                     </div>
 
                 </div>
@@ -461,91 +575,170 @@ function openExperienceModal(id) {
             </section>
 
 
-            <!-- =================================================
-                 DISPONIBILITÀ
-                 ================================================= -->
+            <!-- =========================================
+                 DATA E PARTECIPANTI
+                 ========================================= -->
 
-            <section class="modal-section">
+            <section
+                style="
+                    margin-top:40px;
+                    padding:26px;
+                    border:1px solid #e8e8ed;
+                    border-radius:20px;
+                    background:#fafafa;
+                "
+            >
 
-                <div class="booking-section">
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:
+                        repeat(2, minmax(0, 1fr));
+                        gap:24px;
+                        align-items:end;
+                    "
+                >
 
-                    <div class="booking-grid">
+                    <!-- DATA -->
 
-                        <div class="booking-field">
+                    <div>
 
-                            <label for="pizza-date">
-                                Data
-                            </label>
+                        <label
+                            for="pizza-date"
+                            style="
+                                display:block;
+                                margin-bottom:9px;
+                                color:#202020;
+                                font-size:13px;
+                                font-weight:800;
+                            "
+                        >
+                            Data
+                        </label>
 
-                            <input
-                                type="date"
-                                id="pizza-date"
-                            >
+                        <input
+                            type="date"
+                            id="pizza-date"
+                            style="
+                                width:100%;
+                                height:50px;
+                                padding:0 15px;
+                                border:1px solid #ddddE4;
+                                border-radius:13px;
+                                background:white;
+                                color:#202020;
+                                font-size:14px;
+                                outline:none;
+                            "
+                        >
 
-                        </div>
+                    </div>
 
 
-                        <div class="booking-field">
+                    <!-- PARTECIPANTI -->
 
-                            <label for="pizza-participants">
-                                Partecipanti
-                            </label>
+                    <div>
 
-                            <select id="pizza-participants">
+                        <label
+                            for="pizza-participants"
+                            style="
+                                display:block;
+                                margin-bottom:9px;
+                                color:#202020;
+                                font-size:13px;
+                                font-weight:800;
+                            "
+                        >
+                            Partecipanti
+                        </label>
 
-                                ${Array.from(
-                                    { length: 10 },
-                                    (_, index) => {
+                        <select
+                            id="pizza-participants"
+                            style="
+                                width:100%;
+                                height:50px;
+                                padding:0 15px;
+                                border:1px solid #ddddE4;
+                                border-radius:13px;
+                                background:white;
+                                color:#202020;
+                                font-size:14px;
+                                outline:none;
+                                cursor:pointer;
+                            "
+                        >
 
-                                        const number = index + 1;
+                            ${Array.from(
+                                { length: 10 },
+                                (_, index) => {
 
-                                        return `
-                                            <option value="${number}">
-                                                ${number}
-                                                ${number === 1
+                                    const number =
+                                        index + 1;
+
+                                    return `
+                                        <option value="${number}">
+                                            ${number}
+                                            ${
+                                                number === 1
                                                     ? "persona"
-                                                    : "persone"}
-                                            </option>
-                                        `;
-                                    }
-                                ).join("")}
+                                                    : "persone"
+                                            }
+                                        </option>
+                                    `;
+                                }
+                            ).join("")}
 
-                            </select>
-
-                        </div>
-
-
-                        <div class="booking-total">
-
-                            <span>
-                                Totale
-                            </span>
-
-                            <strong id="pizza-total-price">
-                                49 €
-                            </strong>
-
-                        </div>
+                        </select>
 
                     </div>
 
+                </div>
 
-                    <button
-                        type="button"
-                        class="whatsapp-button"
-                        onclick="requestPizzaAvailability()"
+
+                <!-- TOTALE -->
+
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        gap:20px;
+                        margin-top:22px;
+                        padding-top:20px;
+                        border-top:1px solid #e8e8ed;
+                    "
+                >
+
+                    <span
+                        style="
+                            color:#737373;
+                            font-size:14px;
+                            font-weight:600;
+                        "
                     >
-                        Richiedi disponibilità su WhatsApp
-                    </button>
+                        Totale esperienza
+                    </span>
+
+                    <strong
+                        id="pizza-total-price"
+                        style="
+                            color:#202020;
+                            font-size:24px;
+                            font-weight:800;
+                            letter-spacing:-0.03em;
+                        "
+                    >
+                        49 €
+                    </strong>
 
                 </div>
 
             </section>
 
 
-            <!-- =================================================
+            <!-- =========================================
                  PREPARAZIONE
-                 ================================================= -->
+                 ========================================= -->
 
             <section class="modal-section">
 
@@ -553,29 +746,27 @@ function openExperienceModal(id) {
                     Preparazione
                 </h3>
 
-                <div class="experience-itinerary">
+                <div class="itinerary">
 
                     ${experience.preparation.map(
                         (step, index) => `
-                            <div class="itinerary-step">
 
-                                <div class="itinerary-marker">
-                                    ${index + 1}
-                                </div>
+                            <div class="itinerary-stop">
 
-                                <div class="itinerary-content">
+                                <span class="itinerary-number">
+                                    Procedura ${String(index + 1).padStart(2, "0")}
+                                </span>
 
-                                    <span class="itinerary-label">
-                                        Procedura
-                                    </span>
+                                <h4>
+                                    ${step.title}
+                                </h4>
 
-                                    <p>
-                                        ${step}
-                                    </p>
-
-                                </div>
+                                <p>
+                                    ${step.text}
+                                </p>
 
                             </div>
+
                         `
                     ).join("")}
 
@@ -584,9 +775,9 @@ function openExperienceModal(id) {
             </section>
 
 
-            <!-- =================================================
+            <!-- =========================================
                  ATTIVITÀ IN BREVE
-                 ================================================= -->
+                 ========================================= -->
 
             <section class="modal-section">
 
@@ -601,9 +792,9 @@ function openExperienceModal(id) {
             </section>
 
 
-            <!-- =================================================
+            <!-- =========================================
                  DESCRIZIONE COMPLETA
-                 ================================================= -->
+                 ========================================= -->
 
             <section class="modal-section">
 
@@ -611,83 +802,95 @@ function openExperienceModal(id) {
                     Descrizione completa
                 </h3>
 
-                <p style="white-space:pre-line;">
+                <p
+                    style="
+                        white-space:pre-line;
+                    "
+                >
                     ${experience.description}
                 </p>
 
             </section>
 
 
-            <!-- =================================================
-                 COSA È INCLUSO
-                 ================================================= -->
+            <!-- =========================================
+                 INCLUSO / NON INCLUSO
+                 ========================================= -->
 
             <section class="modal-section">
 
-                <h3>
-                    Cosa è incluso
-                </h3>
+                <div class="detail-columns">
 
-                <ul>
+                    <div class="detail-box include">
 
-                    ${experience.included.map(
-                        (item) => `
-                            <li>
-                                ${item}
-                            </li>
-                        `
-                    ).join("")}
+                        <h3>
+                            Cosa è incluso
+                        </h3>
 
-                </ul>
+                        <ul>
+
+                            ${experience.included.map(
+                                item => `
+                                    <li>
+                                        ${item}
+                                    </li>
+                                `
+                            ).join("")}
+
+                        </ul>
+
+                    </div>
+
+
+                    <div class="detail-box exclude">
+
+                        <h3>
+                            Cosa non è incluso
+                        </h3>
+
+                        <ul>
+
+                            ${experience.notIncluded.map(
+                                item => `
+                                    <li>
+                                        ${item}
+                                    </li>
+                                `
+                            ).join("")}
+
+                        </ul>
+
+                    </div>
+
+                </div>
 
             </section>
 
 
-            <!-- =================================================
-                 COSA NON È INCLUSO
-                 ================================================= -->
+            <!-- =========================================
+                 PUNTO DI INCONTRO
+                 ========================================= -->
 
             <section class="modal-section">
 
-                <h3>
-                    Cosa non è incluso
-                </h3>
+                <div class="meeting-box">
 
-                <ul>
+                    <h3>
+                        Punti di incontro
+                    </h3>
 
-                    ${experience.notIncluded.map(
-                        (item) => `
-                            <li>
-                                ${item}
-                            </li>
-                        `
-                    ).join("")}
+                    <p>
+                        ${experience.meetingPoint}
+                    </p>
 
-                </ul>
+                </div>
 
             </section>
 
 
-            <!-- =================================================
-                 PUNTI DI INCONTRO
-                 ================================================= -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Punti di incontro
-                </h3>
-
-                <p>
-                    ${experience.meetingPoint}
-                </p>
-
-            </section>
-
-
-            <!-- =================================================
+            <!-- =========================================
                  NON AMMESSO
-                 ================================================= -->
+                 ========================================= -->
 
             <section class="modal-section">
 
@@ -698,7 +901,7 @@ function openExperienceModal(id) {
                 <ul>
 
                     ${experience.notAllowed.map(
-                        (item) => `
+                        item => `
                             <li>
                                 ${item}
                             </li>
@@ -710,9 +913,9 @@ function openExperienceModal(id) {
             </section>
 
 
-            <!-- =================================================
+            <!-- =========================================
                  INFORMAZIONI UTILI
-                 ================================================= -->
+                 ========================================= -->
 
             <section class="modal-section">
 
@@ -723,7 +926,7 @@ function openExperienceModal(id) {
                 <ul>
 
                     ${experience.usefulInfo.map(
-                        (item) => `
+                        item => `
                             <li>
                                 ${item}
                             </li>
@@ -734,6 +937,33 @@ function openExperienceModal(id) {
 
             </section>
 
+
+            <!-- =========================================
+                 WHATSAPP
+                 ========================================= -->
+
+            <section class="modal-request">
+
+                <h3>
+                    Richiedi disponibilità
+                </h3>
+
+                <p>
+                    Seleziona data e partecipanti e inviaci
+                    la richiesta. Verificheremo personalmente
+                    la disponibilità e ti risponderemo su WhatsApp.
+                </p>
+
+                <button
+                    type="button"
+                    class="whatsapp-button"
+                    id="pizza-whatsapp-button"
+                >
+                    Richiedi disponibilità su WhatsApp
+                </button>
+
+            </section>
+
         </div>
     `;
 
@@ -741,16 +971,31 @@ function openExperienceModal(id) {
     setupPizzaBooking();
 
 
-    /*
-     * Il CSS attuale utilizza .open
-     * e non .active.
-     */
+    const whatsappButton =
+        document.getElementById(
+            "pizza-whatsapp-button"
+        );
+
+    if (whatsappButton) {
+
+        whatsappButton.addEventListener(
+            "click",
+            requestPizzaAvailability
+        );
+
+    }
+
 
     modal.classList.add("open");
 
-    modal.setAttribute("aria-hidden", "false");
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
 
-    document.body.classList.add("modal-open");
+    document.body.classList.add(
+        "modal-open"
+    );
 }
 
 
@@ -761,7 +1006,9 @@ function openExperienceModal(id) {
 function closeExperienceModal() {
 
     const modal =
-        document.getElementById("experience-modal");
+        document.getElementById(
+            "experience-modal"
+        );
 
     if (!modal) {
         return;
@@ -769,9 +1016,14 @@ function closeExperienceModal() {
 
     modal.classList.remove("open");
 
-    modal.setAttribute("aria-hidden", "true");
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
 
-    document.body.classList.remove("modal-open");
+    document.body.classList.remove(
+        "modal-open"
+    );
 }
 
 
@@ -782,55 +1034,65 @@ function closeExperienceModal() {
 function setupModalEvents() {
 
     const modal =
-        document.getElementById("experience-modal");
+        document.getElementById(
+            "experience-modal"
+        );
 
     if (!modal) {
         return;
     }
 
 
-    /*
-     * Chiude cliccando sull'overlay
-     * o su qualsiasi elemento con data-close-modal.
-     */
+    modal.addEventListener(
+        "click",
+        function (event) {
 
-    modal.addEventListener("click", function (event) {
+            const closeTarget =
+                event.target.closest(
+                    "[data-close-modal]"
+                );
 
-        const closeTarget =
-            event.target.closest("[data-close-modal]");
+            if (closeTarget) {
+                closeExperienceModal();
+            }
 
-        if (closeTarget) {
-            closeExperienceModal();
         }
-
-    });
+    );
 }
 
 
 /* =========================================================
-   ESC PER CHIUDERE
+   ESC
    ========================================================= */
 
-document.addEventListener("keydown", function (event) {
+document.addEventListener(
+    "keydown",
+    function (event) {
 
-    if (event.key === "Escape") {
-        closeExperienceModal();
+        if (event.key === "Escape") {
+            closeExperienceModal();
+        }
+
     }
-
-});
+);
 
 
 /* =========================================================
-   PRENOTAZIONE / CALCOLO TOTALE
+   PRENOTAZIONE
    ========================================================= */
 
 function setupPizzaBooking() {
 
     const dateInput =
-        document.getElementById("pizza-date");
+        document.getElementById(
+            "pizza-date"
+        );
 
     const participantsSelect =
-        document.getElementById("pizza-participants");
+        document.getElementById(
+            "pizza-participants"
+        );
+
 
     if (!dateInput || !participantsSelect) {
         return;
@@ -857,25 +1119,33 @@ function setupPizzaBooking() {
 function setMinimumDate() {
 
     const dateInput =
-        document.getElementById("pizza-date");
+        document.getElementById(
+            "pizza-date"
+        );
 
     if (!dateInput) {
         return;
     }
 
 
-    const today = new Date();
+    const today =
+        new Date();
+
 
     const year =
         today.getFullYear();
 
+
     const month =
-        String(today.getMonth() + 1)
-            .padStart(2, "0");
+        String(
+            today.getMonth() + 1
+        ).padStart(2, "0");
+
 
     const day =
-        String(today.getDate())
-            .padStart(2, "0");
+        String(
+            today.getDate()
+        ).padStart(2, "0");
 
 
     dateInput.min =
@@ -884,18 +1154,26 @@ function setMinimumDate() {
 
 
 /* =========================================================
-   AGGIORNA PREZZO
+   PREZZO DINAMICO
    ========================================================= */
 
 function updatePizzaPrice() {
 
     const participantsSelect =
-        document.getElementById("pizza-participants");
+        document.getElementById(
+            "pizza-participants"
+        );
 
     const totalElement =
-        document.getElementById("pizza-total-price");
+        document.getElementById(
+            "pizza-total-price"
+        );
 
-    if (!participantsSelect || !totalElement) {
+
+    if (
+        !participantsSelect ||
+        !totalElement
+    ) {
         return;
     }
 
@@ -908,7 +1186,9 @@ function updatePizzaPrice() {
 
 
     const total =
-        getPizzaTotal(participants);
+        getPizzaTotal(
+            participants
+        );
 
 
     totalElement.textContent =
@@ -923,25 +1203,26 @@ function updatePizzaPrice() {
 function requestPizzaAvailability() {
 
     const dateInput =
-        document.getElementById("pizza-date");
+        document.getElementById(
+            "pizza-date"
+        );
 
     const participantsSelect =
-        document.getElementById("pizza-participants");
+        document.getElementById(
+            "pizza-participants"
+        );
 
-    if (!dateInput || !participantsSelect) {
+
+    if (
+        !dateInput ||
+        !participantsSelect
+    ) {
         return;
     }
 
 
     const selectedDate =
         dateInput.value;
-
-
-    const participants =
-        parseInt(
-            participantsSelect.value,
-            10
-        ) || 1;
 
 
     if (!selectedDate) {
@@ -954,12 +1235,23 @@ function requestPizzaAvailability() {
     }
 
 
+    const participants =
+        parseInt(
+            participantsSelect.value,
+            10
+        ) || 1;
+
+
     const total =
-        getPizzaTotal(participants);
+        getPizzaTotal(
+            participants
+        );
 
 
     const formattedDate =
-        formatDateItalian(selectedDate);
+        formatItalianDate(
+            selectedDate
+        );
 
 
     const message =
