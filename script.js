@@ -84,6 +84,7 @@ function getRandomImage(images) {
     }
 
     const randomIndex = Math.floor(Math.random() * images.length);
+
     return images[randomIndex];
 }
 
@@ -114,11 +115,12 @@ function formatDateItalian(dateValue) {
 
 
 /* =========================================================
-   RENDER CARD
+   RENDER CATALOGO
    ========================================================= */
 
-function renderExperiences() {
-    const grid = document.getElementById("experiences-grid");
+function renderExperiences(filter = "all") {
+
+    const grid = document.getElementById("catalog-grid");
 
     if (!grid) {
         return;
@@ -126,24 +128,42 @@ function renderExperiences() {
 
     grid.innerHTML = "";
 
-    experiences.forEach((experience) => {
+    const filteredExperiences = experiences.filter((experience) => {
+
+        if (filter === "all") {
+            return true;
+        }
+
+        return experience.category === filter;
+    });
+
+
+    filteredExperiences.forEach((experience) => {
+
         const card = document.createElement("article");
 
         card.className = "experience-card";
+
         card.dataset.category = experience.category;
         card.dataset.id = experience.id;
 
+
         const randomImage = getRandomImage(experience.images);
 
+
         card.innerHTML = `
+
             <div class="experience-image-wrapper">
+
                 <img
                     class="experience-image"
                     src="${randomImage}"
                     alt="${experience.title}"
                     loading="lazy"
                 >
+
             </div>
+
 
             <div class="experience-card-content">
 
@@ -151,24 +171,38 @@ function renderExperiences() {
                     ${experience.categoryLabel}
                 </div>
 
+
                 <h3 class="experience-title">
                     ${experience.title}
                 </h3>
 
+
                 <div class="experience-meta">
-                    <span>${experience.duration}</span>
+
+                    <span>
+                        ${experience.duration}
+                    </span>
+
                     <span>•</span>
-                    <span>${experience.type}</span>
+
+                    <span>
+                        ${experience.type}
+                    </span>
+
                 </div>
+
 
                 <p class="experience-short-description">
                     ${experience.shortDescription}
                 </p>
 
+
                 <div class="experience-card-bottom">
+
                     <div class="experience-price">
                         ${formatPrice(experience.price)} / persona
                     </div>
+
 
                     <button
                         class="experience-button"
@@ -177,12 +211,15 @@ function renderExperiences() {
                     >
                         Scopri
                     </button>
+
                 </div>
 
             </div>
         `;
 
-        card.addEventListener("click", function (event) {
+
+        card.addEventListener("click", function(event) {
+
             if (event.target.closest("button")) {
                 return;
             }
@@ -190,8 +227,57 @@ function renderExperiences() {
             openExperienceModal(experience.id);
         });
 
+
         grid.appendChild(card);
+
     });
+}
+
+
+/* =========================================================
+   FILTRI
+   ========================================================= */
+
+function setupFilters() {
+
+    const filterButtons =
+        document.querySelectorAll(".filter-button");
+
+
+    filterButtons.forEach((button) => {
+
+        button.addEventListener("click", function() {
+
+            const selectedFilter =
+                button.dataset.filter;
+
+
+            filterButtons.forEach((item) => {
+
+                item.classList.remove("active");
+
+                item.setAttribute(
+                    "aria-selected",
+                    "false"
+                );
+
+            });
+
+
+            button.classList.add("active");
+
+            button.setAttribute(
+                "aria-selected",
+                "true"
+            );
+
+
+            renderExperiences(selectedFilter);
+
+        });
+
+    });
+
 }
 
 
@@ -200,100 +286,133 @@ function renderExperiences() {
    ========================================================= */
 
 function openExperienceModal(id) {
-    const experience = experiences.find((item) => item.id === id);
+
+    const experience =
+        experiences.find(
+            (item) => item.id === id
+        );
+
 
     if (!experience) {
         return;
     }
 
-    const modal = document.getElementById("experience-modal");
 
-    if (!modal) {
+    const modal =
+        document.getElementById("experience-modal");
+
+
+    const modalContent =
+        document.getElementById("modal-content");
+
+
+    if (!modal || !modalContent) {
         return;
     }
 
-    const modalContent = modal.querySelector(".modal-content");
-
-    if (!modalContent) {
-        return;
-    }
 
     modalContent.innerHTML = `
-        <button
-            class="modal-close"
-            type="button"
-            onclick="closeExperienceModal()"
-            aria-label="Chiudi"
-        >
-            ×
-        </button>
 
         <div class="modal-gallery">
 
             <div class="modal-gallery-main">
+
                 <img
                     src="${experience.images[0]}"
                     alt="${experience.title}"
                 >
+
             </div>
+
 
             <div class="modal-gallery-side">
 
                 <div class="modal-gallery-small">
+
                     <img
                         src="${experience.images[1]}"
                         alt="${experience.title}"
                     >
+
                 </div>
 
+
                 <div class="modal-gallery-small">
+
                     <img
                         src="${experience.images[2]}"
                         alt="${experience.title}"
                     >
+
                 </div>
 
+
                 <div class="modal-gallery-small">
+
                     <img
                         src="${experience.images[3]}"
                         alt="${experience.title}"
                     >
+
                 </div>
 
+
                 <div class="modal-gallery-small">
+
                     <img
                         src="${experience.images[4]}"
                         alt="${experience.title}"
                     >
+
                 </div>
 
+
                 <div class="modal-gallery-wide">
+
                     <img
                         src="${experience.images[5]}"
                         alt="${experience.title}"
                     >
+
                 </div>
 
             </div>
 
         </div>
 
+
         <div class="modal-header">
+
             <div class="experience-category">
                 ${experience.categoryLabel}
             </div>
 
-            <h2>
+
+            <h2 id="modal-title">
                 ${experience.title}
             </h2>
 
+
             <div class="modal-meta">
-                <span>${experience.duration}</span>
+
+                <span>
+                    ${experience.duration}
+                </span>
+
                 <span>•</span>
-                <span>${experience.languages}</span>
+
+                <span>
+                    ${experience.languages}
+                </span>
+
                 <span>•</span>
-                <span>${experience.type}</span>
+
+                <span>
+                    ${experience.type}
+                </span>
+
             </div>
+
         </div>
 
 
@@ -301,7 +420,9 @@ function openExperienceModal(id) {
 
             <div class="booking-grid">
 
+
                 <div class="booking-field">
+
                     <label for="pizza-date">
                         Data
                     </label>
@@ -310,34 +431,51 @@ function openExperienceModal(id) {
                         type="date"
                         id="pizza-date"
                     >
+
                 </div>
 
 
                 <div class="booking-field">
+
                     <label for="pizza-participants">
                         Partecipanti
                     </label>
 
                     <select id="pizza-participants">
-                        ${Array.from({ length: 10 }, (_, index) => {
-                            const number = index + 1;
 
-                            return `
-                                <option value="${number}">
-                                    ${number} ${number === 1 ? "persona" : "persone"}
-                                </option>
-                            `;
-                        }).join("")}
+                        ${Array.from(
+                            { length: 10 },
+                            (_, index) => {
+
+                                const number =
+                                    index + 1;
+
+                                return `
+                                    <option value="${number}">
+                                        ${number}
+                                        ${number === 1
+                                            ? "persona"
+                                            : "persone"}
+                                    </option>
+                                `;
+                            }
+                        ).join("")}
+
                     </select>
+
                 </div>
 
 
                 <div class="booking-total">
-                    <span>Totale</span>
+
+                    <span>
+                        Totale
+                    </span>
 
                     <strong id="pizza-total-price">
                         49 €
                     </strong>
+
                 </div>
 
             </div>
@@ -356,29 +494,40 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>Preparazione</h3>
+            <h3>
+                Preparazione
+            </h3>
+
 
             <div class="experience-itinerary">
 
-                ${experience.preparation.map((step, index) => `
+                ${experience.preparation.map(
+                    (step, index) => `
+
                     <div class="itinerary-step">
 
                         <div class="itinerary-marker">
                             ${index + 1}
                         </div>
 
+
                         <div class="itinerary-content">
+
                             <span class="itinerary-label">
                                 Procedura
                             </span>
 
+
                             <p>
                                 ${step}
                             </p>
+
                         </div>
 
                     </div>
-                `).join("")}
+
+                `
+                ).join("")}
 
             </div>
 
@@ -387,7 +536,10 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>L'attività in breve</h3>
+            <h3>
+                L'attività in breve
+            </h3>
+
 
             <p>
                 ${experience.shortDescription}
@@ -398,7 +550,10 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>Descrizione completa</h3>
+            <h3>
+                Descrizione completa
+            </h3>
+
 
             <p>
                 ${experience.description}
@@ -409,12 +564,21 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>Cosa è incluso</h3>
+            <h3>
+                Cosa è incluso
+            </h3>
+
 
             <ul>
-                ${experience.included.map(item => `
-                    <li>${item}</li>
-                `).join("")}
+
+                ${experience.included.map(
+                    (item) => `
+                        <li>
+                            ${item}
+                        </li>
+                    `
+                ).join("")}
+
             </ul>
 
         </section>
@@ -422,12 +586,21 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>Cosa non è incluso</h3>
+            <h3>
+                Cosa non è incluso
+            </h3>
+
 
             <ul>
-                ${experience.notIncluded.map(item => `
-                    <li>${item}</li>
-                `).join("")}
+
+                ${experience.notIncluded.map(
+                    (item) => `
+                        <li>
+                            ${item}
+                        </li>
+                    `
+                ).join("")}
+
             </ul>
 
         </section>
@@ -435,7 +608,10 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>Punti di incontro</h3>
+            <h3>
+                Punti di incontro
+            </h3>
+
 
             <p>
                 ${experience.meetingPoint}
@@ -446,12 +622,21 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>Non ammesso</h3>
+            <h3>
+                Non ammesso
+            </h3>
+
 
             <ul>
-                ${experience.notAllowed.map(item => `
-                    <li>${item}</li>
-                `).join("")}
+
+                ${experience.notAllowed.map(
+                    (item) => `
+                        <li>
+                            ${item}
+                        </li>
+                    `
+                ).join("")}
+
             </ul>
 
         </section>
@@ -459,22 +644,41 @@ function openExperienceModal(id) {
 
         <section class="modal-section">
 
-            <h3>Informazioni utili</h3>
+            <h3>
+                Informazioni utili
+            </h3>
+
 
             <ul>
-                ${experience.usefulInfo.map(item => `
-                    <li>${item}</li>
-                `).join("")}
+
+                ${experience.usefulInfo.map(
+                    (item) => `
+                        <li>
+                            ${item}
+                        </li>
+                    `
+                ).join("")}
+
             </ul>
 
         </section>
+
     `;
 
 
     setupPizzaBooking();
 
+
     modal.classList.add("active");
-    document.body.classList.add("modal-open");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "modal-open"
+    );
 }
 
 
@@ -483,92 +687,172 @@ function openExperienceModal(id) {
    ========================================================= */
 
 function closeExperienceModal() {
-    const modal = document.getElementById("experience-modal");
+
+    const modal =
+        document.getElementById("experience-modal");
+
 
     if (!modal) {
         return;
     }
+
 
     modal.classList.remove("active");
-    document.body.classList.remove("modal-open");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "modal-open"
+    );
 }
-
-
-function setupModalEvents() {
-    const modal = document.getElementById("experience-modal");
-
-    if (!modal) {
-        return;
-    }
-
-    modal.addEventListener("click", function (event) {
-        if (event.target === modal) {
-            closeExperienceModal();
-        }
-    });
-}
-
-
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-        closeExperienceModal();
-    }
-});
 
 
 /* =========================================================
-   PRENOTAZIONE / CALCOLO TOTALE
+   EVENTI MODAL
+   ========================================================= */
+
+function setupModalEvents() {
+
+    const modal =
+        document.getElementById("experience-modal");
+
+
+    if (!modal) {
+        return;
+    }
+
+
+    const closeElements =
+        modal.querySelectorAll(
+            "[data-close-modal]"
+        );
+
+
+    closeElements.forEach((element) => {
+
+        element.addEventListener(
+            "click",
+            closeExperienceModal
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   PRENOTAZIONE PIZZA
    ========================================================= */
 
 function setupPizzaBooking() {
-    const dateInput = document.getElementById("pizza-date");
-    const participantsSelect = document.getElementById("pizza-participants");
+
+    const dateInput =
+        document.getElementById("pizza-date");
+
+
+    const participantsSelect =
+        document.getElementById(
+            "pizza-participants"
+        );
+
 
     if (!dateInput || !participantsSelect) {
         return;
     }
 
+
     setMinimumDate();
 
-    participantsSelect.addEventListener("change", updatePizzaPrice);
+
+    participantsSelect.addEventListener(
+        "change",
+        updatePizzaPrice
+    );
+
 
     updatePizzaPrice();
+
 }
 
 
+/* =========================================================
+   DATA MINIMA
+   ========================================================= */
+
 function setMinimumDate() {
-    const dateInput = document.getElementById("pizza-date");
+
+    const dateInput =
+        document.getElementById("pizza-date");
+
 
     if (!dateInput) {
         return;
     }
 
-    const today = new Date();
 
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
+    const today =
+        new Date();
 
-    dateInput.min = `${year}-${month}-${day}`;
+
+    const year =
+        today.getFullYear();
+
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const day =
+        String(
+            today.getDate()
+        ).padStart(2, "0");
+
+
+    dateInput.min =
+        `${year}-${month}-${day}`;
 }
 
 
+/* =========================================================
+   PREZZO DINAMICO
+   ========================================================= */
+
 function updatePizzaPrice() {
+
     const participantsSelect =
-        document.getElementById("pizza-participants");
+        document.getElementById(
+            "pizza-participants"
+        );
+
 
     const totalElement =
-        document.getElementById("pizza-total-price");
+        document.getElementById(
+            "pizza-total-price"
+        );
+
 
     if (!participantsSelect || !totalElement) {
         return;
     }
 
+
     const participants =
-        parseInt(participantsSelect.value, 10) || 1;
+        parseInt(
+            participantsSelect.value,
+            10
+        ) || 1;
+
 
     const total =
-        getPizzaTotal(participants);
+        getPizzaTotal(
+            participants
+        );
+
 
     totalElement.textContent =
         formatPrice(total);
@@ -580,34 +864,59 @@ function updatePizzaPrice() {
    ========================================================= */
 
 function requestPizzaAvailability() {
+
     const dateInput =
-        document.getElementById("pizza-date");
+        document.getElementById(
+            "pizza-date"
+        );
+
 
     const participantsSelect =
-        document.getElementById("pizza-participants");
+        document.getElementById(
+            "pizza-participants"
+        );
+
 
     if (!dateInput || !participantsSelect) {
         return;
     }
 
+
     const selectedDate =
         dateInput.value;
 
+
     const participants =
-        parseInt(participantsSelect.value, 10) || 1;
+        parseInt(
+            participantsSelect.value,
+            10
+        ) || 1;
+
 
     if (!selectedDate) {
-        alert("Seleziona una data prima di richiedere la disponibilità.");
+
+        alert(
+            "Seleziona una data prima di richiedere la disponibilità."
+        );
+
         return;
     }
 
+
     const total =
-        getPizzaTotal(participants);
+        getPizzaTotal(
+            participants
+        );
+
 
     const formattedDate =
-        formatDateItalian(selectedDate);
+        formatDateItalian(
+            selectedDate
+        );
 
-    const message = `Ciao, vorrei richiedere disponibilità per: Lezione di Pizza Napoletana
+
+    const message =
+`Ciao, vorrei richiedere disponibilità per: Lezione di Pizza Napoletana
 
 Data richiesta: ${formattedDate}
 
@@ -617,8 +926,10 @@ Totale: ${total} €
 
 Grazie.`;
 
+
     const whatsappUrl =
         `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
 
     window.open(
         whatsappUrl,
@@ -631,7 +942,33 @@ Grazie.`;
    AVVIO
    ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
-    renderExperiences();
-    setupModalEvents();
-});
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        renderExperiences("all");
+
+        setupFilters();
+
+        setupModalEvents();
+
+    }
+);
+
+
+/* =========================================================
+   TASTO ESC
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            closeExperienceModal();
+
+        }
+
+    }
+);
