@@ -107,44 +107,371 @@ Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata p
 
 
 /* =========================================================
+   CARICAMENTO ESPERIENZE MODULARI
+   ========================================================= */
+
+function loadExperienceScript(path, globalName) {
+
+    return new Promise((resolve) => {
+
+        if (window[globalName]) {
+            resolve(window[globalName]);
+            return;
+        }
+
+        const script = document.createElement("script");
+
+        script.src = path;
+
+        script.onload = function () {
+
+            if (window[globalName]) {
+
+                resolve(window[globalName]);
+
+            } else {
+
+                console.error(
+                    `${globalName} non trovata.`
+                );
+
+                resolve(null);
+
+            }
+
+        };
+
+        script.onerror = function () {
+
+            console.error(
+                `Impossibile caricare ${path}`
+            );
+
+            resolve(null);
+
+        };
+
+        document.head.appendChild(script);
+
+    });
+
+}
+
+
+function loadPizzaSeraleExperience() {
+
+    return loadExperienceScript(
+        "experiences/cooking/pizza-serale/experience.js",
+        "pizzaSeraleExperience"
+    );
+
+}
+
+
+function loadPastaGelatoExperience() {
+
+    return loadExperienceScript(
+        "EXPERIENSE/COOKING/GELATO/EXPERIENCE.JS",
+        "pastaGelatoExperience"
+    );
+
+}
+
+
+/* =========================================================
    UTILITÀ
    ========================================================= */
 
 function formatPrice(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === 0
+    ) {
+
+        return "Richiedi preventivo";
+
+    }
+
     return `${value} €`;
+
 }
 
 
 function getRandomImage(images) {
 
-    if (!images || images.length === 0) {
+    if (
+        !images ||
+        images.length === 0
+    ) {
+
         return "";
+
     }
 
     return images[
-        Math.floor(Math.random() * images.length)
+        Math.floor(
+            Math.random() *
+            images.length
+        )
     ];
+
 }
 
 
 function formatItalianDate(dateValue) {
 
     if (!dateValue) {
+
         return "";
+
     }
 
-    const parts = dateValue.split("-");
+    const parts =
+        dateValue.split("-");
 
-    if (parts.length !== 3) {
+    if (
+        parts.length !== 3
+    ) {
+
         return dateValue;
+
     }
 
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
 }
 
 
-function getPizzaTotal(participants) {
-    return participants * 49;
+/* =========================================================
+   PREZZI PER MODALITÀ
+   ========================================================= */
+
+function getPricingOptions(experience) {
+
+    if (
+        !experience ||
+        !experience.pricing
+    ) {
+
+        return null;
+
+    }
+
+    const pricing =
+        experience.pricing;
+
+    const options = [];
+
+    if (
+        pricing.shared !== undefined &&
+        pricing.shared !== null
+    ) {
+
+        options.push({
+            id: "shared",
+            label: "Condivisa",
+            price: Number(
+                pricing.shared
+            ),
+            description:
+                "Insieme ad altri partecipanti"
+        });
+
+    }
+
+    if (
+        pricing.private !== undefined &&
+        pricing.private !== null
+    ) {
+
+        options.push({
+            id: "private",
+            label: "Privata",
+            price: Number(
+                pricing.private
+            ),
+            description:
+                "Solo il vostro gruppo"
+        });
+
+    }
+
+    return options.length
+        ? options
+        : null;
+
+}
+
+
+function getSelectedPrice(
+    experience,
+    selectedMode
+) {
+
+    const pricingOptions =
+        getPricingOptions(
+            experience
+        );
+
+    if (
+        pricingOptions
+    ) {
+
+        const selectedOption =
+            pricingOptions.find(
+                option =>
+                    option.id ===
+                    selectedMode
+            );
+
+        if (
+            selectedOption
+        ) {
+
+            return selectedOption.price;
+
+        }
+
+    }
+
+    return experience.price || 0;
+
+}
+
+
+function getDefaultPricingMode(
+    experience
+) {
+
+    if (
+        experience &&
+        experience.defaultMode
+    ) {
+
+        return experience.defaultMode;
+
+    }
+
+    const pricingOptions =
+        getPricingOptions(
+            experience
+        );
+
+    if (
+        pricingOptions &&
+        pricingOptions.length > 0
+    ) {
+
+        return pricingOptions[0].id;
+
+    }
+
+    return null;
+
+}
+
+
+function getSelectedModeLabel(
+    experience,
+    selectedMode
+) {
+
+    const pricingOptions =
+        getPricingOptions(
+            experience
+        );
+
+    if (
+        pricingOptions
+    ) {
+
+        const selectedOption =
+            pricingOptions.find(
+                option =>
+                    option.id ===
+                    selectedMode
+            );
+
+        if (
+            selectedOption
+        ) {
+
+            return selectedOption.label;
+
+        }
+
+    }
+
+    return experience.type || "";
+
+}
+
+
+function getSelectedModeType(
+    experience,
+    selectedMode
+) {
+
+    const pricingOptions =
+        getPricingOptions(
+            experience
+        );
+
+    if (
+        pricingOptions
+    ) {
+
+        const selectedOption =
+            pricingOptions.find(
+                option =>
+                    option.id ===
+                    selectedMode
+            );
+
+        if (
+            selectedOption
+        ) {
+
+            return `Esperienza ${selectedOption.label.toLowerCase()}`;
+
+        }
+
+    }
+
+    return experience.type || "";
+
+}
+
+
+/* =========================================================
+   CALCOLO TOTALE
+   ========================================================= */
+
+function getExperienceTotal(
+    experience,
+    participants,
+    selectedMode = null
+) {
+
+    const price =
+        getSelectedPrice(
+            experience,
+            selectedMode
+        );
+
+    if (!price) {
+
+        return 0;
+
+    }
+
+    return (
+        Number(price) *
+        participants
+    );
+
 }
 
 
@@ -155,214 +482,256 @@ function getPizzaTotal(participants) {
 function renderExperiences() {
 
     const grid =
-        document.getElementById("catalog-grid");
+        document.getElementById(
+            "catalog-grid"
+        );
 
     if (!grid) {
-        console.error("Elemento #catalog-grid non trovato.");
+
+        console.error(
+            "Elemento #catalog-grid non trovato."
+        );
+
         return;
+
     }
 
     grid.innerHTML = "";
 
-    experiences.forEach((experience) => {
+    experiences.forEach(
+        (experience) => {
 
-        const card =
-            document.createElement("article");
+            const card =
+                document.createElement(
+                    "article"
+                );
 
-        card.className =
-            "experience-card";
+            card.className =
+                "experience-card";
 
-        card.dataset.id =
-            experience.id;
+            card.dataset.id =
+                experience.id;
 
+            const galleryImages =
+                experience.images
+                    .map(
+                        (
+                            image,
+                            index
+                        ) => {
 
-        const randomImage =
-            getRandomImage(experience.images);
+                            return `
+                                <img
+                                    src="${image}"
+                                    alt="${experience.title} - Foto ${index + 1}"
+                                    loading="${index === 0 ? "eager" : "lazy"}"
+                                >
+                            `;
 
+                        }
+                    )
+                    .join("");
 
-        const galleryImages =
-            experience.images.map(
-                (image, index) => {
+            const galleryDots =
+                experience.images
+                    .map(
+                        (
+                            _,
+                            index
+                        ) => {
 
-                    return `
-                        <img
-                            src="${image}"
-                            alt="${experience.title} - Foto ${index + 1}"
-                            loading="${index === 0 ? "eager" : "lazy"}"
-                        >
-                    `;
+                            return `
+                                <span
+                                    class="experience-card-gallery-dot ${
+                                        index === 0
+                                            ? "active"
+                                            : ""
+                                    }"
+                                    data-index="${index}"
+                                ></span>
+                            `;
 
-                }
-            ).join("");
+                        }
+                    )
+                    .join("");
 
+            const pricingOptions =
+                getPricingOptions(
+                    experience
+                );
 
-        const galleryDots =
-            experience.images.map(
-                (_, index) => {
+            const defaultMode =
+                getDefaultPricingMode(
+                    experience
+                );
 
-                    return `
-                        <span
-                            class="experience-card-gallery-dot ${
-                                index === 0
-                                    ? "active"
-                                    : ""
-                            }"
-                            data-index="${index}"
-                        ></span>
-                    `;
+            const defaultPrice =
+                getSelectedPrice(
+                    experience,
+                    defaultMode
+                );
 
-                }
-            ).join("");
+            const priceHtml =
+                defaultPrice
+                    ? `${formatPrice(
+                        defaultPrice
+                    )} / persona`
+                    : "Richiedi preventivo";
 
+            card.innerHTML = `
 
-        card.innerHTML = `
+                <div class="experience-card-image">
 
-            <div class="experience-card-image">
-
-                <div
-                    class="experience-card-gallery-track"
-                    data-gallery-id="${experience.id}"
-                >
-                    ${galleryImages}
-                </div>
-
-
-                <div
-                    class="experience-card-gallery-controls"
-                >
-
-                    <button
-                        type="button"
-                        class="experience-card-gallery-arrow"
-                        data-gallery-prev
-                        aria-label="Foto precedente"
+                    <div
+                        class="experience-card-gallery-track"
+                        data-gallery-id="${experience.id}"
                     >
-                        ‹
-                    </button>
 
-
-                    <button
-                        type="button"
-                        class="experience-card-gallery-arrow"
-                        data-gallery-next
-                        aria-label="Foto successiva"
-                    >
-                        ›
-                    </button>
-
-                </div>
-
-
-                <div
-                    class="experience-card-gallery-dots"
-                >
-                    ${galleryDots}
-                </div>
-
-            </div>
-
-
-            <div class="experience-card-content">
-
-                <div class="experience-card-category">
-                    ${experience.categoryLabel}
-                </div>
-
-
-                <h3 class="experience-card-title">
-                    ${experience.title}
-                </h3>
-
-
-                <p class="experience-card-description">
-                    ${experience.shortDescription}
-                </p>
-
-
-                <div class="experience-card-footer">
-
-                    <div>
-
-                        <div class="experience-price">
-                            ${formatPrice(experience.price)} / persona
-                        </div>
-
-                        <div class="experience-duration">
-                            ${experience.duration}
-                        </div>
+                        ${galleryImages}
 
                     </div>
 
-
-                    <button
-                        type="button"
-                        class="experience-button"
+                    <div
+                        class="experience-card-gallery-controls"
                     >
-                        Scopri
-                    </button>
+
+                        <button
+                            type="button"
+                            class="experience-card-gallery-arrow"
+                            data-gallery-prev
+                            aria-label="Foto precedente"
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            type="button"
+                            class="experience-card-gallery-arrow"
+                            data-gallery-next
+                            aria-label="Foto successiva"
+                        >
+                            ›
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="experience-card-gallery-dots"
+                    >
+
+                        ${galleryDots}
+
+                    </div>
 
                 </div>
 
-            </div>
-        `;
+                <div class="experience-card-content">
 
+                    <div class="experience-card-category">
+                        ${experience.categoryLabel}
+                    </div>
 
-        const gallery =
-            card.querySelector(
-                ".experience-card-gallery-track"
-            );
+                    <h3 class="experience-card-title">
+                        ${experience.title}
+                    </h3>
 
+                    <p class="experience-card-description">
+                        ${experience.shortDescription}
+                    </p>
 
-        const previousButton =
-            card.querySelector(
-                "[data-gallery-prev]"
-            );
+                    <div class="experience-card-footer">
 
+                        <div>
 
-        const nextButton =
-            card.querySelector(
-                "[data-gallery-next]"
-            );
+                            <div class="experience-price">
+                                ${priceHtml}
+                            </div>
 
+                            <div class="experience-duration">
+                                ${experience.duration}
+                            </div>
 
-        const dots =
-            Array.from(
-                card.querySelectorAll(
-                    ".experience-card-gallery-dot"
-                )
-            );
+                        </div>
 
+                        <button
+                            type="button"
+                            class="experience-button"
+                        >
+                            Scopri
+                        </button>
 
-        setupCardGallery(
-            card,
-            gallery,
-            previousButton,
-            nextButton,
-            dots,
-            experience
-        );
+                    </div>
 
+                </div>
+            `;
 
-        card.addEventListener(
-            "click",
-            function () {
-
-                openExperienceModal(
-                    experience.id
+            const gallery =
+                card.querySelector(
+                    ".experience-card-gallery-track"
                 );
 
-            }
-        );
+            const previousButton =
+                card.querySelector(
+                    "[data-gallery-prev]"
+                );
 
+            const nextButton =
+                card.querySelector(
+                    "[data-gallery-next]"
+                );
 
-        grid.appendChild(card);
+            const dots =
+                Array.from(
+                    card.querySelectorAll(
+                        ".experience-card-gallery-dot"
+                    )
+                );
 
-    });
+            setupCardGallery(
+                card,
+                gallery,
+                previousButton,
+                nextButton,
+                dots,
+                experience
+            );
+
+            card.addEventListener(
+                "click",
+                function (event) {
+
+                    if (
+                        event.target.closest(
+                            ".experience-card-gallery-arrow"
+                        ) ||
+                        event.target.closest(
+                            ".experience-card-gallery-dot"
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+                    openExperienceModal(
+                        experience.id
+                    );
+
+                }
+            );
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
 }
 
 
 /* =========================================================
-   GALLERIA CARD MOBILE
+   GALLERIA CARD
    ========================================================= */
 
 function setupCardGallery(
@@ -380,17 +749,20 @@ function setupCardGallery(
         !previousButton ||
         !nextButton
     ) {
+
         return;
+
     }
 
-
     let currentIndex = 0;
-
 
     function updateDots(index) {
 
         dots.forEach(
-            (dot, dotIndex) => {
+            (
+                dot,
+                dotIndex
+            ) => {
 
                 dot.classList.toggle(
                     "active",
@@ -402,27 +774,31 @@ function setupCardGallery(
 
     }
 
-
     function scrollToImage(index) {
 
         if (
             index < 0 ||
-            index >= experience.images.length
+            index >=
+                experience.images.length
         ) {
+
             return;
+
         }
 
-
-        currentIndex = index;
-
+        currentIndex =
+            index;
 
         gallery.scrollTo({
+
             left:
                 gallery.clientWidth *
                 currentIndex,
-            behavior: "smooth"
-        });
 
+            behavior:
+                "smooth"
+
+        });
 
         updateDots(
             currentIndex
@@ -430,28 +806,34 @@ function setupCardGallery(
 
     }
 
-
     function getCurrentIndexFromScroll() {
 
         if (
             !gallery.clientWidth
         ) {
+
             return 0;
+
         }
 
-
         return Math.max(
+
             0,
+
             Math.min(
+
                 experience.images.length - 1,
+
                 Math.round(
                     gallery.scrollLeft /
                     gallery.clientWidth
                 )
-            )
-        );
-    }
 
+            )
+
+        );
+
+    }
 
     previousButton.addEventListener(
         "click",
@@ -464,11 +846,12 @@ function setupCardGallery(
                     ? experience.images.length - 1
                     : currentIndex - 1;
 
-            scrollToImage(index);
+            scrollToImage(
+                index
+            );
 
         }
     );
-
 
     nextButton.addEventListener(
         "click",
@@ -477,15 +860,17 @@ function setupCardGallery(
             event.stopPropagation();
 
             const index =
-                currentIndex >= experience.images.length - 1
+                currentIndex >=
+                    experience.images.length - 1
                     ? 0
                     : currentIndex + 1;
 
-            scrollToImage(index);
+            scrollToImage(
+                index
+            );
 
         }
     );
-
 
     gallery.addEventListener(
         "scroll",
@@ -494,12 +879,12 @@ function setupCardGallery(
             const index =
                 getCurrentIndexFromScroll();
 
-
             if (
                 index !== currentIndex
             ) {
 
-                currentIndex = index;
+                currentIndex =
+                    index;
 
                 updateDots(
                     currentIndex
@@ -513,7 +898,6 @@ function setupCardGallery(
         }
     );
 
-
     gallery.addEventListener(
         "touchstart",
         function (event) {
@@ -525,7 +909,6 @@ function setupCardGallery(
             passive: true
         }
     );
-
 
     gallery.addEventListener(
         "touchmove",
@@ -539,7 +922,6 @@ function setupCardGallery(
         }
     );
 
-
     gallery.addEventListener(
         "touchend",
         function (event) {
@@ -552,7 +934,6 @@ function setupCardGallery(
         }
     );
 
-
     gallery.addEventListener(
         "click",
         function (event) {
@@ -562,9 +943,10 @@ function setupCardGallery(
         }
     );
 
-
     dots.forEach(
-        (dot) => {
+        (
+            dot
+        ) => {
 
             dot.addEventListener(
                 "click",
@@ -578,7 +960,9 @@ function setupCardGallery(
                             10
                         );
 
-                    scrollToImage(index);
+                    scrollToImage(
+                        index
+                    );
 
                 }
             );
@@ -586,8 +970,9 @@ function setupCardGallery(
         }
     );
 
-
-    updateDots(0);
+    updateDots(
+        0
+    );
 
 }
 
@@ -596,56 +981,275 @@ function setupCardGallery(
    MODAL
    ========================================================= */
 
-function openExperienceModal(id) {
+function openExperienceModal(
+    id
+) {
 
     const experience =
         experiences.find(
-            item => item.id === id
+            item =>
+                item.id === id
         );
 
     if (!experience) {
-        return;
-    }
 
+        console.error(
+            "Esperienza non trovata:",
+            id
+        );
+
+        return;
+
+    }
 
     const modal =
         document.getElementById(
             "experience-modal"
         );
 
-
     const modalContent =
         document.getElementById(
             "modal-content"
         );
 
-
-    if (!modal || !modalContent) {
+    if (
+        !modal ||
+        !modalContent
+    ) {
 
         console.error(
             "Elementi modal non trovati."
         );
 
         return;
+
     }
 
+    const program =
+        experience.program ||
+        experience.preparation ||
+        [];
+
+    const isCookingProgram =
+        Boolean(
+            experience.program
+        );
+
+    const programHeading =
+        isCookingProgram
+            ? "Il programma"
+            : "Preparazione";
+
+    const programHtml =
+        program.map(
+            (
+                step,
+                index
+            ) => {
+
+                const description =
+                    step.description ||
+                    step.text ||
+                    "";
+
+                return `
+
+                    <div class="itinerary-stop">
+
+                        <span class="itinerary-number">
+
+                            ${
+                                isCookingProgram
+                                    ? "Tappa"
+                                    : "Procedura"
+                            }
+
+                            ${String(
+                                index + 1
+                            ).padStart(
+                                2,
+                                "0"
+                            )}
+
+                        </span>
+
+                        <h4>
+                            ${step.title}
+                        </h4>
+
+                        <p>
+                            ${description}
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+    const includedHtml =
+        (
+            experience.included ||
+            []
+        )
+            .map(
+                item => `
+                    <li>
+                        ${item}
+                    </li>
+                `
+            )
+            .join("");
+
+    const notIncludedHtml =
+        (
+            experience.notIncluded ||
+            []
+        )
+            .map(
+                item => `
+                    <li>
+                        ${item}
+                    </li>
+                `
+            )
+            .join("");
+
+    const notAllowedHtml =
+        (
+            experience.notAllowed ||
+            []
+        )
+            .map(
+                item => `
+                    <li>
+                        ${item}
+                    </li>
+                `
+            )
+            .join("");
+
+    const usefulInfoHtml =
+        (
+            experience.usefulInfo ||
+            []
+        )
+            .map(
+                item => `
+                    <li>
+                        ${item}
+                    </li>
+                `
+            )
+            .join("");
+
+    const pricingOptions =
+        getPricingOptions(
+            experience
+        );
+
+    const defaultMode =
+        getDefaultPricingMode(
+            experience
+        );
+
+    const initialPrice =
+        getSelectedPrice(
+            experience,
+            defaultMode
+        );
+
+    const initialType =
+        getSelectedModeType(
+            experience,
+            defaultMode
+        );
+
+    const priceHtml =
+        initialPrice
+            ? `${formatPrice(
+                initialPrice
+            )} / persona`
+            : "Richiedi preventivo";
+
+    const initialTotal =
+        initialPrice
+            ? formatPrice(
+                initialPrice
+            )
+            : "Richiedi preventivo";
+
+    const pricingSelectorHtml =
+        pricingOptions
+            ? `
+
+                <div
+                    class="experience-pricing-selector"
+                    id="experience-pricing-selector"
+                >
+
+                    <div class="experience-pricing-title">
+                        Come vuoi partecipare?
+                    </div>
+
+                    <div class="experience-pricing-options">
+
+                        ${pricingOptions
+                            .map(
+                                option => {
+
+                                    return `
+
+                                        <button
+                                            type="button"
+                                            class="experience-pricing-option ${
+                                                option.id === defaultMode
+                                                    ? "active"
+                                                    : ""
+                                            }"
+                                            data-pricing-mode="${option.id}"
+                                        >
+
+                                            <span
+                                                class="experience-pricing-option-label"
+                                            >
+                                                ${option.label}
+                                            </span>
+
+                                            <strong>
+                                                ${formatPrice(
+                                                    option.price
+                                                )}
+                                                / persona
+                                            </strong>
+
+                                            <small>
+                                                ${option.description}
+                                            </small>
+
+                                        </button>
+
+                                    `;
+
+                                }
+                            )
+                            .join("")}
+
+                    </div>
+
+                </div>
+
+            `
+            : "";
 
     modalContent.innerHTML = `
 
         <div class="modal-body">
 
+            <div class="modal-hero">
 
-            <!-- =========================================
-                 TESTATA
-                 ========================================= -->
-
-            <div
-                class="modal-hero"
-            >
-
-                <div
-                    class="modal-hero-image"
-                >
+                <div class="modal-hero-image">
 
                     <img
                         id="pizza-main-image"
@@ -654,7 +1258,6 @@ function openExperienceModal(id) {
                     >
 
                 </div>
-
 
                 <div class="modal-hero-info">
 
@@ -680,13 +1283,18 @@ function openExperienceModal(id) {
                             ${experience.languages}
                         </div>
 
-                        <div class="modal-meta-item modal-meta-type">
-                            ${experience.type}
+                        <div
+                            class="modal-meta-item modal-meta-type"
+                            id="modal-experience-type"
+                        >
+                            ${initialType}
                         </div>
 
-                        <div class="modal-meta-item modal-meta-price">
-                            ${formatPrice(experience.price)}
-                            / persona
+                        <div
+                            class="modal-meta-item modal-meta-price"
+                            id="modal-experience-price"
+                        >
+                            ${priceHtml}
                         </div>
 
                     </div>
@@ -695,10 +1303,7 @@ function openExperienceModal(id) {
 
             </div>
 
-
-            <!-- =========================================
-                 INDICATORI FOTO MOBILE
-                 ========================================= -->
+            ${pricingSelectorHtml}
 
             <div
                 class="pizza-mobile-gallery"
@@ -714,16 +1319,17 @@ function openExperienceModal(id) {
                     ‹
                 </button>
 
-
-                <div
-                    class="pizza-mobile-gallery-dots"
-                >
+                <div class="pizza-mobile-gallery-dots">
 
                     ${experience.images
                         .map(
-                            (image, index) => {
+                            (
+                                image,
+                                index
+                            ) => {
 
                                 return `
+
                                     <button
                                         type="button"
                                         class="pizza-mobile-gallery-dot ${
@@ -734,6 +1340,7 @@ function openExperienceModal(id) {
                                         data-mobile-gallery-index="${index}"
                                         aria-label="Visualizza foto ${index + 1}"
                                     ></button>
+
                                 `;
 
                             }
@@ -741,7 +1348,6 @@ function openExperienceModal(id) {
                         .join("")}
 
                 </div>
-
 
                 <button
                     type="button"
@@ -754,18 +1360,9 @@ function openExperienceModal(id) {
 
             </div>
 
+            <section class="pizza-modal-gallery">
 
-            <!-- =========================================
-                 GALLERIA DESKTOP FOTO 2-6
-                 ========================================= -->
-
-            <section
-                class="pizza-modal-gallery"
-            >
-
-                <div
-                    class="pizza-modal-gallery-inner"
-                >
+                <div class="pizza-modal-gallery-inner">
 
                     <button
                         type="button"
@@ -776,7 +1373,6 @@ function openExperienceModal(id) {
                         ‹
                     </button>
 
-
                     <div
                         id="pizza-thumbnail-gallery"
                         class="pizza-thumbnail-gallery"
@@ -785,7 +1381,10 @@ function openExperienceModal(id) {
                         ${experience.images
                             .slice(1)
                             .map(
-                                (image, index) => {
+                                (
+                                    image,
+                                    index
+                                ) => {
 
                                     const realIndex =
                                         index + 1;
@@ -807,12 +1406,12 @@ function openExperienceModal(id) {
                                         </button>
 
                                     `;
+
                                 }
                             )
                             .join("")}
 
                     </div>
-
 
                     <button
                         type="button"
@@ -827,24 +1426,13 @@ function openExperienceModal(id) {
 
             </section>
 
+            <section class="pizza-booking">
 
-            <!-- =========================================
-                 DATA + PERSONE
-                 ========================================= -->
-
-            <section
-                class="pizza-booking"
-            >
-
-                <div
-                    class="pizza-booking-fields"
-                >
+                <div class="pizza-booking-fields">
 
                     <div>
 
-                        <label
-                            for="pizza-date"
-                        >
+                        <label for="pizza-date">
                             Data
                         </label>
 
@@ -855,12 +1443,9 @@ function openExperienceModal(id) {
 
                     </div>
 
-
                     <div>
 
-                        <label
-                            for="pizza-participants"
-                        >
+                        <label for="pizza-participants">
                             Persone
                         </label>
 
@@ -869,22 +1454,35 @@ function openExperienceModal(id) {
                         >
 
                             ${Array.from(
-                                { length: 10 },
-                                (_, index) => {
+                                {
+                                    length: 10
+                                },
+                                (
+                                    _,
+                                    index
+                                ) => {
 
                                     const number =
                                         index + 1;
 
                                     return `
-                                        <option value="${number}">
+
+                                        <option
+                                            value="${number}"
+                                        >
+
                                             ${number}
+
                                             ${
                                                 number === 1
                                                     ? "persona"
                                                     : "persone"
                                             }
+
                                         </option>
+
                                     `;
+
                                 }
                             ).join("")}
 
@@ -894,7 +1492,6 @@ function openExperienceModal(id) {
 
                 </div>
 
-
                 <button
                     type="button"
                     class="whatsapp-button"
@@ -903,69 +1500,33 @@ function openExperienceModal(id) {
                     Richiedi disponibilità su WhatsApp
                 </button>
 
-
-                <div
-                    class="pizza-total"
-                >
+                <div class="pizza-total">
 
                     <span>
                         Totale esperienza
                     </span>
 
-                    <strong
-                        id="pizza-total-price"
-                    >
-                        49 €
+                    <strong id="pizza-total-price">
+                        ${initialTotal}
                     </strong>
 
                 </div>
 
             </section>
 
-
-            <!-- =========================================
-                 PREPARAZIONE
-                 ========================================= -->
-
             <section class="modal-section">
 
                 <h3>
-                    Preparazione
+                    ${programHeading}
                 </h3>
 
                 <div class="itinerary">
 
-                    ${experience.preparation.map(
-                        (step, index) => `
-
-                            <div class="itinerary-stop">
-
-                                <span class="itinerary-number">
-                                    Procedura
-                                    ${String(index + 1).padStart(2, "0")}
-                                </span>
-
-                                <h4>
-                                    ${step.title}
-                                </h4>
-
-                                <p>
-                                    ${step.text}
-                                </p>
-
-                            </div>
-
-                        `
-                    ).join("")}
+                    ${programHtml}
 
                 </div>
 
             </section>
-
-
-            <!-- =========================================
-                 ATTIVITÀ IN BREVE
-                 ========================================= -->
 
             <section class="modal-section">
 
@@ -979,11 +1540,6 @@ function openExperienceModal(id) {
 
             </section>
 
-
-            <!-- =========================================
-                 DESCRIZIONE COMPLETA
-                 ========================================= -->
-
             <section class="modal-section">
 
                 <h3>
@@ -995,11 +1551,6 @@ function openExperienceModal(id) {
                 </p>
 
             </section>
-
-
-            <!-- =========================================
-                 INCLUSO / NON INCLUSO
-                 ========================================= -->
 
             <section class="modal-section">
 
@@ -1013,18 +1564,11 @@ function openExperienceModal(id) {
 
                         <ul>
 
-                            ${experience.included.map(
-                                item => `
-                                    <li>
-                                        ${item}
-                                    </li>
-                                `
-                            ).join("")}
+                            ${includedHtml}
 
                         </ul>
 
                     </div>
-
 
                     <div class="detail-box exclude">
 
@@ -1034,13 +1578,7 @@ function openExperienceModal(id) {
 
                         <ul>
 
-                            ${experience.notIncluded.map(
-                                item => `
-                                    <li>
-                                        ${item}
-                                    </li>
-                                `
-                            ).join("")}
+                            ${notIncludedHtml}
 
                         </ul>
 
@@ -1049,11 +1587,6 @@ function openExperienceModal(id) {
                 </div>
 
             </section>
-
-
-            <!-- =========================================
-                 PUNTO DI INCONTRO
-                 ========================================= -->
 
             <section class="modal-section">
 
@@ -1071,11 +1604,6 @@ function openExperienceModal(id) {
 
             </section>
 
-
-            <!-- =========================================
-                 NON AMMESSO
-                 ========================================= -->
-
             <section class="modal-section">
 
                 <h3>
@@ -1084,22 +1612,11 @@ function openExperienceModal(id) {
 
                 <ul>
 
-                    ${experience.notAllowed.map(
-                        item => `
-                            <li>
-                                ${item}
-                            </li>
-                        `
-                    ).join("")}
+                    ${notAllowedHtml}
 
                 </ul>
 
             </section>
-
-
-            <!-- =========================================
-                 INFORMAZIONI UTILI
-                 ========================================= -->
 
             <section class="modal-section">
 
@@ -1109,13 +1626,7 @@ function openExperienceModal(id) {
 
                 <ul>
 
-                    ${experience.usefulInfo.map(
-                        item => `
-                            <li>
-                                ${item}
-                            </li>
-                        `
-                    ).join("")}
+                    ${usefulInfoHtml}
 
                 </ul>
 
@@ -1124,29 +1635,43 @@ function openExperienceModal(id) {
         </div>
     `;
 
+    setupExperienceGallery(
+        experience
+    );
 
-    setupPizzaGallery(experience);
+    setupExperienceBooking(
+        experience,
+        defaultMode
+    );
 
-    setupPizzaBooking();
-
+    setupPricingSelector(
+        experience,
+        defaultMode
+    );
 
     const whatsappButton =
         document.getElementById(
             "pizza-whatsapp-button"
         );
 
-
     if (whatsappButton) {
 
         whatsappButton.addEventListener(
             "click",
-            requestPizzaAvailability
+            function () {
+
+                requestExperienceAvailability(
+                    experience
+                );
+
+            }
         );
 
     }
 
-
-    modal.classList.add("open");
+    modal.classList.add(
+        "open"
+    );
 
     modal.setAttribute(
         "aria-hidden",
@@ -1156,6 +1681,77 @@ function openExperienceModal(id) {
     document.body.classList.add(
         "modal-open"
     );
+
+}
+
+
+/* =========================================================
+   SELETTORE CONDIVISA / PRIVATA
+   ========================================================= */
+
+function setupPricingSelector(
+    experience,
+    defaultMode
+) {
+
+    const pricingOptions =
+        getPricingOptions(
+            experience
+        );
+
+    if (!pricingOptions) {
+
+        return;
+
+    }
+
+    const buttons =
+        Array.from(
+            document.querySelectorAll(
+                "[data-pricing-mode]"
+            )
+        );
+
+    buttons.forEach(
+        (
+            button
+        ) => {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const selectedMode =
+                        button.dataset.pricingMode;
+
+                    buttons.forEach(
+                        otherButton => {
+
+                            otherButton.classList.toggle(
+                                "active",
+                                otherButton ===
+                                    button
+                            );
+
+                        }
+                    );
+
+                    updateExperiencePrice(
+                        experience,
+                        selectedMode
+                    );
+
+                }
+            );
+
+        }
+    );
+
+    updateExperiencePrice(
+        experience,
+        defaultMode
+    );
+
 }
 
 
@@ -1163,7 +1759,9 @@ function openExperienceModal(id) {
    GALLERIA MODAL
    ========================================================= */
 
-function setupPizzaGallery(experience) {
+function setupExperienceGallery(
+    experience
+) {
 
     const mainImage =
         document.getElementById(
@@ -1202,11 +1800,11 @@ function setupPizzaGallery(experience) {
             )
         );
 
-
     if (!mainImage) {
-        return;
-    }
 
+        return;
+
+    }
 
     const thumbnails =
         gallery
@@ -1217,33 +1815,37 @@ function setupPizzaGallery(experience) {
             )
             : [];
 
-
     let currentIndex = 0;
 
-
-    function updateGallery(index) {
+    function updateGallery(
+        index
+    ) {
 
         if (
             index < 0 ||
-            index >= experience.images.length
+            index >=
+                experience.images.length
         ) {
+
             return;
+
         }
 
-
-        currentIndex = index;
-
+        currentIndex =
+            index;
 
         mainImage.src =
-            experience.images[currentIndex];
-
+            experience.images[
+                currentIndex
+            ];
 
         mainImage.alt =
             `${experience.title} - Foto ${currentIndex + 1}`;
 
-
         thumbnails.forEach(
-            (thumbnail) => {
+            (
+                thumbnail
+            ) => {
 
                 const thumbnailIndex =
                     parseInt(
@@ -1251,22 +1853,19 @@ function setupPizzaGallery(experience) {
                         10
                     );
 
-
                 const isActive =
-                    thumbnailIndex === currentIndex;
-
+                    thumbnailIndex ===
+                    currentIndex;
 
                 thumbnail.style.opacity =
                     isActive
                         ? "1"
                         : "0.82";
 
-
                 thumbnail.style.outline =
                     isActive
                         ? "3px solid #8b3dff"
                         : "none";
-
 
                 thumbnail.style.transform =
                     isActive
@@ -1276,9 +1875,10 @@ function setupPizzaGallery(experience) {
             }
         );
 
-
         mobileDots.forEach(
-            (dot) => {
+            (
+                dot
+            ) => {
 
                 const dotIndex =
                     parseInt(
@@ -1286,15 +1886,14 @@ function setupPizzaGallery(experience) {
                         10
                     );
 
-
                 dot.classList.toggle(
                     "active",
-                    dotIndex === currentIndex
+                    dotIndex ===
+                    currentIndex
                 );
 
             }
         );
-
 
         const activeThumbnail =
             thumbnails.find(
@@ -1305,22 +1904,31 @@ function setupPizzaGallery(experience) {
                     ) === currentIndex
             );
 
-
-        if (activeThumbnail) {
+        if (
+            activeThumbnail
+        ) {
 
             activeThumbnail.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-                inline: "center"
+
+                behavior:
+                    "smooth",
+
+                block:
+                    "nearest",
+
+                inline:
+                    "center"
+
             });
 
         }
 
     }
 
-
     thumbnails.forEach(
-        (thumbnail) => {
+        (
+            thumbnail
+        ) => {
 
             thumbnail.addEventListener(
                 "click",
@@ -1334,14 +1942,15 @@ function setupPizzaGallery(experience) {
                             10
                         );
 
-                    updateGallery(index);
+                    updateGallery(
+                        index
+                    );
 
                 }
             );
 
         }
     );
-
 
     if (previousButton) {
 
@@ -1365,7 +1974,6 @@ function setupPizzaGallery(experience) {
 
     }
 
-
     if (nextButton) {
 
         nextButton.addEventListener(
@@ -1375,7 +1983,8 @@ function setupPizzaGallery(experience) {
                 event.stopPropagation();
 
                 const nextIndex =
-                    currentIndex >= experience.images.length - 1
+                    currentIndex >=
+                        experience.images.length - 1
                         ? 0
                         : currentIndex + 1;
 
@@ -1388,8 +1997,9 @@ function setupPizzaGallery(experience) {
 
     }
 
-
-    if (mobilePreviousButton) {
+    if (
+        mobilePreviousButton
+    ) {
 
         mobilePreviousButton.addEventListener(
             "click",
@@ -1411,8 +2021,9 @@ function setupPizzaGallery(experience) {
 
     }
 
-
-    if (mobileNextButton) {
+    if (
+        mobileNextButton
+    ) {
 
         mobileNextButton.addEventListener(
             "click",
@@ -1421,7 +2032,8 @@ function setupPizzaGallery(experience) {
                 event.stopPropagation();
 
                 const nextIndex =
-                    currentIndex >= experience.images.length - 1
+                    currentIndex >=
+                        experience.images.length - 1
                         ? 0
                         : currentIndex + 1;
 
@@ -1434,9 +2046,10 @@ function setupPizzaGallery(experience) {
 
     }
 
-
     mobileDots.forEach(
-        (dot) => {
+        (
+            dot
+        ) => {
 
             dot.addEventListener(
                 "click",
@@ -1450,7 +2063,9 @@ function setupPizzaGallery(experience) {
                             10
                         );
 
-                    updateGallery(index);
+                    updateGallery(
+                        index
+                    );
 
                 }
             );
@@ -1458,9 +2073,10 @@ function setupPizzaGallery(experience) {
         }
     );
 
-
     thumbnails.forEach(
-        thumbnail => {
+        (
+            thumbnail
+        ) => {
 
             thumbnail.style.opacity =
                 "0.82";
@@ -1474,10 +2090,8 @@ function setupPizzaGallery(experience) {
         }
     );
 
-
     let touchStartX = 0;
     let touchStartY = 0;
-
 
     mainImage.addEventListener(
         "touchstart",
@@ -1502,7 +2116,6 @@ function setupPizzaGallery(experience) {
         }
     );
 
-
     mainImage.addEventListener(
         "touchend",
         function (event) {
@@ -1511,34 +2124,35 @@ function setupPizzaGallery(experience) {
                 !event.changedTouches ||
                 event.changedTouches.length === 0
             ) {
-                return;
-            }
 
+                return;
+
+            }
 
             const touch =
                 event.changedTouches[0];
-
 
             const differenceX =
                 touchStartX -
                 touch.clientX;
 
-
             const differenceY =
                 touchStartY -
                 touch.clientY;
-
 
             if (
                 Math.abs(differenceX) < 45 ||
                 Math.abs(differenceX) <
                     Math.abs(differenceY)
             ) {
+
                 return;
+
             }
 
-
-            if (differenceX > 0) {
+            if (
+                differenceX > 0
+            ) {
 
                 const nextIndex =
                     currentIndex >=
@@ -1569,8 +2183,10 @@ function setupPizzaGallery(experience) {
         }
     );
 
+    updateGallery(
+        0
+    );
 
-    updateGallery(0);
 }
 
 
@@ -1585,13 +2201,15 @@ function closeExperienceModal() {
             "experience-modal"
         );
 
-
     if (!modal) {
+
         return;
+
     }
 
-
-    modal.classList.remove("open");
+    modal.classList.remove(
+        "open"
+    );
 
     modal.setAttribute(
         "aria-hidden",
@@ -1601,6 +2219,7 @@ function closeExperienceModal() {
     document.body.classList.remove(
         "modal-open"
     );
+
 }
 
 
@@ -1615,11 +2234,11 @@ function setupModalEvents() {
             "experience-modal"
         );
 
-
     if (!modal) {
-        return;
-    }
 
+        return;
+
+    }
 
     modal.addEventListener(
         "click",
@@ -1630,7 +2249,6 @@ function setupModalEvents() {
                     "[data-close-modal]"
                 );
 
-
             if (closeTarget) {
 
                 closeExperienceModal();
@@ -1639,6 +2257,7 @@ function setupModalEvents() {
 
         }
     );
+
 }
 
 
@@ -1650,7 +2269,9 @@ document.addEventListener(
     "keydown",
     function (event) {
 
-        if (event.key === "Escape") {
+        if (
+            event.key === "Escape"
+        ) {
 
             closeExperienceModal();
 
@@ -1661,41 +2282,65 @@ document.addEventListener(
 
 
 /* =========================================================
-   PRENOTAZIONE
+   BOOKING
    ========================================================= */
 
-function setupPizzaBooking() {
+let activeBookingExperience =
+    null;
+
+let activeBookingMode =
+    null;
+
+
+function setupExperienceBooking(
+    experience,
+    selectedMode = null
+) {
+
+    activeBookingExperience =
+        experience;
+
+    activeBookingMode =
+        selectedMode;
 
     const dateInput =
         document.getElementById(
             "pizza-date"
         );
 
-
     const participantsSelect =
         document.getElementById(
             "pizza-participants"
         );
 
-
     if (
         !dateInput ||
         !participantsSelect
     ) {
-        return;
-    }
 
+        return;
+
+    }
 
     setMinimumDate();
 
-
     participantsSelect.addEventListener(
         "change",
-        updatePizzaPrice
+        function () {
+
+            updateExperiencePrice(
+                experience,
+                activeBookingMode
+            );
+
+        }
     );
 
+    updateExperiencePrice(
+        experience,
+        selectedMode
+    );
 
-    updatePizzaPrice();
 }
 
 
@@ -1710,34 +2355,37 @@ function setMinimumDate() {
             "pizza-date"
         );
 
-
     if (!dateInput) {
-        return;
-    }
 
+        return;
+
+    }
 
     const today =
         new Date();
 
-
     const year =
         today.getFullYear();
-
 
     const month =
         String(
             today.getMonth() + 1
-        ).padStart(2, "0");
-
+        ).padStart(
+            2,
+            "0"
+        );
 
     const day =
         String(
             today.getDate()
-        ).padStart(2, "0");
-
+        ).padStart(
+            2,
+            "0"
+        );
 
     dateInput.min =
         `${year}-${month}-${day}`;
+
 }
 
 
@@ -1745,27 +2393,42 @@ function setMinimumDate() {
    PREZZO DINAMICO
    ========================================================= */
 
-function updatePizzaPrice() {
+function updateExperiencePrice(
+    experience,
+    selectedMode = null
+) {
+
+    activeBookingMode =
+        selectedMode;
 
     const participantsSelect =
         document.getElementById(
             "pizza-participants"
         );
 
-
     const totalElement =
         document.getElementById(
             "pizza-total-price"
         );
 
+    const modalPriceElement =
+        document.getElementById(
+            "modal-experience-price"
+        );
+
+    const modalTypeElement =
+        document.getElementById(
+            "modal-experience-type"
+        );
 
     if (
         !participantsSelect ||
         !totalElement
     ) {
-        return;
-    }
 
+        return;
+
+    }
 
     const participants =
         parseInt(
@@ -1773,15 +2436,67 @@ function updatePizzaPrice() {
             10
         ) || 1;
 
-
-    const total =
-        getPizzaTotal(
-            participants
+    const selectedPrice =
+        getSelectedPrice(
+            experience,
+            selectedMode
         );
 
+    if (
+        modalTypeElement
+    ) {
+
+        modalTypeElement.textContent =
+            getSelectedModeType(
+                experience,
+                selectedMode
+            );
+
+    }
+
+    if (
+        !selectedPrice
+    ) {
+
+        totalElement.textContent =
+            "Richiedi preventivo";
+
+        if (
+            modalPriceElement
+        ) {
+
+            modalPriceElement.textContent =
+                "Richiedi preventivo";
+
+        }
+
+        return;
+
+    }
+
+    if (
+        modalPriceElement
+    ) {
+
+        modalPriceElement.textContent =
+            `${formatPrice(
+                selectedPrice
+            )} / persona`;
+
+    }
+
+    const total =
+        getExperienceTotal(
+            experience,
+            participants,
+            selectedMode
+        );
 
     totalElement.textContent =
-        formatPrice(total);
+        formatPrice(
+            total
+        );
+
 }
 
 
@@ -1789,31 +2504,31 @@ function updatePizzaPrice() {
    WHATSAPP
    ========================================================= */
 
-function requestPizzaAvailability() {
+function requestExperienceAvailability(
+    experience
+) {
 
     const dateInput =
         document.getElementById(
             "pizza-date"
         );
 
-
     const participantsSelect =
         document.getElementById(
             "pizza-participants"
         );
 
-
     if (
         !dateInput ||
         !participantsSelect
     ) {
-        return;
-    }
 
+        return;
+
+    }
 
     const selectedDate =
         dateInput.value;
-
 
     if (!selectedDate) {
 
@@ -1822,8 +2537,8 @@ function requestPizzaAvailability() {
         );
 
         return;
-    }
 
+    }
 
     const participants =
         parseInt(
@@ -1831,39 +2546,55 @@ function requestPizzaAvailability() {
             10
         ) || 1;
 
+    const selectedMode =
+        activeBookingMode;
 
     const total =
-        getPizzaTotal(
-            participants
+        getExperienceTotal(
+            experience,
+            participants,
+            selectedMode
         );
-
 
     const formattedDate =
         formatItalianDate(
             selectedDate
         );
 
+    const totalText =
+        total
+            ? `${total} €`
+            : "Richiedi preventivo";
+
+    const modeText =
+        getSelectedModeLabel(
+            experience,
+            selectedMode
+        );
 
     const message =
-        `Ciao, vorrei richiedere disponibilità per: Lezione di Pizza Napoletana
+        `Ciao, vorrei richiedere disponibilità per: ${experience.title}
+
+Modalità: ${modeText}
 
 Data richiesta: ${formattedDate}
 
 Partecipanti: ${participants}
 
-Totale: ${total} €
+Totale: ${totalText}
 
 Grazie.`;
 
-
     const whatsappUrl =
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+            message
+        )}`;
 
     window.open(
         whatsappUrl,
         "_blank"
     );
+
 }
 
 
@@ -1875,9 +2606,80 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+        setupModalEvents();
+
+        /*
+         * La card base viene mostrata immediatamente.
+         * Le esperienze modulari vengono caricate
+         * separatamente, così un eventuale errore
+         * in un modulo non fa scomparire le altre.
+         */
+
         renderExperiences();
 
-        setupModalEvents();
+        loadPizzaSeraleExperience()
+            .then(
+                function (pizzaSerale) {
+
+                    if (
+                        pizzaSerale
+                    ) {
+
+                        const alreadyExists =
+                            experiences.some(
+                                experience =>
+                                    experience.id ===
+                                    pizzaSerale.id
+                            );
+
+                        if (
+                            !alreadyExists
+                        ) {
+
+                            experiences.push(
+                                pizzaSerale
+                            );
+
+                            renderExperiences();
+
+                        }
+
+                    }
+
+                }
+            );
+
+        loadPastaGelatoExperience()
+            .then(
+                function (pastaGelato) {
+
+                    if (
+                        pastaGelato
+                    ) {
+
+                        const alreadyExists =
+                            experiences.some(
+                                experience =>
+                                    experience.id ===
+                                    pastaGelato.id
+                            );
+
+                        if (
+                            !alreadyExists
+                        ) {
+
+                            experiences.push(
+                                pastaGelato
+                            );
+
+                            renderExperiences();
+
+                        }
+
+                    }
+
+                }
+            );
 
     }
 );
