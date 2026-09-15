@@ -1659,41 +1659,73 @@ a {
 }
 
 
+/* =========================================================
+   SMARTPHONE
+   Rifatto da zero.
+   Il desktop sopra rimane invariato.
+   ========================================================= */
+
 @media (max-width: 700px) {
+
+    html,
+    body {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        overflow-x: hidden;
+    }
+
 
     .container {
 
         width:
-            min(
-                calc(100% - 28px),
-                var(--container)
-            );
+            calc(100% - 28px);
+
+        max-width: 100%;
+
+        margin-inline: auto;
     }
 
+
+    /* HEADER */
 
     .header-inner {
 
         min-height: 66px;
+
+        width: 100%;
+
+        gap: 14px;
     }
 
 
     .brand {
 
         font-size: 16px;
+
+        white-space: nowrap;
     }
 
 
     .main-nav {
 
         gap: 14px;
+
+        min-width: 0;
     }
 
 
     .main-nav a {
 
         font-size: 12px;
+
+        white-space: nowrap;
     }
 
+
+    /* HERO */
 
     .hero {
 
@@ -1711,8 +1743,12 @@ a {
     .eyebrow {
 
         font-size: 16px;
+
+        line-height: 1.25;
     }
 
+
+    /* EXPERIENCE SECTION */
 
     .experiences-section {
 
@@ -1721,19 +1757,28 @@ a {
     }
 
 
+    /* FILTERS */
+
     .filters {
 
         justify-content: flex-start;
 
-        overflow-x: auto;
-
         flex-wrap: nowrap;
 
-        padding-bottom: 6px;
+        overflow-x: auto;
+
+        width: 100%;
+
+        max-width: 100%;
+
+        padding:
+            2px 2px 8px;
 
         margin-bottom: 30px;
 
         scrollbar-width: none;
+
+        -webkit-overflow-scrolling: touch;
     }
 
 
@@ -1745,20 +1790,33 @@ a {
 
     .filter-button {
 
-        flex-shrink: 0;
+        flex:
+            0 0 auto;
+
+        white-space: nowrap;
     }
 
+
+    /* CATALOG */
 
     .catalog-grid {
 
         grid-template-columns:
             1fr;
+
+        width: 100%;
     }
 
 
-    /* ==============================
-       CARD MOBILE
-       ============================== */
+    /* CARD MOBILE */
+
+    .experience-card {
+
+        width: 100%;
+
+        min-width: 0;
+    }
+
 
     .experience-card-image {
 
@@ -1813,6 +1871,8 @@ a {
 
         width: 100%;
 
+        min-width: 100%;
+
         height: 100%;
 
         display: block !important;
@@ -1825,14 +1885,13 @@ a {
     }
 
 
-    /* Frecce */
+    /* CARD FRECCE */
 
     .experience-card-gallery-controls {
 
         position: absolute;
 
-        inset:
-            0;
+        inset: 0;
 
         display: flex;
 
@@ -1883,7 +1942,7 @@ a {
     }
 
 
-    /* Indicatori */
+    /* CARD INDICATORI */
 
     .experience-card-gallery-dots {
 
@@ -1951,6 +2010,10 @@ a {
 
     .experience-card-content {
 
+        width: 100%;
+
+        min-width: 0;
+
         padding:
             18px 18px 20px;
     }
@@ -1989,6 +2052,8 @@ a {
     .experience-card-footer {
 
         gap: 12px;
+
+        min-width: 0;
     }
 
 
@@ -2013,9 +2078,7 @@ a {
     }
 
 
-    /* ==============================
-       HOW IT WORKS
-       ============================== */
+    /* HOW IT WORKS */
 
     .how-it-works {
 
@@ -2031,33 +2094,70 @@ a {
     }
 
 
-    /* ==============================
-       MODAL MOBILE
-       ============================== */
+    /* =====================================================
+       MODAL SMARTPHONE
+       ===================================================== */
 
     .modal {
 
-        padding: 10px;
+        position: fixed;
+
+        inset: 0;
+
+        width: 100%;
+
+        height: 100%;
+
+        padding: 8px;
 
         align-items: center;
+
+        justify-content: center;
+
+        overflow: hidden;
+    }
+
+
+    .modal-overlay {
+
+        position: absolute;
+
+        inset: 0;
     }
 
 
     .modal-dialog {
 
+        position: relative;
+
         width: 100%;
 
+        max-width: 520px;
+
+        height: auto;
+
         max-height:
-            calc(100vh - 20px);
+            calc(100vh - 16px);
+
+        margin: 0;
+
+        overflow-x: hidden;
+
+        overflow-y: auto;
 
         border-radius:
             20px;
 
-        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+
+        overscroll-behavior:
+            contain;
     }
 
 
     .modal-body {
+
+        position: relative;
 
         display: flex;
 
@@ -2065,32 +2165,50 @@ a {
 
         width: 100%;
 
+        min-width: 0;
+
         padding:
-            22px 18px 28px;
+            16px 16px 30px;
     }
 
 
-    /*
-       Crocetta leggermente più in basso
-       per evitare che sia troppo vicina
-       alla barra superiore dello smartphone.
-    */
+    /* CHIUSURA */
 
     .modal-close {
 
-        top: 24px;
+        position: absolute;
 
-        margin-top: 24px;
+        top: 12px;
 
-        margin-right: 16px;
+        right: 12px;
+
+        float: none;
+
+        z-index: 20;
+
+        width: 38px;
+
+        height: 38px;
+
+        margin: 0;
+
+        border-radius: 50%;
+
+        background:
+            rgba(255,255,255,0.94);
+
+        box-shadow:
+            0 6px 20px rgba(0,0,0,0.16);
+
+        font-size: 25px;
+
+        line-height: 38px;
+
+        text-align: center;
     }
 
 
-    /*
-       Trasformiamo l'hero in un contenitore
-       logico, così possiamo riordinare gli
-       elementi esclusivamente su smartphone.
-    */
+    /* HERO COME CONTENITORE LOGICO */
 
     .modal-hero {
 
@@ -2098,26 +2216,33 @@ a {
     }
 
 
+    /* FOTO PRINCIPALE */
+
     .modal-hero-image {
 
         order: 1;
 
         width: 100%;
 
+        min-width: 0;
+
         min-height: 0;
 
-        height: 235px;
+        height:
+            clamp(190px, 55vw, 235px);
 
-        max-height: 235px;
+        max-height:
+            235px;
 
         margin: 0;
+
+        overflow: hidden;
 
         border-radius:
             16px;
 
-        overflow: hidden;
-
-        touch-action: pan-y;
+        background:
+            #eeeeF2;
 
         flex-shrink: 0;
     }
@@ -2125,7 +2250,11 @@ a {
 
     .modal-hero-image img {
 
+        display: block;
+
         width: 100%;
+
+        min-width: 100%;
 
         height: 100%;
 
@@ -2133,13 +2262,14 @@ a {
 
         border-radius:
             16px;
+
+        user-select: none;
+
+        -webkit-user-drag: none;
     }
 
 
-    /*
-       Indicatori della galleria mobile.
-       Sei punti = sei fotografie.
-    */
+    /* GALLERIA MOBILE */
 
     .pizza-mobile-gallery {
 
@@ -2153,12 +2283,14 @@ a {
 
         width: 100%;
 
+        min-width: 0;
+
         min-height: 34px;
 
         margin:
-            4px 0 18px;
+            3px 0 15px;
 
-        gap: 16px;
+        gap: 13px;
     }
 
 
@@ -2170,11 +2302,18 @@ a {
 
         justify-content: center;
 
-        gap: 6px;
+        gap: 5px;
+
+        min-width: 0;
     }
 
 
     .pizza-mobile-gallery-dot {
+
+        display: block;
+
+        flex:
+            0 0 auto;
 
         width: 6px;
 
@@ -2187,7 +2326,7 @@ a {
         border-radius: 50%;
 
         background:
-            #d2d2d7;
+            #d0d0d6;
 
         cursor: pointer;
 
@@ -2200,9 +2339,10 @@ a {
 
     .pizza-mobile-gallery-dot.active {
 
-        width: 17px;
+        width: 16px;
 
-        border-radius: 999px;
+        border-radius:
+            999px;
 
         background:
             var(--accent);
@@ -2214,9 +2354,12 @@ a {
 
     .pizza-mobile-gallery-arrow {
 
-        width: 27px;
+        flex:
+            0 0 auto;
 
-        height: 27px;
+        width: 28px;
+
+        height: 28px;
 
         display: flex;
 
@@ -2229,30 +2372,30 @@ a {
         border-radius: 50%;
 
         background:
-            #f3f3f5;
+            #f1f1f4;
 
         color:
             #222;
 
-        font-size: 20px;
+        font-size: 19px;
 
         line-height: 1;
 
         cursor: pointer;
+
+        -webkit-tap-highlight-color: transparent;
     }
 
 
-    /*
-       Informazioni testata:
-       categoria → titolo → descrizione
-       → prezzo/durata
-    */
+    /* INFORMAZIONI HERO */
 
     .modal-hero-info {
 
         order: 3;
 
         width: 100%;
+
+        min-width: 0;
 
         display: flex;
 
@@ -2264,9 +2407,13 @@ a {
 
     .modal-category {
 
-        margin-bottom: 7px;
+        width: 100%;
+
+        margin-bottom: 6px;
 
         font-size: 10px;
+
+        line-height: 1.3;
 
         letter-spacing:
             0.09em;
@@ -2275,75 +2422,81 @@ a {
 
     .modal-title {
 
+        width: 100%;
+
         margin-bottom: 9px;
 
-        font-size: 30px;
+        font-size:
+            clamp(27px, 8vw, 31px);
 
         line-height: 1.08;
 
         letter-spacing:
             -0.04em;
+
+        overflow-wrap: break-word;
     }
 
 
     .modal-short {
 
+        width: 100%;
+
         margin-bottom: 13px;
+
+        color: var(--muted);
 
         font-size: 13px;
 
         line-height: 1.55;
+
+        overflow-wrap: break-word;
     }
 
+
+    /* PREZZO / DURATA */
 
     .modal-meta {
 
         display: flex;
 
-        flex-wrap: nowrap;
-
         align-items: center;
 
         justify-content: space-between;
 
+        flex-wrap: nowrap;
+
         width: 100%;
+
+        min-width: 0;
 
         gap: 10px;
 
-        margin-bottom: 0;
+        margin: 0;
     }
 
 
     .modal-meta-item {
 
+        min-width: 0;
+
         padding: 0;
 
         border-radius: 0;
 
-        background: transparent;
+        background:
+            transparent;
+
+        color:
+            var(--text);
 
         font-size: 14px;
 
         font-weight: 800;
 
-        color:
-            var(--text);
-    }
+        line-height: 1.3;
 
-
-    /*
-       Su mobile mostriamo solamente:
-       prezzo e durata.
-       Lingue e tipo rimangono nascosti
-       per non appesantire la testata.
-    */
-
-    .modal-meta-duration {
-
-        order: 2;
-
-        color:
-            var(--muted);
+        white-space: nowrap;
     }
 
 
@@ -2351,10 +2504,21 @@ a {
 
         order: 1;
 
+        font-size: 17px;
+
         color:
             var(--text);
+    }
 
-        font-size: 17px;
+
+    .modal-meta-duration {
+
+        order: 2;
+
+        color:
+            var(--muted);
+
+        text-align: right;
     }
 
 
@@ -2365,10 +2529,7 @@ a {
     }
 
 
-    /*
-       Galleria desktop nascosta su smartphone.
-       Viene sostituita dai sei indicatori.
-    */
+    /* GALLERIA DESKTOP NASCOSTA */
 
     .pizza-modal-gallery {
 
@@ -2376,10 +2537,9 @@ a {
     }
 
 
-    /*
-       PRENOTAZIONE:
-       subito dopo prezzo e durata.
-    */
+    /* =====================================================
+       PRENOTAZIONE
+       ===================================================== */
 
     .pizza-booking {
 
@@ -2387,10 +2547,14 @@ a {
 
         width: 100%;
 
-        margin-top: 20px;
+        min-width: 0;
+
+        max-width: 100%;
+
+        margin-top: 19px;
 
         padding:
-            17px 15px;
+            16px 14px;
 
         border:
             1px solid #e8e8ed;
@@ -2410,26 +2574,52 @@ a {
         display: grid;
 
         grid-template-columns:
-            1fr;
-
-        gap: 14px;
+            minmax(0, 1fr);
 
         width: 100%;
+
+        min-width: 0;
+
+        gap: 13px;
+    }
+
+
+    .pizza-booking-fields > div {
+
+        display: block;
+
+        width: 100%;
+
+        min-width: 0;
+
+        max-width: 100%;
     }
 
 
     .pizza-booking label {
 
+        display: block;
+
+        width: 100%;
+
         margin-bottom: 6px;
 
+        color:
+            #202020;
+
         font-size: 11px;
+
+        font-weight: 800;
+
+        line-height: 1.25;
     }
 
 
     /*
-       DATA e PERSONE hanno ora esattamente
-       le stesse dimensioni e lo stesso
-       allineamento.
+       IMPORTANTE:
+       tutti i campi utilizzano border-box,
+       quindi padding e bordo sono compresi
+       nella larghezza del contenitore.
     */
 
     #pizza-date,
@@ -2439,11 +2629,15 @@ a {
 
         width: 100% !important;
 
+        min-width: 0 !important;
+
         max-width: 100% !important;
 
-        height: 45px !important;
+        height: 44px !important;
 
-        min-height: 45px;
+        min-height: 44px;
+
+        margin: 0 !important;
 
         padding:
             0 11px !important;
@@ -2454,34 +2648,37 @@ a {
         border-radius:
             11px;
 
+        background:
+            #ffffff;
+
+        color:
+            #202020;
+
         font-size:
             13px !important;
 
-        margin:
-            0 !important;
+        line-height:
+            normal;
 
         box-sizing:
             border-box;
+
+        outline: none;
     }
 
-
-    /*
-       La data viene allineata a sinistra
-       con un font leggermente più grande.
-    */
 
     #pizza-date {
 
         text-align: left;
 
         font-size:
-            14px !important;
+            13px !important;
 
         padding-left:
-            12px !important;
+            11px !important;
 
         padding-right:
-            12px !important;
+            11px !important;
 
         -webkit-appearance:
             none;
@@ -2499,54 +2696,102 @@ a {
     }
 
 
+    /* WHATSAPP */
+
     .pizza-booking .whatsapp-button {
 
-        width: 100%;
+        display: flex;
 
-        min-height: 46px;
+        align-items: center;
 
-        margin-top: 16px;
+        justify-content: center;
 
-        padding:
-            11px 13px;
+        width: 100% !important;
 
-        border-radius:
-            12px;
+        min-width: 0;
 
-        font-size: 12px;
+        max-width: 100%;
 
-        line-height: 1.2;
-
-        white-space: normal;
-    }
-
-
-    .pizza-total {
+        min-height: 45px;
 
         margin-top: 15px;
 
-        padding-top: 14px;
+        padding:
+            10px 12px;
+
+        border-radius:
+            11px;
+
+        font-size: 11px;
+
+        line-height: 1.25;
+
+        text-align: center;
+
+        white-space: normal;
+
+        box-sizing:
+            border-box;
+    }
+
+
+    /* TOTALE */
+
+    .pizza-total {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        width: 100%;
+
+        min-width: 0;
 
         gap: 12px;
+
+        margin-top: 14px;
+
+        padding-top: 13px;
+
+        border-top:
+            1px solid #e8e8ed;
     }
 
 
     .pizza-total span {
 
+        color:
+            #737373;
+
         font-size: 11px;
+
+        line-height: 1.3;
     }
 
 
     .pizza-total strong {
 
+        color:
+            #202020;
+
         font-size: 20px;
+
+        font-weight: 800;
+
+        line-height: 1.2;
+
+        letter-spacing:
+            -0.03em;
+
+        white-space: nowrap;
     }
 
 
-    /*
-       Tutte le sezioni informative
-       vengono dopo la prenotazione.
-    */
+    /* =====================================================
+       SEZIONI INFORMATIVE
+       ===================================================== */
 
     .modal-section {
 
@@ -2554,43 +2799,89 @@ a {
 
         width: 100%;
 
-        margin-top: 30px;
+        min-width: 0;
+
+        margin-top: 29px;
     }
 
 
     .modal-section h3 {
 
-        margin-bottom: 12px;
+        width: 100%;
 
-        font-size: 19px;
+        margin-bottom: 11px;
+
+        font-size: 18px;
 
         line-height: 1.2;
+
+        letter-spacing:
+            -0.025em;
     }
 
 
     .modal-section p {
 
+        width: 100%;
+
+        color:
+            #555;
+
         font-size: 13px;
 
         line-height: 1.7;
+
+        overflow-wrap: break-word;
     }
 
 
     .modal-section ul {
 
+        display: flex;
+
+        flex-direction: column;
+
         gap: 8px;
 
+        width: 100%;
+
         padding-left: 18px;
+
+        color:
+            #555;
 
         font-size: 13px;
 
         line-height: 1.55;
+
+        overflow-wrap: break-word;
     }
 
 
-    /* ITINERARIO MOBILE */
+    .modal-section li {
+
+        min-width: 0;
+    }
+
+
+    .modal-section li::marker {
+
+        color:
+            var(--accent);
+    }
+
+
+    /* =====================================================
+       PREPARAZIONE / ITINERARIO
+       ===================================================== */
 
     .itinerary {
+
+        position: relative;
+
+        width: 100%;
+
+        min-width: 0;
 
         padding-left: 28px;
 
@@ -2599,6 +2890,10 @@ a {
 
 
     .itinerary::before {
+
+        content: "";
+
+        position: absolute;
 
         left: 7px;
 
@@ -2614,13 +2909,29 @@ a {
 
     .itinerary-stop {
 
+        position: relative;
+
+        width: 100%;
+
+        min-width: 0;
+
         margin-bottom: 21px;
 
         padding-left: 6px;
     }
 
 
+    .itinerary-stop:last-child {
+
+        margin-bottom: 0;
+    }
+
+
     .itinerary-stop::before {
+
+        content: "";
+
+        position: absolute;
 
         left: -28px;
 
@@ -2630,43 +2941,81 @@ a {
 
         height: 13px;
 
-        border-width:
-            3px;
+        border-radius: 50%;
+
+        background:
+            white;
+
+        border:
+            3px solid
+            var(--accent);
+
+        box-shadow:
+            0 0 0 4px
+            rgba(139, 61, 255, 0.08);
     }
 
 
     .itinerary-number {
 
-        font-size: 9px;
+        display: block;
 
         margin-bottom: 2px;
+
+        color:
+            var(--accent);
+
+        font-size: 9px;
+
+        font-weight: 800;
+
+        line-height: 1.3;
+
+        letter-spacing:
+            0.08em;
+
+        text-transform: uppercase;
     }
 
 
     .itinerary-stop h4 {
+
+        width: 100%;
 
         margin-bottom: 4px;
 
         font-size: 14px;
 
         line-height: 1.35;
+
+        overflow-wrap: break-word;
     }
 
 
     .itinerary-stop p {
 
+        width: 100%;
+
         font-size: 12px;
 
         line-height: 1.6;
+
+        overflow-wrap: break-word;
     }
 
 
-    /* INCLUDE / EXCLUDE MOBILE */
+    /* =====================================================
+       INCLUDE / EXCLUDE
+       ===================================================== */
 
     .detail-columns {
 
+        display: grid;
+
         grid-template-columns:
-            1fr;
+            minmax(0, 1fr);
+
+        width: 100%;
 
         gap: 14px;
     }
@@ -2674,11 +3023,23 @@ a {
 
     .detail-box {
 
+        width: 100%;
+
+        min-width: 0;
+
         padding:
             17px;
 
+        border:
+            1px solid var(--border);
+
         border-radius:
             15px;
+
+        background:
+            #fafafa;
+
+        overflow: hidden;
     }
 
 
@@ -2687,28 +3048,198 @@ a {
         margin-bottom: 11px;
 
         font-size: 17px;
+
+        line-height: 1.25;
     }
 
 
-    /* MEETING MOBILE */
+    .detail-box p {
+
+        font-size: 13px;
+
+        line-height: 1.65;
+    }
+
+
+    .detail-box ul {
+
+        font-size: 13px;
+
+        line-height: 1.55;
+    }
+
+
+    /* =====================================================
+       PUNTO DI INCONTRO
+       ===================================================== */
 
     .meeting-box {
+
+        width: 100%;
+
+        min-width: 0;
 
         padding:
             17px;
 
         border-radius:
             15px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #faf7ff,
+                #f5efff
+            );
+
+        overflow-wrap: break-word;
     }
 
 
-    /*
-       Spazio finale della modal.
-    */
+    .meeting-box p {
+
+        font-size: 13px;
+
+        line-height: 1.65;
+    }
+
+
+    /* SPAZIO FINALE */
 
     .modal-section:last-child {
 
         margin-bottom: 8px;
+    }
+
+}
+
+
+/* =========================================================
+   SMARTPHONE MOLTO PICCOLO
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .container {
+
+        width:
+            calc(100% - 22px);
+    }
+
+
+    .header-inner {
+
+        gap: 8px;
+    }
+
+
+    .brand {
+
+        font-size: 15px;
+    }
+
+
+    .main-nav {
+
+        gap: 9px;
+    }
+
+
+    .main-nav a {
+
+        font-size: 11px;
+    }
+
+
+    .modal {
+
+        padding: 5px;
+    }
+
+
+    .modal-dialog {
+
+        max-height:
+            calc(100vh - 10px);
+
+        border-radius:
+            18px;
+    }
+
+
+    .modal-body {
+
+        padding:
+            13px 13px 26px;
+    }
+
+
+    .modal-hero-image {
+
+        height: 205px;
+
+        max-height: 205px;
+
+        border-radius:
+            14px;
+    }
+
+
+    .modal-hero-image img {
+
+        border-radius:
+            14px;
+    }
+
+
+    .pizza-mobile-gallery {
+
+        margin-bottom:
+            13px;
+
+        gap: 10px;
+    }
+
+
+    .modal-title {
+
+        font-size: 27px;
+    }
+
+
+    .modal-short {
+
+        font-size: 12px;
+    }
+
+
+    .pizza-booking {
+
+        padding:
+            14px 12px;
+    }
+
+
+    #pizza-date,
+    #pizza-participants {
+
+        height: 43px !important;
+
+        min-height: 43px;
+    }
+
+
+    .pizza-booking .whatsapp-button {
+
+        min-height: 44px;
+
+        font-size: 10.5px;
+    }
+
+
+    .modal-section {
+
+        margin-top: 27px;
     }
 
 }
