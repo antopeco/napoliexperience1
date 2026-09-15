@@ -637,25 +637,14 @@ function openExperienceModal(id) {
 
             <!-- =========================================
                  TESTATA
-                 FOTO 1 + TITOLO
                  ========================================= -->
 
             <div
                 class="modal-hero"
-                style="
-                    grid-template-columns:
-                    minmax(260px, 0.95fr)
-                    minmax(0, 1.05fr);
-                    align-items:center;
-                "
             >
 
                 <div
                     class="modal-hero-image"
-                    style="
-                        min-height:310px;
-                        max-height:360px;
-                    "
                 >
 
                     <img
@@ -683,20 +672,19 @@ function openExperienceModal(id) {
 
                     <div class="modal-meta">
 
-                        <div class="modal-meta-item">
-                            Durata:
+                        <div class="modal-meta-item modal-meta-duration">
                             ${experience.duration}
                         </div>
 
-                        <div class="modal-meta-item">
+                        <div class="modal-meta-item modal-meta-languages">
                             ${experience.languages}
                         </div>
 
-                        <div class="modal-meta-item">
+                        <div class="modal-meta-item modal-meta-type">
                             ${experience.type}
                         </div>
 
-                        <div class="modal-meta-item">
+                        <div class="modal-meta-item modal-meta-price">
                             ${formatPrice(experience.price)}
                             / persona
                         </div>
@@ -709,49 +697,81 @@ function openExperienceModal(id) {
 
 
             <!-- =========================================
-                 GALLERIA FOTO 2-6
+                 INDICATORI FOTO MOBILE
+                 ========================================= -->
+
+            <div
+                class="pizza-mobile-gallery"
+                aria-label="Galleria immagini"
+            >
+
+                <button
+                    type="button"
+                    id="mobile-gallery-prev"
+                    class="pizza-mobile-gallery-arrow"
+                    aria-label="Foto precedente"
+                >
+                    ‹
+                </button>
+
+
+                <div
+                    class="pizza-mobile-gallery-dots"
+                >
+
+                    ${experience.images
+                        .map(
+                            (image, index) => {
+
+                                return `
+                                    <button
+                                        type="button"
+                                        class="pizza-mobile-gallery-dot ${
+                                            index === 0
+                                                ? "active"
+                                                : ""
+                                        }"
+                                        data-mobile-gallery-index="${index}"
+                                        aria-label="Visualizza foto ${index + 1}"
+                                    ></button>
+                                `;
+
+                            }
+                        )
+                        .join("")}
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="mobile-gallery-next"
+                    class="pizza-mobile-gallery-arrow"
+                    aria-label="Foto successiva"
+                >
+                    ›
+                </button>
+
+            </div>
+
+
+            <!-- =========================================
+                 GALLERIA DESKTOP FOTO 2-6
                  ========================================= -->
 
             <section
-                style="
-                    margin-top:24px;
-                    margin-bottom:40px;
-                "
+                class="pizza-modal-gallery"
             >
 
                 <div
-                    style="
-                        position:relative;
-                        width:100%;
-                    "
+                    class="pizza-modal-gallery-inner"
                 >
 
                     <button
                         type="button"
                         id="gallery-prev"
                         aria-label="Foto precedente"
-                        style="
-                            position:absolute;
-                            left:-16px;
-                            top:50%;
-                            transform:translateY(-50%);
-                            z-index:10;
-                            width:40px;
-                            height:40px;
-                            border:none;
-                            border-radius:50%;
-                            background:white;
-                            color:#202020;
-                            box-shadow:
-                                0 5px 18px
-                                rgba(0,0,0,0.16);
-                            font-size:25px;
-                            line-height:1;
-                            cursor:pointer;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                        "
+                        class="pizza-gallery-arrow"
                     >
                         ‹
                     </button>
@@ -759,19 +779,7 @@ function openExperienceModal(id) {
 
                     <div
                         id="pizza-thumbnail-gallery"
-                        style="
-                            display:flex;
-                            gap:12px;
-                            width:100%;
-                            overflow-x:auto;
-                            overflow-y:hidden;
-                            scroll-behavior:smooth;
-                            scrollbar-width:none;
-                            padding:
-                                4px 8px 10px 8px;
-                            box-sizing:border-box;
-                            -webkit-overflow-scrolling:touch;
-                        "
+                        class="pizza-thumbnail-gallery"
                     >
 
                         ${experience.images
@@ -789,37 +797,11 @@ function openExperienceModal(id) {
                                             class="pizza-gallery-thumb"
                                             data-index="${realIndex}"
                                             aria-label="Visualizza foto ${realIndex + 1}"
-                                            style="
-                                                flex:
-                                                    0 0 125px;
-                                                width:125px;
-                                                height:90px;
-                                                padding:0;
-                                                border:none;
-                                                border-radius:14px;
-                                                overflow:hidden;
-                                                background:#f1f1f4;
-                                                cursor:pointer;
-                                                position:relative;
-                                                opacity:0.82;
-                                                outline:none;
-                                                box-sizing:border-box;
-                                                transition:
-                                                    opacity 0.2s ease,
-                                                    transform 0.2s ease;
-                                            "
                                         >
 
                                             <img
                                                 src="${image}"
                                                 alt="${experience.title} - Foto ${realIndex + 1}"
-                                                style="
-                                                    width:100%;
-                                                    height:100%;
-                                                    object-fit:cover;
-                                                    display:block;
-                                                    pointer-events:none;
-                                                "
                                             >
 
                                         </button>
@@ -836,28 +818,7 @@ function openExperienceModal(id) {
                         type="button"
                         id="gallery-next"
                         aria-label="Foto successiva"
-                        style="
-                            position:absolute;
-                            right:-16px;
-                            top:50%;
-                            transform:translateY(-50%);
-                            z-index:10;
-                            width:40px;
-                            height:40px;
-                            border:none;
-                            border-radius:50%;
-                            background:white;
-                            color:#202020;
-                            box-shadow:
-                                0 5px 18px
-                                rgba(0,0,0,0.16);
-                            font-size:25px;
-                            line-height:1;
-                            cursor:pointer;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                        "
+                        class="pizza-gallery-arrow"
                     >
                         ›
                     </button>
@@ -872,36 +833,17 @@ function openExperienceModal(id) {
                  ========================================= -->
 
             <section
-                style="
-                    margin-top:40px;
-                    padding:26px;
-                    border:1px solid #e8e8ed;
-                    border-radius:20px;
-                    background:#fafafa;
-                "
+                class="pizza-booking"
             >
 
                 <div
-                    style="
-                        display:grid;
-                        grid-template-columns:
-                        repeat(2, minmax(0, 1fr));
-                        gap:24px;
-                        align-items:end;
-                    "
+                    class="pizza-booking-fields"
                 >
 
                     <div>
 
                         <label
                             for="pizza-date"
-                            style="
-                                display:block;
-                                margin-bottom:9px;
-                                color:#202020;
-                                font-size:13px;
-                                font-weight:800;
-                            "
                         >
                             Data
                         </label>
@@ -909,18 +851,6 @@ function openExperienceModal(id) {
                         <input
                             type="date"
                             id="pizza-date"
-                            style="
-                                box-sizing:border-box;
-                                width:100%;
-                                height:50px;
-                                padding:0 15px;
-                                border:1px solid #ddddE4;
-                                border-radius:13px;
-                                background:white;
-                                color:#202020;
-                                font-size:14px;
-                                outline:none;
-                            "
                         >
 
                     </div>
@@ -930,32 +860,12 @@ function openExperienceModal(id) {
 
                         <label
                             for="pizza-participants"
-                            style="
-                                display:block;
-                                margin-bottom:9px;
-                                color:#202020;
-                                font-size:13px;
-                                font-weight:800;
-                            "
                         >
                             Persone
                         </label>
 
                         <select
                             id="pizza-participants"
-                            style="
-                                box-sizing:border-box;
-                                width:100%;
-                                height:50px;
-                                padding:0 15px;
-                                border:1px solid #ddddE4;
-                                border-radius:13px;
-                                background:white;
-                                color:#202020;
-                                font-size:14px;
-                                outline:none;
-                                cursor:pointer;
-                            "
                         >
 
                             ${Array.from(
@@ -989,45 +899,21 @@ function openExperienceModal(id) {
                     type="button"
                     class="whatsapp-button"
                     id="pizza-whatsapp-button"
-                    style="
-                        width:100%;
-                        margin-top:22px;
-                    "
                 >
                     Richiedi disponibilità su WhatsApp
                 </button>
 
 
                 <div
-                    style="
-                        display:flex;
-                        align-items:center;
-                        justify-content:space-between;
-                        gap:20px;
-                        margin-top:22px;
-                        padding-top:20px;
-                        border-top:1px solid #e8e8ed;
-                    "
+                    class="pizza-total"
                 >
 
-                    <span
-                        style="
-                            color:#737373;
-                            font-size:14px;
-                            font-weight:600;
-                        "
-                    >
+                    <span>
                         Totale esperienza
                     </span>
 
                     <strong
                         id="pizza-total-price"
-                        style="
-                            color:#202020;
-                            font-size:24px;
-                            font-weight:800;
-                            letter-spacing:-0.03em;
-                        "
                     >
                         49 €
                     </strong>
@@ -1299,32 +1185,46 @@ function setupPizzaGallery(experience) {
             "gallery-next"
         );
 
+    const mobilePreviousButton =
+        document.getElementById(
+            "mobile-gallery-prev"
+        );
 
-    if (
-        !mainImage ||
-        !gallery ||
-        !previousButton ||
-        !nextButton
-    ) {
+    const mobileNextButton =
+        document.getElementById(
+            "mobile-gallery-next"
+        );
+
+    const mobileDots =
+        Array.from(
+            document.querySelectorAll(
+                ".pizza-mobile-gallery-dot"
+            )
+        );
+
+
+    if (!mainImage) {
         return;
     }
 
 
     const thumbnails =
-        Array.from(
-            gallery.querySelectorAll(
-                ".pizza-gallery-thumb"
+        gallery
+            ? Array.from(
+                gallery.querySelectorAll(
+                    ".pizza-gallery-thumb"
+                )
             )
-        );
+            : [];
 
 
     let currentIndex = 0;
 
 
-    function updateMainImage(index) {
+    function updateGallery(index) {
 
         if (
-            index < 1 ||
+            index < 0 ||
             index >= experience.images.length
         ) {
             return;
@@ -1377,6 +1277,25 @@ function setupPizzaGallery(experience) {
         );
 
 
+        mobileDots.forEach(
+            (dot) => {
+
+                const dotIndex =
+                    parseInt(
+                        dot.dataset.mobileGalleryIndex,
+                        10
+                    );
+
+
+                dot.classList.toggle(
+                    "active",
+                    dotIndex === currentIndex
+                );
+
+            }
+        );
+
+
         const activeThumbnail =
             thumbnails.find(
                 thumbnail =>
@@ -1415,7 +1334,7 @@ function setupPizzaGallery(experience) {
                             10
                         );
 
-                    updateMainImage(index);
+                    updateGallery(index);
 
                 }
             );
@@ -1424,38 +1343,116 @@ function setupPizzaGallery(experience) {
     );
 
 
-    previousButton.addEventListener(
-        "click",
-        function (event) {
+    if (previousButton) {
 
-            event.stopPropagation();
+        previousButton.addEventListener(
+            "click",
+            function (event) {
 
-            const nextIndex =
-                currentIndex <= 1
-                    ? experience.images.length - 1
-                    : currentIndex - 1;
+                event.stopPropagation();
 
-            updateMainImage(
-                nextIndex
-            );
+                const previousIndex =
+                    currentIndex <= 0
+                        ? experience.images.length - 1
+                        : currentIndex - 1;
 
-        }
-    );
+                updateGallery(
+                    previousIndex
+                );
+
+            }
+        );
+
+    }
 
 
-    nextButton.addEventListener(
-        "click",
-        function (event) {
+    if (nextButton) {
 
-            event.stopPropagation();
+        nextButton.addEventListener(
+            "click",
+            function (event) {
 
-            const nextIndex =
-                currentIndex >= experience.images.length - 1
-                    ? 1
-                    : currentIndex + 1;
+                event.stopPropagation();
 
-            updateMainImage(
-                nextIndex
+                const nextIndex =
+                    currentIndex >= experience.images.length - 1
+                        ? 0
+                        : currentIndex + 1;
+
+                updateGallery(
+                    nextIndex
+                );
+
+            }
+        );
+
+    }
+
+
+    if (mobilePreviousButton) {
+
+        mobilePreviousButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+                const previousIndex =
+                    currentIndex <= 0
+                        ? experience.images.length - 1
+                        : currentIndex - 1;
+
+                updateGallery(
+                    previousIndex
+                );
+
+            }
+        );
+
+    }
+
+
+    if (mobileNextButton) {
+
+        mobileNextButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+                const nextIndex =
+                    currentIndex >= experience.images.length - 1
+                        ? 0
+                        : currentIndex + 1;
+
+                updateGallery(
+                    nextIndex
+                );
+
+            }
+        );
+
+    }
+
+
+    mobileDots.forEach(
+        (dot) => {
+
+            dot.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    const index =
+                        parseInt(
+                            dot.dataset.mobileGalleryIndex,
+                            10
+                        );
+
+                    updateGallery(index);
+
+                }
             );
 
         }
@@ -1479,10 +1476,10 @@ function setupPizzaGallery(experience) {
 
 
     let touchStartX = 0;
-    let touchEndX = 0;
+    let touchStartY = 0;
 
 
-    gallery.addEventListener(
+    mainImage.addEventListener(
         "touchstart",
         function (event) {
 
@@ -1494,6 +1491,9 @@ function setupPizzaGallery(experience) {
                 touchStartX =
                     event.touches[0].clientX;
 
+                touchStartY =
+                    event.touches[0].clientY;
+
             }
 
         },
@@ -1503,43 +1503,63 @@ function setupPizzaGallery(experience) {
     );
 
 
-    gallery.addEventListener(
+    mainImage.addEventListener(
         "touchend",
         function (event) {
 
             if (
-                event.changedTouches &&
-                event.changedTouches.length > 0
+                !event.changedTouches ||
+                event.changedTouches.length === 0
             ) {
-
-                touchEndX =
-                    event.changedTouches[0].clientX;
-
-            }
-
-
-            const difference =
-                touchStartX - touchEndX;
-
-
-            if (Math.abs(difference) < 40) {
                 return;
             }
 
 
-            if (difference > 0) {
+            const touch =
+                event.changedTouches[0];
 
-                gallery.scrollBy({
-                    left: 150,
-                    behavior: "smooth"
-                });
+
+            const differenceX =
+                touchStartX -
+                touch.clientX;
+
+
+            const differenceY =
+                touchStartY -
+                touch.clientY;
+
+
+            if (
+                Math.abs(differenceX) < 45 ||
+                Math.abs(differenceX) <
+                    Math.abs(differenceY)
+            ) {
+                return;
+            }
+
+
+            if (differenceX > 0) {
+
+                const nextIndex =
+                    currentIndex >=
+                        experience.images.length - 1
+                        ? 0
+                        : currentIndex + 1;
+
+                updateGallery(
+                    nextIndex
+                );
 
             } else {
 
-                gallery.scrollBy({
-                    left: -150,
-                    behavior: "smooth"
-                });
+                const previousIndex =
+                    currentIndex <= 0
+                        ? experience.images.length - 1
+                        : currentIndex - 1;
+
+                updateGallery(
+                    previousIndex
+                );
 
             }
 
@@ -1548,6 +1568,9 @@ function setupPizzaGallery(experience) {
             passive: true
         }
     );
+
+
+    updateGallery(0);
 }
 
 
