@@ -12,56 +12,78 @@ const experiences = [
         categoryLabel: "Corso di cucina",
         title: "Lezione di Pizza Napoletana",
         image: "images/pizza-napoletana.jpg.jpg",
-        price: "Richiedi preventivo",
+        price: 49,
+        priceType: "perPerson",
         duration: "Circa 2 ore",
 
         short:
-            "Lezione pratica dedicata alla preparazione della pizza napoletana, dall'impasto alla cottura.",
+            "Lezione pratica dedicata alla preparazione della pizza napoletana, dall'impasto alla cottura, con antipasto, bevande e pizza finale inclusi.",
 
         description:
-            "Un'esperienza pratica dedicata alla preparazione della pizza napoletana in un laboratorio di cucina a Napoli, con preparazione dell'impasto, condimento e cottura della pizza.",
+            "Questa esperienza ti porta nel cuore della tradizione della pizza napoletana attraverso una lezione pratica di circa due ore, guidata da uno chef locale all’interno di un laboratorio di cucina attrezzato. Durante il corso scoprirai come nasce una vera pizza napoletana, partendo dalla conoscenza degli ingredienti fondamentali e dalla preparazione dell’impasto. Lo chef ti accompagnerà passo dopo passo nella lavorazione manuale, spiegandoti le principali fasi necessarie per ottenere un impasto correttamente lavorato. Durante il riposo dell’impasto potrai gustare un antipasto tipico napoletano composto da bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva, accompagnato dalle bevande previste dall’esperienza. La lezione prosegue con la stesura dell’impasto e la preparazione della pizza, imparando a lavorare correttamente il disco e a preparare il condimento con pomodoro San Marzano, mozzarella, olio e basilico. La pizza preparata verrà cotta in un forno a legna professionale e potrai gustare direttamente il risultato del tuo lavoro. Al termine dell’esperienza riceverai un diploma di pizzaiolo come ricordo della tua esperienza napoletana. Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata per essere semplice, pratica e adatta a chi viaggia da solo, alle coppie e alle famiglie.",
 
         itinerary: [
             {
-                title: "Accoglienza",
-                text: "Inizio dell'esperienza e introduzione alla preparazione della pizza."
+                title: "Accoglienza e introduzione",
+                text: "Inizio dell'esperienza presso il laboratorio di cucina e introduzione alla tradizione della pizza napoletana e agli ingredienti utilizzati."
             },
             {
                 title: "Preparazione dell'impasto",
-                text: "Lavorazione dell'impasto secondo la tradizione napoletana."
+                text: "Lavorazione manuale dell'impasto con la guida dello chef locale e spiegazione delle principali fasi della preparazione."
             },
             {
-                title: "Condimento",
-                text: "Preparazione e condimento della pizza."
+                title: "Antipasto e bevande",
+                text: "Durante il riposo dell'impasto viene servito un antipasto tipico napoletano con bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d'oliva, accompagnato dalle bevande incluse."
             },
             {
-                title: "Cottura e degustazione",
-                text: "Cottura della pizza e degustazione finale."
+                title: "Stesura e condimento",
+                text: "Stesura dell'impasto e preparazione della pizza con pomodoro San Marzano, mozzarella, olio e basilico."
+            },
+            {
+                title: "Cottura",
+                text: "La pizza viene cotta in un forno a legna professionale seguendo le indicazioni dello chef."
+            },
+            {
+                title: "Degustazione e diploma",
+                text: "Degustazione della pizza preparata e consegna del diploma di pizzaiolo al termine della lezione."
             }
         ],
 
         included: [
-            "Lezione pratica di pizza",
-            "Ingredienti per la preparazione",
-            "Antipasto tipico",
-            "Bevanda",
-            "Pizza preparata durante la lezione"
+            "Lezione di pizza napoletana",
+            "Chef locale",
+            "Preparazione dell'impasto",
+            "Preparazione del pomodoro San Marzano",
+            "Antipasto tipico napoletano: bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d'oliva",
+            "Pizza finale per pranzo o cena",
+            "Bevande incluse",
+            "Grembiule e utensili da cucina",
+            "Cappello da chef",
+            "Diploma di pizzaiolo"
         ],
 
         notIncluded: [
-            "Trasferimenti da e verso il luogo dell'attività"
+            "Trasporti da e per il punto di incontro"
         ],
 
         meetingPoint:
-            "Il punto di incontro viene comunicato con la conferma dell'esperienza.",
+            "NaplesBay Cooking Lab, Via delle Zite 30, 80139 Napoli, Italia.",
 
         notAllowed: [
-            "Per gli alcolici valgono i limiti previsti per i minori."
+            "Ai minori di 18 anni non vengono servite bevande alcoliche."
         ],
 
         useful: [
-            "Esperienza adatta anche ai principianti.",
-            "Si consiglia abbigliamento comodo."
+            "Durata dell'esperienza: circa 2 ore.",
+            "Lingue disponibili: italiano, inglese, francese e spagnolo.",
+            "Esperienza condivisa.",
+            "Accessibile con passeggino.",
+            "Animali domestici ammessi.",
+            "Non accessibile in sedia a rotelle.",
+            "Il laboratorio si trova nel centro storico, a circa 5 minuti a piedi dalla stazione metro Duomo.",
+            "Non è richiesta alcuna esperienza precedente in cucina.",
+            "Si consiglia abbigliamento comodo.",
+            "Cancellazione con rimborso completo se effettuata almeno 24 ore prima."
         ]
     },
 
@@ -2434,6 +2456,50 @@ function escapeHTML(value) {
 
 
 /* =========================================================
+   PREZZO PIZZA
+========================================================= */
+
+function getPizzaTotal(participants) {
+
+    const experience =
+        experiences.find(
+            item => item.id === "pizza"
+        );
+
+    if (!experience) {
+        return 0;
+    }
+
+    const quantity =
+        Math.max(
+            1,
+            parseInt(participants, 10) || 1
+        );
+
+    return experience.price * quantity;
+}
+
+
+function updatePizzaPrice(participants) {
+
+    const total =
+        getPizzaTotal(participants);
+
+    const totalElement =
+        document.getElementById(
+            "pizza-total-price"
+        );
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            `${total} €`;
+    }
+
+}
+
+
+/* =========================================================
    LISTE
 ========================================================= */
 
@@ -2562,7 +2628,11 @@ function renderCards(filter = "all") {
                         <div>
 
                             <div class="experience-price">
-                                ${escapeHTML(experience.price)}
+                                ${
+                                    experience.priceType === "perPerson"
+                                        ? `${escapeHTML(experience.price)} € / persona`
+                                        : escapeHTML(experience.price)
+                                }
                             </div>
 
                             <div class="experience-duration">
@@ -2611,6 +2681,16 @@ function openExperience(id) {
         `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappText)}`;
 
 
+    const isPizza =
+        experience.id === "pizza";
+
+
+    const modalPrice =
+        isPizza
+            ? "49 € / persona"
+            : experience.price;
+
+
     modalContent.innerHTML = `
 
         <div class="modal-body">
@@ -2657,7 +2737,7 @@ function openExperience(id) {
                         </span>
 
                         <span class="modal-meta-item">
-                            ${escapeHTML(experience.price)}
+                            ${escapeHTML(modalPrice)}
                         </span>
 
                     </div>
@@ -2665,6 +2745,122 @@ function openExperience(id) {
                 </div>
 
             </div>
+
+
+            ${
+                isPizza
+                    ? `
+                        <!-- PARTECIPANTI E PREZZO PIZZA -->
+
+                        <section class="modal-section">
+
+                            <h3>
+                                Partecipanti
+                            </h3>
+
+                            <div
+                                style="
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:space-between;
+                                    gap:20px;
+                                    flex-wrap:wrap;
+                                    padding:20px;
+                                    border-radius:16px;
+                                    background:#f7f5fb;
+                                    border:1px solid rgba(90,60,140,0.10);
+                                "
+                            >
+
+                                <div>
+
+                                    <label
+                                        for="pizza-participants"
+                                        style="
+                                            display:block;
+                                            font-weight:600;
+                                            margin-bottom:8px;
+                                        "
+                                    >
+                                        Numero di partecipanti
+                                    </label>
+
+                                    <select
+                                        id="pizza-participants"
+                                        onchange="updatePizzaPrice(this.value)"
+                                        style="
+                                            min-width:180px;
+                                            padding:12px 14px;
+                                            border:1px solid #d8d3df;
+                                            border-radius:10px;
+                                            background:#fff;
+                                            font-size:16px;
+                                            cursor:pointer;
+                                        "
+                                    >
+                                        <option value="1">1 persona</option>
+                                        <option value="2">2 persone</option>
+                                        <option value="3">3 persone</option>
+                                        <option value="4">4 persone</option>
+                                        <option value="5">5 persone</option>
+                                        <option value="6">6 persone</option>
+                                        <option value="7">7 persone</option>
+                                        <option value="8">8 persone</option>
+                                        <option value="9">9 persone</option>
+                                        <option value="10">10 persone</option>
+                                    </select>
+
+                                </div>
+
+
+                                <div
+                                    style="
+                                        text-align:right;
+                                        min-width:160px;
+                                    "
+                                >
+
+                                    <span
+                                        style="
+                                            display:block;
+                                            font-size:13px;
+                                            color:#777;
+                                            margin-bottom:4px;
+                                        "
+                                    >
+                                        Totale esperienza
+                                    </span>
+
+                                    <strong
+                                        id="pizza-total-price"
+                                        style="
+                                            display:block;
+                                            font-size:28px;
+                                            line-height:1.1;
+                                        "
+                                    >
+                                        49 €
+                                    </strong>
+
+                                    <span
+                                        style="
+                                            display:block;
+                                            font-size:13px;
+                                            color:#777;
+                                            margin-top:4px;
+                                        "
+                                    >
+                                        49 € per persona
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+                    `
+                    : ""
+            }
 
 
             <!-- ITINERARIO -->
