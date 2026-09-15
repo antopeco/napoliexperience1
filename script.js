@@ -3,52 +3,39 @@ const WHATSAPP_NUMBER = "393423512684";
 const experiences = [
     {
         id: "pizza",
-        category: "cooking",
-        categoryLabel: "Corso di cucina",
         title: "Lezione di Pizza Napoletana",
-        image: "images/pizza-napoletana.jpg.jpg",
+        category: "cooking",
+        categoryLabel: "Corsi di Cucina",
 
         price: 49,
         priceType: "perPerson",
-        duration: "Circa 2 ore",
 
-        short:
-            "Lezione pratica dedicata alla preparazione della pizza napoletana, dall'impasto alla cottura, con antipasto, bevande e pizza finale inclusi.",
+        duration: "2 ore",
+        languages: "ITA / ENG / FRA / SPA",
+        type: "Esperienza condivisa",
+
+        images: [
+            "images/pizza-napoletana-1.jpg.webp",
+            "images/pizza-napoletana-2.jpg.webp",
+            "images/pizza-napoletana-3.jpg.webp",
+            "images/pizza-napoletana-4.jpg.webp",
+            "images/pizza-napoletana-5.jpg.webp",
+            "images/pizza-napoletana-6.jpg.webp"
+        ],
+
+        shortDescription:
+            "Impara a preparare la vera pizza napoletana insieme a uno chef locale, dall'impasto alla cottura, e gusta il risultato finale.",
 
         description:
-            "Questa esperienza ti porta nel cuore della tradizione della pizza napoletana attraverso una lezione pratica di circa due ore, guidata da uno chef locale all’interno di un laboratorio di cucina attrezzato. Durante il corso scoprirai come nasce una vera pizza napoletana, partendo dalla conoscenza degli ingredienti fondamentali e dalla preparazione dell’impasto. Lo chef ti accompagnerà passo dopo passo nella lavorazione manuale, spiegandoti le principali fasi necessarie per ottenere un impasto correttamente lavorato. Durante il riposo dell’impasto potrai gustare un antipasto tipico napoletano composto da bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva, accompagnato dalle bevande previste dall’esperienza. La lezione prosegue con la stesura dell’impasto e la preparazione della pizza, imparando a lavorare correttamente il disco e a preparare il condimento con pomodoro San Marzano, mozzarella, olio e basilico. La pizza preparata verrà cotta in un forno a legna professionale e potrai gustare direttamente il risultato del tuo lavoro. Al termine dell’esperienza riceverai un diploma di pizzaiolo come ricordo della tua esperienza napoletana. Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata per essere semplice, pratica e adatta a chi viaggia da solo, alle coppie e alle famiglie.",
+            "Questa esperienza ti porta nel cuore della tradizione della pizza napoletana attraverso una lezione pratica di circa due ore, guidata da uno chef locale all’interno di un laboratorio di cucina attrezzato. Durante il corso scoprirai come nasce una vera pizza napoletana, partendo dalla conoscenza degli ingredienti fondamentali e dalla preparazione dell’impasto. Lo chef ti accompagnerà passo dopo passo nella lavorazione manuale, spiegandoti le principali fasi necessarie per ottenere un impasto correttamente lavorato. Durante il riposo dell’impasto potrai gustare un antipasto tipico napoletano composto da bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva, accompagnato dalle bevande previste dall’esperienza. La lezione prosegue con la stesura dell’impasto e la preparazione della pizza, imparando a lavorare correttamente il disco e a preparare il condimento con pomodoro San Marzano, mozzarella, olio e basilico. La pizza preparata verrà cotta in un forno professionale e potrai gustare direttamente il risultato del tuo lavoro. Al termine dell’esperienza riceverai un diploma di pizzaiolo come ricordo della tua esperienza napoletana. Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata per essere semplice, pratica e adatta a chi viaggia da solo, alle coppie e alle famiglie.",
 
-        itinerary: [
-            {
-                title: "Accoglienza e introduzione",
-                text:
-                    "Inizio dell’esperienza presso il laboratorio di cucina e introduzione alla tradizione della pizza napoletana e agli ingredienti utilizzati."
-            },
-            {
-                title: "Preparazione dell’impasto",
-                text:
-                    "Lavorazione manuale dell’impasto con la guida dello chef locale e spiegazione delle principali fasi della preparazione."
-            },
-            {
-                title: "Antipasto e bevande",
-                text:
-                    "Durante il riposo dell’impasto viene servito un antipasto tipico napoletano con bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva, accompagnato dalle bevande incluse."
-            },
-            {
-                title: "Stesura e condimento",
-                text:
-                    "Stesura dell’impasto e preparazione della pizza con pomodoro San Marzano, mozzarella, olio e basilico."
-            },
-            {
-                title: "Cottura",
-                text:
-                    "La pizza viene cotta in un forno a legna professionale seguendo le indicazioni dello chef."
-            },
-            {
-                title: "Degustazione e diploma",
-                text:
-                    "Degustazione della pizza preparata e consegna del diploma di pizzaiolo al termine della lezione."
-            }
+        preparation: [
+            "Preparazione dell’impasto",
+            "Preparazione del pomodoro San Marzano",
+            "Stesura dell’impasto",
+            "Condimento della pizza",
+            "Cottura in forno professionale",
+            "Degustazione finale"
         ],
 
         included: [
@@ -56,7 +43,7 @@ const experiences = [
             "Chef locale",
             "Preparazione dell’impasto",
             "Preparazione del pomodoro San Marzano",
-            "Antipasto tipico napoletano: bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva",
+            "Antipasto tipico napoletano (bruschette con pomodorini, mozzarella, pane fatto in casa e olio extravergine d’oliva)",
             "Pizza finale per pranzo o cena",
             "Bevande incluse",
             "Grembiule e utensili da cucina",
@@ -69,678 +56,582 @@ const experiences = [
         ],
 
         meetingPoint:
-            "NaplesBay Cooking Lab, Via delle Zite 30, 80139 Napoli, Italia.",
+            "NaplesBay Cooking Lab, Via delle Zite 30, 80139 Napoli, Italia",
 
         notAllowed: [
-            "Ai minori di 18 anni non vengono servite bevande alcoliche."
+            "Non sono disponibili bevande alcoliche per i partecipanti di età inferiore ai 18 anni"
         ],
 
-        useful: [
-            "Durata dell’esperienza: circa 2 ore.",
-            "Lingue disponibili: italiano, inglese, francese e spagnolo.",
-            "Esperienza condivisa.",
-            "Accessibile con passeggino.",
-            "Animali domestici ammessi.",
-            "Non accessibile in sedia a rotelle.",
-            "Il laboratorio si trova nel centro storico, a circa 5 minuti a piedi dalla stazione metro Duomo.",
-            "Non è richiesta alcuna esperienza precedente in cucina.",
-            "Si consiglia abbigliamento comodo.",
-            "Cancellazione con rimborso completo se effettuata almeno 24 ore prima."
+        usefulInfo: [
+            "Accessibile con passeggino",
+            "Animali domestici ammessi",
+            "Non accessibile in sedia a rotelle",
+            "Laboratorio situato nel centro storico",
+            "Circa 5 minuti a piedi dalla fermata Duomo della metropolitana",
+            "Cancellazione con rimborso completo fino ad almeno 24 ore prima"
         ]
     }
 ];
 
 
 /* =========================================================
-   NUMERO PARTECIPANTI E PREZZO
-========================================================= */
+   FUNZIONI GENERALI
+   ========================================================= */
 
-function getPizzaTotal(participants) {
-    const quantity = Math.max(
-        1,
-        parseInt(participants, 10) || 1
-    );
-
-    return 49 * quantity;
-}
-
-
-function updatePizzaPrice(participants) {
-    const total = getPizzaTotal(participants);
-
-    const totalElement =
-        document.getElementById("pizza-total-price");
-
-    if (totalElement) {
-        totalElement.textContent = `${total} €`;
-    }
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-/* =========================================================
-   LISTE
-========================================================= */
-
-function renderList(items) {
-    if (!items || !items.length) {
+function getRandomImage(images) {
+    if (!images || images.length === 0) {
         return "";
     }
 
-    return `
-        <ul>
-            ${items.map(item => `
-                <li>${escapeHTML(item)}</li>
-            `).join("")}
-        </ul>
-    `;
+    const randomIndex = Math.floor(Math.random() * images.length);
+    return images[randomIndex];
 }
 
 
-/* =========================================================
-   PREPARAZIONE
-========================================================= */
+function formatPrice(value) {
+    return `${value} €`;
+}
 
-function renderItinerary(items) {
-    if (!items || !items.length) {
-        return `
-            <p>
-                Preparazione non disponibile.
-            </p>
-        `;
+
+function getPizzaTotal(participants) {
+    return 49 * participants;
+}
+
+
+function formatDateItalian(dateValue) {
+    if (!dateValue) {
+        return "";
     }
 
-    return `
-        <div class="itinerary">
+    const parts = dateValue.split("-");
 
-            ${items.map((item, index) => `
-                
-                <div class="itinerary-stop">
+    if (parts.length !== 3) {
+        return dateValue;
+    }
 
-                    <span class="itinerary-number">
-                        PROCEDURA ${String(index + 1).padStart(2, "0")}
-                    </span>
-
-                    <h4>
-                        ${escapeHTML(item.title)}
-                    </h4>
-
-                    <p>
-                        ${escapeHTML(item.text)}
-                    </p>
-
-                </div>
-
-            `).join("")}
-
-        </div>
-    `;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 
 /* =========================================================
    RENDER CARD
-========================================================= */
+   ========================================================= */
 
-function renderCards() {
+function renderExperiences() {
+    const grid = document.getElementById("experiences-grid");
 
-    const catalogGrid =
-        document.getElementById("catalog-grid");
-
-    if (!catalogGrid) {
+    if (!grid) {
         return;
     }
 
-    catalogGrid.innerHTML = experiences.map(experience => `
+    grid.innerHTML = "";
 
-        <article
-            class="experience-card"
-            data-id="${escapeHTML(experience.id)}"
-            tabindex="0"
-            role="button"
-        >
+    experiences.forEach((experience) => {
+        const card = document.createElement("article");
 
-            <div class="experience-card-image">
+        card.className = "experience-card";
+        card.dataset.category = experience.category;
+        card.dataset.id = experience.id;
 
+        const randomImage = getRandomImage(experience.images);
+
+        card.innerHTML = `
+            <div class="experience-image-wrapper">
                 <img
-                    src="${escapeHTML(experience.image)}"
-                    alt="${escapeHTML(experience.title)}"
+                    class="experience-image"
+                    src="${randomImage}"
+                    alt="${experience.title}"
                     loading="lazy"
                 >
-
             </div>
-
 
             <div class="experience-card-content">
 
-                <span class="experience-card-category">
-                    ${escapeHTML(experience.categoryLabel)}
-                </span>
+                <div class="experience-category">
+                    ${experience.categoryLabel}
+                </div>
 
-
-                <h3 class="experience-card-title">
-                    ${escapeHTML(experience.title)}
+                <h3 class="experience-title">
+                    ${experience.title}
                 </h3>
 
+                <div class="experience-meta">
+                    <span>${experience.duration}</span>
+                    <span>•</span>
+                    <span>${experience.type}</span>
+                </div>
 
-                <p class="experience-card-description">
-                    ${escapeHTML(experience.short)}
+                <p class="experience-short-description">
+                    ${experience.shortDescription}
                 </p>
 
-
-                <div class="experience-card-footer">
-
-                    <div>
-
-                        <div class="experience-price">
-                            49 € / persona
-                        </div>
-
-                        <div class="experience-duration">
-                            ${escapeHTML(experience.duration)}
-                        </div>
-
+                <div class="experience-card-bottom">
+                    <div class="experience-price">
+                        ${formatPrice(experience.price)} / persona
                     </div>
 
-
-                    <span class="experience-button">
+                    <button
+                        class="experience-button"
+                        type="button"
+                        onclick="openExperienceModal('${experience.id}')"
+                    >
                         Scopri
-                    </span>
-
+                    </button>
                 </div>
 
             </div>
+        `;
 
-        </article>
+        card.addEventListener("click", function (event) {
+            if (event.target.closest("button")) {
+                return;
+            }
 
-    `).join("");
+            openExperienceModal(experience.id);
+        });
+
+        grid.appendChild(card);
+    });
 }
 
 
 /* =========================================================
-   APRI ESPERIENZA
-========================================================= */
+   MODAL
+   ========================================================= */
 
-function openExperience(id) {
-
-    const experience =
-        experiences.find(
-            item => item.id === id
-        );
+function openExperienceModal(id) {
+    const experience = experiences.find((item) => item.id === id);
 
     if (!experience) {
         return;
     }
 
-    const modal =
-        document.getElementById("experience-modal");
-
-    const modalContent =
-        document.getElementById("modal-content");
-
-    if (!modal || !modalContent) {
-        return;
-    }
-
-
-    const whatsappMessage =
-        `Ciao, vorrei richiedere informazioni e disponibilità per l'esperienza "${experience.title}".`;
-
-    const whatsappURL =
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
-
-
-    modalContent.innerHTML = `
-
-        <div class="modal-body">
-
-
-            <!-- HERO MODAL -->
-
-            <div class="modal-hero">
-
-                <div class="modal-hero-image">
-
-                    <img
-                        src="${escapeHTML(experience.image)}"
-                        alt="${escapeHTML(experience.title)}"
-                    >
-
-                </div>
-
-
-                <div class="modal-hero-info">
-
-                    <span class="modal-category">
-                        ${escapeHTML(experience.categoryLabel)}
-                    </span>
-
-
-                    <h2
-                        class="modal-title"
-                        id="modal-title"
-                    >
-                        ${escapeHTML(experience.title)}
-                    </h2>
-
-
-                    <p class="modal-short">
-                        ${escapeHTML(experience.short)}
-                    </p>
-
-
-                    <div class="modal-meta">
-
-                        <span class="modal-meta-item">
-                            ${escapeHTML(experience.duration)}
-                        </span>
-
-                        <span class="modal-meta-item">
-                            49 € / persona
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- PARTECIPANTI -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Partecipanti
-                </h3>
-
-
-                <div class="pizza-price-box">
-
-                    <div>
-
-                        <label for="pizza-participants">
-                            Numero di partecipanti
-                        </label>
-
-
-                        <select
-                            id="pizza-participants"
-                            onchange="updatePizzaPrice(this.value)"
-                        >
-
-                            <option value="1">
-                                1 persona
-                            </option>
-
-                            <option value="2">
-                                2 persone
-                            </option>
-
-                            <option value="3">
-                                3 persone
-                            </option>
-
-                            <option value="4">
-                                4 persone
-                            </option>
-
-                            <option value="5">
-                                5 persone
-                            </option>
-
-                            <option value="6">
-                                6 persone
-                            </option>
-
-                            <option value="7">
-                                7 persone
-                            </option>
-
-                            <option value="8">
-                                8 persone
-                            </option>
-
-                            <option value="9">
-                                9 persone
-                            </option>
-
-                            <option value="10">
-                                10 persone
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="pizza-total">
-
-                        <span>
-                            Totale
-                        </span>
-
-
-                        <strong id="pizza-total-price">
-                            49 €
-                        </strong>
-
-
-                        <small>
-                            49 € per persona
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- PREPARAZIONE -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Preparazione
-                </h3>
-
-                ${renderItinerary(
-                    experience.itinerary
-                )}
-
-            </section>
-
-
-            <!-- ATTIVITÀ IN BREVE -->
-
-            <section class="modal-section">
-
-                <h3>
-                    L'attività in breve
-                </h3>
-
-                <p>
-                    ${escapeHTML(experience.short)}
-                </p>
-
-            </section>
-
-
-            <!-- DESCRIZIONE COMPLETA -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Descrizione completa
-                </h3>
-
-                <p>
-                    ${escapeHTML(experience.description)}
-                </p>
-
-            </section>
-
-
-            <!-- COSA È INCLUSO -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Cosa è incluso
-                </h3>
-
-                ${renderList(
-                    experience.included
-                )}
-
-            </section>
-
-
-            <!-- COSA NON È INCLUSO -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Cosa non è incluso
-                </h3>
-
-                ${renderList(
-                    experience.notIncluded
-                )}
-
-            </section>
-
-
-            <!-- PUNTO DI INCONTRO -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Punti di incontro
-                </h3>
-
-                <p>
-                    ${escapeHTML(
-                        experience.meetingPoint
-                    )}
-                </p>
-
-            </section>
-
-
-            <!-- NON AMMESSO -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Non ammesso
-                </h3>
-
-                ${renderList(
-                    experience.notAllowed
-                )}
-
-            </section>
-
-
-            <!-- INFORMAZIONI UTILI -->
-
-            <section class="modal-section">
-
-                <h3>
-                    Informazioni utili
-                </h3>
-
-                ${renderList(
-                    experience.useful
-                )}
-
-            </section>
-
-
-            <!-- WHATSAPP -->
-
-            <section class="modal-request">
-
-                <h3>
-                    Richiedi disponibilità
-                </h3>
-
-                <p>
-                    Invia una richiesta indicando la data
-                    desiderata e il numero di partecipanti.
-                </p>
-
-
-                <a
-                    class="whatsapp-button"
-                    href="${whatsappURL}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Richiedi disponibilità su WhatsApp
-                </a>
-
-            </section>
-
-
-        </div>
-
-    `;
-
-
-    modal.classList.add("open");
-
-    modal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-    document.body.style.overflow =
-        "hidden";
-}
-
-
-/* =========================================================
-   CHIUDI MODAL
-========================================================= */
-
-function closeModal() {
-
-    const modal =
-        document.getElementById("experience-modal");
+    const modal = document.getElementById("experience-modal");
 
     if (!modal) {
         return;
     }
 
-    modal.classList.remove("open");
+    const modalContent = modal.querySelector(".modal-content");
 
-    modal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
+    if (!modalContent) {
+        return;
+    }
 
-    document.body.style.overflow =
-        "";
+    modalContent.innerHTML = `
+        <button
+            class="modal-close"
+            type="button"
+            onclick="closeExperienceModal()"
+            aria-label="Chiudi"
+        >
+            ×
+        </button>
+
+        <div class="modal-gallery">
+
+            <div class="modal-gallery-main">
+                <img
+                    src="${experience.images[0]}"
+                    alt="${experience.title}"
+                >
+            </div>
+
+            <div class="modal-gallery-side">
+
+                <div class="modal-gallery-small">
+                    <img
+                        src="${experience.images[1]}"
+                        alt="${experience.title}"
+                    >
+                </div>
+
+                <div class="modal-gallery-small">
+                    <img
+                        src="${experience.images[2]}"
+                        alt="${experience.title}"
+                    >
+                </div>
+
+                <div class="modal-gallery-small">
+                    <img
+                        src="${experience.images[3]}"
+                        alt="${experience.title}"
+                    >
+                </div>
+
+                <div class="modal-gallery-small">
+                    <img
+                        src="${experience.images[4]}"
+                        alt="${experience.title}"
+                    >
+                </div>
+
+                <div class="modal-gallery-wide">
+                    <img
+                        src="${experience.images[5]}"
+                        alt="${experience.title}"
+                    >
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-header">
+            <div class="experience-category">
+                ${experience.categoryLabel}
+            </div>
+
+            <h2>
+                ${experience.title}
+            </h2>
+
+            <div class="modal-meta">
+                <span>${experience.duration}</span>
+                <span>•</span>
+                <span>${experience.languages}</span>
+                <span>•</span>
+                <span>${experience.type}</span>
+            </div>
+        </div>
+
+
+        <section class="modal-section booking-section">
+
+            <div class="booking-grid">
+
+                <div class="booking-field">
+                    <label for="pizza-date">
+                        Data
+                    </label>
+
+                    <input
+                        type="date"
+                        id="pizza-date"
+                    >
+                </div>
+
+
+                <div class="booking-field">
+                    <label for="pizza-participants">
+                        Partecipanti
+                    </label>
+
+                    <select id="pizza-participants">
+                        ${Array.from({ length: 10 }, (_, index) => {
+                            const number = index + 1;
+
+                            return `
+                                <option value="${number}">
+                                    ${number} ${number === 1 ? "persona" : "persone"}
+                                </option>
+                            `;
+                        }).join("")}
+                    </select>
+                </div>
+
+
+                <div class="booking-total">
+                    <span>Totale</span>
+
+                    <strong id="pizza-total-price">
+                        49 €
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="whatsapp-button"
+                onclick="requestPizzaAvailability()"
+            >
+                Richiedi disponibilità su WhatsApp
+            </button>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>Preparazione</h3>
+
+            <div class="experience-itinerary">
+
+                ${experience.preparation.map((step, index) => `
+                    <div class="itinerary-step">
+
+                        <div class="itinerary-marker">
+                            ${index + 1}
+                        </div>
+
+                        <div class="itinerary-content">
+                            <span class="itinerary-label">
+                                Procedura
+                            </span>
+
+                            <p>
+                                ${step}
+                            </p>
+                        </div>
+
+                    </div>
+                `).join("")}
+
+            </div>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>L'attività in breve</h3>
+
+            <p>
+                ${experience.shortDescription}
+            </p>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>Descrizione completa</h3>
+
+            <p>
+                ${experience.description}
+            </p>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>Cosa è incluso</h3>
+
+            <ul>
+                ${experience.included.map(item => `
+                    <li>${item}</li>
+                `).join("")}
+            </ul>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>Cosa non è incluso</h3>
+
+            <ul>
+                ${experience.notIncluded.map(item => `
+                    <li>${item}</li>
+                `).join("")}
+            </ul>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>Punti di incontro</h3>
+
+            <p>
+                ${experience.meetingPoint}
+            </p>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>Non ammesso</h3>
+
+            <ul>
+                ${experience.notAllowed.map(item => `
+                    <li>${item}</li>
+                `).join("")}
+            </ul>
+
+        </section>
+
+
+        <section class="modal-section">
+
+            <h3>Informazioni utili</h3>
+
+            <ul>
+                ${experience.usefulInfo.map(item => `
+                    <li>${item}</li>
+                `).join("")}
+            </ul>
+
+        </section>
+    `;
+
+
+    setupPizzaBooking();
+
+    modal.classList.add("active");
+    document.body.classList.add("modal-open");
 }
 
 
 /* =========================================================
-   CLICK SULLE CARD
-========================================================= */
+   CHIUSURA MODAL
+   ========================================================= */
 
-document.addEventListener(
-    "click",
-    event => {
+function closeExperienceModal() {
+    const modal = document.getElementById("experience-modal");
 
-        const card =
-            event.target.closest(
-                ".experience-card"
-            );
-
-        if (card) {
-
-            openExperience(
-                card.dataset.id
-            );
-
-            return;
-        }
-
-
-        if (
-            event.target.matches(
-                "[data-close-modal]"
-            )
-        ) {
-
-            closeModal();
-
-        }
-
+    if (!modal) {
+        return;
     }
-);
+
+    modal.classList.remove("active");
+    document.body.classList.remove("modal-open");
+}
+
+
+function setupModalEvents() {
+    const modal = document.getElementById("experience-modal");
+
+    if (!modal) {
+        return;
+    }
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeExperienceModal();
+        }
+    });
+}
+
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+        closeExperienceModal();
+    }
+});
 
 
 /* =========================================================
-   TASTIERA
-========================================================= */
+   PRENOTAZIONE / CALCOLO TOTALE
+   ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    event => {
+function setupPizzaBooking() {
+    const dateInput = document.getElementById("pizza-date");
+    const participantsSelect = document.getElementById("pizza-participants");
 
-        const card =
-            event.target.closest(
-                ".experience-card"
-            );
-
-
-        if (
-            card &&
-            (
-                event.key === "Enter" ||
-                event.key === " "
-            )
-        ) {
-
-            event.preventDefault();
-
-            openExperience(
-                card.dataset.id
-            );
-
-            return;
-        }
-
-
-        if (event.key === "Escape") {
-
-            const modal =
-                document.getElementById(
-                    "experience-modal"
-                );
-
-
-            if (
-                modal &&
-                modal.classList.contains("open")
-            ) {
-
-                closeModal();
-
-            }
-
-        }
-
+    if (!dateInput || !participantsSelect) {
+        return;
     }
-);
+
+    setMinimumDate();
+
+    participantsSelect.addEventListener("change", updatePizzaPrice);
+
+    updatePizzaPrice();
+}
+
+
+function setMinimumDate() {
+    const dateInput = document.getElementById("pizza-date");
+
+    if (!dateInput) {
+        return;
+    }
+
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    dateInput.min = `${year}-${month}-${day}`;
+}
+
+
+function updatePizzaPrice() {
+    const participantsSelect =
+        document.getElementById("pizza-participants");
+
+    const totalElement =
+        document.getElementById("pizza-total-price");
+
+    if (!participantsSelect || !totalElement) {
+        return;
+    }
+
+    const participants =
+        parseInt(participantsSelect.value, 10) || 1;
+
+    const total =
+        getPizzaTotal(participants);
+
+    totalElement.textContent =
+        formatPrice(total);
+}
+
+
+/* =========================================================
+   WHATSAPP
+   ========================================================= */
+
+function requestPizzaAvailability() {
+    const dateInput =
+        document.getElementById("pizza-date");
+
+    const participantsSelect =
+        document.getElementById("pizza-participants");
+
+    if (!dateInput || !participantsSelect) {
+        return;
+    }
+
+    const selectedDate =
+        dateInput.value;
+
+    const participants =
+        parseInt(participantsSelect.value, 10) || 1;
+
+    if (!selectedDate) {
+        alert("Seleziona una data prima di richiedere la disponibilità.");
+        return;
+    }
+
+    const total =
+        getPizzaTotal(participants);
+
+    const formattedDate =
+        formatDateItalian(selectedDate);
+
+    const message = `Ciao, vorrei richiedere disponibilità per: Lezione di Pizza Napoletana
+
+Data richiesta: ${formattedDate}
+
+Partecipanti: ${participants}
+
+Totale: ${total} €
+
+Grazie.`;
+
+    const whatsappUrl =
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+    window.open(
+        whatsappUrl,
+        "_blank"
+    );
+}
 
 
 /* =========================================================
    AVVIO
-========================================================= */
+   ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        renderCards();
-
-    }
-);
+document.addEventListener("DOMContentLoaded", function () {
+    renderExperiences();
+    setupModalEvents();
+});
