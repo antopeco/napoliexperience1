@@ -158,6 +158,13 @@ function loadExperienceScript(path, globalName) {
 }
 
 
+/*
+ * Esperienza Lezione serale di Pizza Napoletana
+ *
+ * Percorso reale:
+ * experiences/cooking/pizza-serale/experience.js
+ */
+
 function loadPizzaSeraleExperience() {
 
     return loadExperienceScript(
@@ -168,10 +175,17 @@ function loadPizzaSeraleExperience() {
 }
 
 
+/*
+ * Esperienza Pasta fresca e Gelato
+ *
+ * Percorso reale:
+ * experiences/cooking/gelato/experience.js
+ */
+
 function loadPastaGelatoExperience() {
 
     return loadExperienceScript(
-        "EXPERIENSE/COOKING/GELATO/EXPERIENCE.JS",
+        "experiences/cooking/gelato/experience.js",
         "pastaGelatoExperience"
     );
 
@@ -554,11 +568,6 @@ function renderExperiences() {
                         }
                     )
                     .join("");
-
-            const pricingOptions =
-                getPricingOptions(
-                    experience
-                );
 
             const defaultMode =
                 getDefaultPricingMode(
@@ -1047,10 +1056,22 @@ function openExperienceModal(
                 index
             ) => {
 
+                const isStringStep =
+                    typeof step === "string";
+
+                const stepTitle =
+                    isStringStep
+                        ? step
+                        : step.title || "";
+
                 const description =
-                    step.description ||
-                    step.text ||
-                    "";
+                    isStringStep
+                        ? ""
+                        : (
+                            step.description ||
+                            step.text ||
+                            ""
+                        );
 
                 return `
 
@@ -1074,12 +1095,18 @@ function openExperienceModal(
                         </span>
 
                         <h4>
-                            ${step.title}
+                            ${stepTitle}
                         </h4>
 
-                        <p>
-                            ${description}
-                        </p>
+                        ${
+                            description
+                                ? `
+                                    <p>
+                                        ${description}
+                                    </p>
+                                `
+                                : ""
+                        }
 
                     </div>
 
@@ -1087,6 +1114,7 @@ function openExperienceModal(
 
             }
         ).join("");
+
 
     const includedHtml =
         (
@@ -1102,6 +1130,7 @@ function openExperienceModal(
             )
             .join("");
 
+
     const notIncludedHtml =
         (
             experience.notIncluded ||
@@ -1115,6 +1144,7 @@ function openExperienceModal(
                 `
             )
             .join("");
+
 
     const notAllowedHtml =
         (
@@ -1130,6 +1160,7 @@ function openExperienceModal(
             )
             .join("");
 
+
     const usefulInfoHtml =
         (
             experience.usefulInfo ||
@@ -1143,6 +1174,7 @@ function openExperienceModal(
                 `
             )
             .join("");
+
 
     const pricingOptions =
         getPricingOptions(
@@ -1242,6 +1274,7 @@ function openExperienceModal(
 
             `
             : "";
+
 
     modalContent.innerHTML = `
 
@@ -1635,6 +1668,7 @@ function openExperienceModal(
         </div>
     `;
 
+
     setupExperienceGallery(
         experience
     );
@@ -1648,6 +1682,7 @@ function openExperienceModal(
         experience,
         defaultMode
     );
+
 
     const whatsappButton =
         document.getElementById(
@@ -1668,6 +1703,7 @@ function openExperienceModal(
         );
 
     }
+
 
     modal.classList.add(
         "open"
@@ -1925,6 +1961,7 @@ function setupExperienceGallery(
 
     }
 
+
     thumbnails.forEach(
         (
             thumbnail
@@ -1952,6 +1989,7 @@ function setupExperienceGallery(
         }
     );
 
+
     if (previousButton) {
 
         previousButton.addEventListener(
@@ -1973,6 +2011,7 @@ function setupExperienceGallery(
         );
 
     }
+
 
     if (nextButton) {
 
@@ -1996,6 +2035,7 @@ function setupExperienceGallery(
         );
 
     }
+
 
     if (
         mobilePreviousButton
@@ -2021,6 +2061,7 @@ function setupExperienceGallery(
 
     }
 
+
     if (
         mobileNextButton
     ) {
@@ -2045,6 +2086,7 @@ function setupExperienceGallery(
         );
 
     }
+
 
     mobileDots.forEach(
         (
@@ -2073,6 +2115,7 @@ function setupExperienceGallery(
         }
     );
 
+
     thumbnails.forEach(
         (
             thumbnail
@@ -2090,8 +2133,10 @@ function setupExperienceGallery(
         }
     );
 
+
     let touchStartX = 0;
     let touchStartY = 0;
+
 
     mainImage.addEventListener(
         "touchstart",
@@ -2115,6 +2160,7 @@ function setupExperienceGallery(
             passive: true
         }
     );
+
 
     mainImage.addEventListener(
         "touchend",
@@ -2182,6 +2228,7 @@ function setupExperienceGallery(
             passive: true
         }
     );
+
 
     updateGallery(
         0
@@ -2609,13 +2656,19 @@ document.addEventListener(
         setupModalEvents();
 
         /*
-         * La card base viene mostrata immediatamente.
-         * Le esperienze modulari vengono caricate
-         * separatamente, così un eventuale errore
-         * in un modulo non fa scomparire le altre.
+         * Mostra immediatamente l'esperienza
+         * principale già presente nel file.
          */
 
         renderExperiences();
+
+
+        /*
+         * Carica Pizza Serale separatamente.
+         *
+         * Se il modulo non viene trovato,
+         * le altre esperienze rimangono visibili.
+         */
 
         loadPizzaSeraleExperience()
             .then(
@@ -2648,6 +2701,15 @@ document.addEventListener(
 
                 }
             );
+
+
+        /*
+         * Carica Pasta fresca e Gelato
+         * separatamente.
+         *
+         * Se il modulo non viene trovato,
+         * le altre esperienze rimangono visibili.
+         */
 
         loadPastaGelatoExperience()
             .then(
