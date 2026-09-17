@@ -31,7 +31,6 @@ window.bikeToursExperience = {
         "images/bicitour3.jpg.avif",
         "images/bicitour5.jpg.avif",
         "images/bicitour6.jpg.avif",
-        "images/bicitour7.jpg.avif"
     ],
 
     shortDescription:
