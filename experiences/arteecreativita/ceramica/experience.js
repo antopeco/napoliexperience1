@@ -24,7 +24,7 @@ type: "Esperienza condivisa",
 images: [
     "images/ceramica1.jpg.avif",
     "images/ceramica2.jpg.jpg",
-    "images/",
+    "images/ceramica3.jpg.jpg",
     "images/ceramica4.jpg.jpg"
 ],
 
