@@ -104,8 +104,7 @@ Non è richiesta alcuna esperienza precedente in cucina: la lezione è pensata p
             "Animali domestici ammessi",
             "Non accessibile in sedia a rotelle",
             "Laboratorio situato nel centro storico di Napoli",
-            "Circa 5 minuti a piedi dalla fermata Duomo della metropolitana",
-            "Cancellazione con rimborso completo fino ad almeno 24 ore prima"
+            "Circa 5 minuti a piedi dalla fermata Duomo della metropolitana"
         ]
     }
 ];
@@ -206,6 +205,39 @@ function loadIschiaProcidaExperience() {
     );
 }
 
+/*
+ * Ceramica
+ */
+
+function loadCeramicaExperience() {
+    return loadExperienceScript(
+        "experiences/arteecreativita/ceramica/experience.js",
+        "ceramicaExperience"
+    );
+}
+
+/*
+ * Fotografia
+ */
+
+function loadFotografiaExperience() {
+    return loadExperienceScript(
+        "experiences/arteecreativita/fotografia/experience.js",
+        "fotografiaExperience"
+    );
+}
+
+/*
+ * Tour in Bici
+ */
+
+function loadTourInBiciExperience() {
+    return loadExperienceScript(
+        "experiences/bici/tourinbici/experience.js",
+        "bikeToursExperience"
+    );
+}
+
 /* =========================================================
    UTILITÀ
    ========================================================= */
@@ -250,6 +282,212 @@ function formatItalianDate(dateValue) {
     }
 
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+/* =========================================================
+   SUPPORTO TOUR IN BICI
+   ========================================================= */
+
+let selectedBikeTourId = "unesco";
+
+let selectedBikeElectric = false;
+
+let selectedBikeChildSeat = false;
+
+let selectedBikeLanguage = "";
+
+function isBikeExperience(experience) {
+    return Boolean(
+        experience &&
+        experience.id === "bike-tours"
+    );
+}
+
+function getBikeTours(experience) {
+    if (
+        !isBikeExperience(experience) ||
+        !Array.isArray(experience.tours)
+    ) {
+        return [];
+    }
+
+    return experience.tours;
+}
+
+function getSelectedBikeTour(experience) {
+    const tours =
+        getBikeTours(experience);
+
+    if (!tours.length) {
+        return null;
+    }
+
+    const selected =
+        tours.find(
+            tour =>
+                tour.id ===
+                selectedBikeTourId
+        );
+
+    return selected || tours[0];
+}
+
+/*
+ * Tutti i tour possono avere E-bike.
+ */
+
+function bikeTourHasElectricBike(tour) {
+    if (!tour) {
+        return false;
+    }
+
+    return true;
+}
+
+function getBikeTourBasePrice(tour) {
+    if (
+        !tour ||
+        tour.price === undefined ||
+        tour.price === null
+    ) {
+        return 0;
+    }
+
+    return Number(tour.price) || 0;
+}
+
+function getBikeTourPricePerPerson(tour) {
+    if (!tour) {
+        return 0;
+    }
+
+    let price =
+        getBikeTourBasePrice(
+            tour
+        );
+
+    if (
+        selectedBikeElectric &&
+        bikeTourHasElectricBike(
+            tour
+        )
+    ) {
+        price += 15;
+    }
+
+    if (
+        selectedBikeChildSeat
+    ) {
+        price += 5;
+    }
+
+    return price;
+}
+
+function getBikeTourWhatsAppMode(tour) {
+    if (!tour) {
+        return "";
+    }
+
+    const options = [];
+
+    if (
+        selectedBikeElectric &&
+        bikeTourHasElectricBike(
+            tour
+        )
+    ) {
+        options.push(
+            "E-bike"
+        );
+    }
+
+    if (
+        selectedBikeChildSeat
+    ) {
+        options.push(
+            "Seggiolino bambino"
+        );
+    }
+
+    if (!options.length) {
+        return "Bicicletta standard";
+    }
+
+    return options.join(
+        " + "
+    );
+}
+
+function getBikeTourLanguages(
+    experience,
+    tour
+) {
+    const source =
+        tour &&
+        tour.languages
+            ? tour.languages
+            : experience &&
+              experience.languages
+                ? experience.languages
+                : "";
+
+    if (Array.isArray(source)) {
+        return source.filter(Boolean);
+    }
+
+    if (!source) {
+        return [];
+    }
+
+    return String(source)
+        .split("/")
+        .map(
+            language =>
+                language.trim()
+        )
+        .filter(Boolean);
+}
+
+function getBikeTourLanguageValue(
+    experience,
+    tour
+) {
+    const languages =
+        getBikeTourLanguages(
+            experience,
+            tour
+        );
+
+    if (!languages.length) {
+        return "";
+    }
+
+    if (
+        selectedBikeLanguage &&
+        languages.includes(
+            selectedBikeLanguage
+        )
+    ) {
+        return selectedBikeLanguage;
+    }
+
+    return languages[0];
+}
+
+function getBikeTourLanguageDisplay(
+    experience,
+    tour
+) {
+    const languages =
+        getBikeTourLanguages(
+            experience,
+            tour
+        );
+
+    return languages.join(
+        " / "
+    );
 }
 
 /* =========================================================
@@ -299,6 +537,50 @@ function getPricingOptions(experience) {
         });
     }
 
+    if (
+        Array.isArray(
+            pricing.modes
+        )
+    ) {
+        pricing.modes.forEach(
+            mode => {
+
+                if (!mode) {
+                    return;
+                }
+
+                const price =
+                    Number(
+                        mode.price
+                    );
+
+                if (
+                    !Number.isFinite(
+                        price
+                    )
+                ) {
+                    return;
+                }
+
+                options.push({
+                    id:
+                        mode.id ||
+                        `mode-${options.length + 1}`,
+
+                    label:
+                        mode.label ||
+                        "",
+
+                    price: price,
+
+                    description:
+                        mode.description ||
+                        ""
+                });
+            }
+        );
+    }
+
     return options.length
         ? options
         : null;
@@ -308,6 +590,21 @@ function getSelectedPrice(
     experience,
     selectedMode
 ) {
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        const tour =
+            getSelectedBikeTour(
+                experience
+            );
+
+        return getBikeTourPricePerPerson(
+            tour
+        );
+    }
+
     const pricingOptions =
         getPricingOptions(
             experience
@@ -332,6 +629,14 @@ function getSelectedPrice(
 function getDefaultPricingMode(
     experience
 ) {
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        return null;
+    }
+
     if (
         experience &&
         experience.defaultMode
@@ -358,6 +663,21 @@ function getSelectedModeLabel(
     experience,
     selectedMode
 ) {
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        const tour =
+            getSelectedBikeTour(
+                experience
+            );
+
+        return getBikeTourWhatsAppMode(
+            tour
+        );
+    }
+
     const pricingOptions =
         getPricingOptions(
             experience
@@ -383,6 +703,21 @@ function getSelectedModeType(
     experience,
     selectedMode
 ) {
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        const tour =
+            getSelectedBikeTour(
+                experience
+            );
+
+        return tour
+            ? tour.duration
+            : "";
+    }
+
     const pricingOptions =
         getPricingOptions(
             experience
@@ -397,6 +732,14 @@ function getSelectedModeType(
             );
 
         if (selectedOption) {
+
+            if (
+                experience.id ===
+                "fotografia"
+            ) {
+                return selectedOption.label;
+            }
+
             return `Esperienza ${selectedOption.label.toLowerCase()}`;
         }
     }
@@ -482,10 +825,6 @@ function canonicalizeCategory(
         return "";
     }
 
-    /*
-     * TUTTE
-     */
-
     if (
         normalized === "all" ||
         normalized === "tutte" ||
@@ -493,10 +832,6 @@ function canonicalizeCategory(
     ) {
         return "all";
     }
-
-    /*
-     * CORSI DI CUCINA
-     */
 
     if (
         normalized === "cooking" ||
@@ -516,10 +851,6 @@ function canonicalizeCategory(
         return "cooking";
     }
 
-    /*
-     * TOUR IN MINIBUS
-     */
-
     if (
         normalized === "minibus" ||
         normalized === "tour in minibus" ||
@@ -530,10 +861,6 @@ function canonicalizeCategory(
     ) {
         return "minibus";
     }
-
-    /*
-     * TOUR IN BARCA
-     */
 
     if (
         normalized === "boat" ||
@@ -550,41 +877,40 @@ function canonicalizeCategory(
         return "boat";
     }
 
-    /*
-     * TOUR A PIEDI
-     */
-
     if (
-        normalized === "walking" ||
-        normalized === "walk" ||
-        normalized === "a piedi" ||
-        normalized === "tour a piedi" ||
-        normalized === "tour piedi" ||
+        normalized === "art" ||
+        normalized === "arte" ||
+        normalized === "creativita" ||
+        normalized === "arte e creativita" ||
         normalized.includes(
-            "a piedi"
+            "arte e creativita"
         ) ||
         normalized.includes(
-            "walking"
+            "creativita"
         )
     ) {
-        return "walking";
+        return "art";
     }
 
-    /*
-     * TOUR PRIVATI
-     */
-
     if (
-        normalized === "private" ||
-        normalized === "privato" ||
-        normalized === "privata" ||
-        normalized === "tour privati" ||
-        normalized === "tour privato" ||
+        normalized === "bici" ||
+        normalized === "bike" ||
+        normalized === "tour in bici" ||
+        normalized === "tour bici" ||
         normalized.includes(
-            "privat"
+            "tour in bici"
+        ) ||
+        normalized.includes(
+            "tour bici"
+        ) ||
+        normalized.includes(
+            "bici"
+        ) ||
+        normalized.includes(
+            "bike"
         )
     ) {
-        return "private";
+        return "bici";
     }
 
     return normalized;
@@ -611,17 +937,12 @@ function getExperienceCategory(
             experience.categoryLabel
         );
 
-    /*
-     * Se category è già una categoria
-     * riconosciuta, utilizziamola.
-     */
-
     const validCategories = [
         "cooking",
         "minibus",
         "boat",
-        "walking",
-        "private"
+        "art",
+        "bici"
     ];
 
     if (
@@ -632,11 +953,6 @@ function getExperienceCategory(
         return category;
     }
 
-    /*
-     * Se categoryLabel contiene una
-     * categoria riconoscibile, utilizziamola.
-     */
-
     if (
         validCategories.includes(
             categoryLabel
@@ -644,12 +960,6 @@ function getExperienceCategory(
     ) {
         return categoryLabel;
     }
-
-    /*
-     * Controllo più flessibile nel caso
-     * le esperienze modulari utilizzino
-     * valori differenti.
-     */
 
     const values = [
         normalizeCategoryValue(
@@ -698,22 +1008,27 @@ function getExperienceCategory(
         }
 
         if (
+            value === "art" ||
             value.includes(
-                "piedi"
+                "arte"
             ) ||
             value.includes(
-                "walking"
+                "creativita"
             )
         ) {
-            return "walking";
+            return "art";
         }
 
         if (
+            value === "bici" ||
             value.includes(
-                "privat"
+                "bici"
+            ) ||
+            value.includes(
+                "bike"
             )
         ) {
-            return "private";
+            return "bici";
         }
     }
 
@@ -737,10 +1052,6 @@ function experienceMatchesCategory(
             selectedCategory
         );
 
-    /*
-     * TUTTE
-     */
-
     if (
         canonicalSelectedCategory ===
         "all"
@@ -748,19 +1059,11 @@ function experienceMatchesCategory(
         return true;
     }
 
-    /*
-     * Nessuna categoria valida
-     */
-
     if (
         !canonicalSelectedCategory
     ) {
         return false;
     }
-
-    /*
-     * Categoria dell'esperienza
-     */
 
     const experienceCategory =
         getExperienceCategory(
@@ -784,10 +1087,6 @@ function getButtonCategory(
         return "all";
     }
 
-    /*
-     * Prima prova con data-category.
-     */
-
     const dataCategory =
         button.getAttribute(
             "data-category"
@@ -803,12 +1102,6 @@ function getButtonCategory(
             return categoryFromData;
         }
     }
-
-    /*
-     * Se data-category non è presente
-     * oppure non è riconosciuto,
-     * utilizziamo il testo del pulsante.
-     */
 
     const buttonText =
         button.textContent
@@ -855,21 +1148,10 @@ function setupCategoryFilters() {
                 "click",
                 function () {
 
-                    /*
-                     * Determina la categoria
-                     * indipendentemente dal formato
-                     * utilizzato nell'HTML.
-                     */
-
                     activeCategory =
                         getButtonCategory(
                             button
                         );
-
-                    /*
-                     * Aggiorna lo stato visivo
-                     * del pulsante.
-                     */
 
                     buttons.forEach(
                         otherButton => {
@@ -881,20 +1163,11 @@ function setupCategoryFilters() {
                         }
                     );
 
-                    /*
-                     * Ridisegna il catalogo.
-                     */
-
                     renderExperiences();
                 }
             );
         }
     );
-
-    /*
-     * Imposta correttamente la categoria
-     * iniziale in base al pulsante già attivo.
-     */
 
     const activeButton =
         buttons.find(
@@ -932,10 +1205,6 @@ function renderExperiences() {
 
     grid.innerHTML = "";
 
-    /*
-     * Applica il filtro.
-     */
-
     const filteredExperiences =
         experiences.filter(
             experience =>
@@ -947,6 +1216,7 @@ function renderExperiences() {
 
     filteredExperiences.forEach(
         experience => {
+
             const card =
                 document.createElement(
                     "article"
@@ -1007,21 +1277,61 @@ function renderExperiences() {
                     )
                     .join("");
 
-            const defaultMode =
-                getDefaultPricingMode(
-                    experience
-                );
+            let cardTitle =
+                experience.title;
 
-            const defaultPrice =
+            let cardDescription =
+                experience.shortDescription;
+
+            let cardDuration =
+                experience.duration;
+
+            let cardPrice =
                 getSelectedPrice(
                     experience,
-                    defaultMode
+                    getDefaultPricingMode(
+                        experience
+                    )
                 );
 
+            /*
+             * Tour in Bici:
+             * una sola card dinamica.
+             */
+
+            if (
+                isBikeExperience(
+                    experience
+                )
+            ) {
+                const selectedTour =
+                    getSelectedBikeTour(
+                        experience
+                    );
+
+                if (selectedTour) {
+                    cardTitle =
+                        selectedTour.title;
+
+                    cardDescription =
+                        selectedTour.shortDescription ||
+                        selectedTour.description ||
+                        experience.shortDescription;
+
+                    cardDuration =
+                        selectedTour.duration;
+
+                    cardPrice =
+                        getBikeTourPricePerPerson(
+                            selectedTour
+                        );
+                }
+            }
+
             const priceHtml =
-                defaultPrice
+                cardPrice
                     ? `${formatPrice(
-                          defaultPrice
+                          cardPrice
                       )} / persona`
                     : "Richiedi preventivo";
 
@@ -1074,13 +1384,72 @@ function renderExperiences() {
                         }
                     </div>
 
+                    ${
+                        isBikeExperience(
+                            experience
+                        )
+                            ? `
+                                <div
+                                    class="bike-card-selector-wrapper"
+                                    style="margin-bottom:12px;"
+                                >
+
+                                    <label
+                                        for="bike-card-tour-selector"
+                                        style="
+                                            display:block;
+                                            font-size:12px;
+                                            margin-bottom:6px;
+                                            opacity:.75;
+                                        "
+                                    >
+                                        Scegli il tuo tour
+                                    </label>
+
+                                    <select
+                                        id="bike-card-tour-selector"
+                                        class="bike-card-tour-selector"
+                                        style="
+                                            width:100%;
+                                            padding:10px 12px;
+                                            border-radius:8px;
+                                            border:1px solid rgba(0,0,0,.12);
+                                            background:#fff;
+                                        "
+                                    >
+                                        ${getBikeTours(
+                                            experience
+                                        )
+                                            .map(
+                                                tour => `
+                                                    <option
+                                                        value="${tour.id}"
+                                                        ${
+                                                            tour.id ===
+                                                            selectedBikeTourId
+                                                                ? "selected"
+                                                                : ""
+                                                        }
+                                                    >
+                                                        ${tour.title}
+                                                    </option>
+                                                `
+                                            )
+                                            .join("")}
+                                    </select>
+
+                                </div>
+                            `
+                            : ""
+                    }
+
                     <h3 class="experience-card-title">
-                        ${experience.title}
+                        ${cardTitle}
                     </h3>
 
                     <p class="experience-card-description">
                         ${
-                            experience.shortDescription ||
+                            cardDescription ||
                             ""
                         }
                     </p>
@@ -1095,7 +1464,7 @@ function renderExperiences() {
 
                             <div class="experience-duration">
                                 ${
-                                    experience.duration ||
+                                    cardDuration ||
                                     ""
                                 }
                             </div>
@@ -1145,6 +1514,45 @@ function renderExperiences() {
                 experience
             );
 
+            const bikeSelector =
+                card.querySelector(
+                    "#bike-card-tour-selector"
+                );
+
+            if (bikeSelector) {
+                bikeSelector.addEventListener(
+                    "click",
+                    function (
+                        event
+                    ) {
+                        event.stopPropagation();
+                    }
+                );
+
+                bikeSelector.addEventListener(
+                    "change",
+                    function (
+                        event
+                    ) {
+                        event.stopPropagation();
+
+                        selectedBikeTourId =
+                            bikeSelector.value;
+
+                        selectedBikeElectric =
+                            false;
+
+                        selectedBikeChildSeat =
+                            false;
+
+                        selectedBikeLanguage =
+                            "";
+
+                        renderExperiences();
+                    }
+                );
+            }
+
             card.addEventListener(
                 "click",
                 function (event) {
@@ -1155,6 +1563,9 @@ function renderExperiences() {
                         ) ||
                         event.target.closest(
                             ".experience-card-gallery-dot"
+                        ) ||
+                        event.target.closest(
+                            ".bike-card-tour-selector"
                         )
                     ) {
                         return;
@@ -1376,6 +1787,587 @@ function setupCardGallery(
 }
 
 /* =========================================================
+   CREAZIONE DATI MODAL
+   ========================================================= */
+
+function getBikeModalData(
+    experience,
+    tour
+) {
+    if (!tour) {
+        return {
+            title: experience.title,
+            shortDescription:
+                experience.shortDescription ||
+                "",
+            description:
+                experience.description ||
+                "",
+            duration:
+                experience.duration ||
+                "",
+            languages:
+                experience.languages ||
+                "",
+            type:
+                experience.type ||
+                "",
+            program: [],
+            included:
+                experience.included ||
+                [],
+            notIncluded:
+                experience.notIncluded ||
+                [],
+            meetingPoint:
+                experience.meetingPoint ||
+                "",
+            notAllowed:
+                experience.notAllowed ||
+                [],
+            usefulInfo:
+                experience.usefulInfo ||
+                []
+        };
+    }
+
+    return {
+        title:
+            tour.title ||
+            experience.title,
+
+        shortDescription:
+            tour.shortDescription ||
+            experience.shortDescription ||
+            "",
+
+        description:
+            tour.description ||
+            experience.description ||
+            "",
+
+        duration:
+            tour.duration ||
+            experience.duration ||
+            "",
+
+        languages:
+            getBikeTourLanguageDisplay(
+                experience,
+                tour
+            ),
+
+        type:
+            tour.type ||
+            tour.duration ||
+            experience.type ||
+            "",
+
+        program:
+            tour.program ||
+            [],
+
+        included:
+            tour.included ||
+            [],
+
+        notIncluded:
+            tour.notIncluded ||
+            [],
+
+        meetingPoint:
+            tour.meetingPoint ||
+            experience.meetingPoint ||
+            "",
+
+        notAllowed:
+            tour.notAllowed ||
+            [],
+
+        usefulInfo:
+            tour.usefulInfo ||
+            []
+    };
+}
+
+/* =========================================================
+   HTML PROGRAMMA
+   ========================================================= */
+
+function createProgramHtml(
+    program
+) {
+    return (
+        program || []
+    )
+        .map(
+            (
+                step,
+                index
+            ) => {
+
+                const isStringStep =
+                    typeof step ===
+                    "string";
+
+                const stepTitle =
+                    isStringStep
+                        ? step
+                        : step.title ||
+                          "";
+
+                const description =
+                    isStringStep
+                        ? ""
+                        : step.description ||
+                          step.text ||
+                          "";
+
+                return `
+                    <div class="itinerary-stop">
+
+                        <span class="itinerary-number">
+                            Tappa ${String(
+                                index + 1
+                            ).padStart(
+                                2,
+                                "0"
+                            )}
+                        </span>
+
+                        <h4>
+                            ${stepTitle}
+                        </h4>
+
+                        ${
+                            description
+                                ? `
+                                    <p>
+                                        ${description}
+                                    </p>
+                                `
+                                : ""
+                        }
+
+                    </div>
+                `;
+            }
+        )
+        .join("");
+}
+
+function createListHtml(
+    items
+) {
+    return (
+        items || []
+    )
+        .map(
+            item => `
+                <li>
+                    ${item}
+                </li>
+            `
+        )
+        .join("");
+}
+
+function createMeetingPointHtml(
+    meetingPoint
+) {
+    const meetingPoints =
+        Array.isArray(
+            meetingPoint
+        )
+            ? meetingPoint
+            : meetingPoint
+                ? [
+                      meetingPoint
+                  ]
+                : [];
+
+    return meetingPoints
+        .map(
+            point => `
+                <div class="meeting-point-item">
+
+                    <span class="meeting-point-marker">
+                        ●
+                    </span>
+
+                    <span class="meeting-point-text">
+                        ${point}
+                    </span>
+
+                </div>
+            `
+        )
+        .join("");
+}
+
+/* =========================================================
+   AGGIORNAMENTO CONTENUTI TOUR IN BICI
+   ========================================================= */
+
+function updateBikeTourModalContent(
+    experience
+) {
+    if (
+        !isBikeExperience(
+            experience
+        )
+    ) {
+        return;
+    }
+
+    const tour =
+        getSelectedBikeTour(
+            experience
+        );
+
+    if (!tour) {
+        return;
+    }
+
+    const data =
+        getBikeModalData(
+            experience,
+            tour
+        );
+
+    const titleElement =
+        document.getElementById(
+            "bike-modal-title"
+        );
+
+    const shortElement =
+        document.getElementById(
+            "bike-modal-short"
+        );
+
+    const durationElement =
+        document.getElementById(
+            "bike-modal-duration"
+        );
+
+    const languagesElement =
+        document.getElementById(
+            "bike-modal-languages"
+        );
+
+    const typeElement =
+        document.getElementById(
+            "modal-experience-type"
+        );
+
+    const priceElement =
+        document.getElementById(
+            "modal-experience-price"
+        );
+
+    const programElement =
+        document.getElementById(
+            "bike-modal-program"
+        );
+
+    const descriptionElement =
+        document.getElementById(
+            "bike-modal-description"
+        );
+
+    const includedElement =
+        document.getElementById(
+            "bike-modal-included"
+        );
+
+    const notIncludedElement =
+        document.getElementById(
+            "bike-modal-not-included"
+        );
+
+    const meetingElement =
+        document.getElementById(
+            "bike-modal-meeting"
+        );
+
+    const notAllowedElement =
+        document.getElementById(
+            "bike-modal-not-allowed"
+        );
+
+    const usefulInfoElement =
+        document.getElementById(
+            "bike-modal-useful-info"
+        );
+
+    if (titleElement) {
+        titleElement.textContent =
+            data.title;
+    }
+
+    if (shortElement) {
+        shortElement.textContent =
+            data.shortDescription;
+    }
+
+    if (durationElement) {
+        durationElement.textContent =
+            data.duration;
+    }
+
+    if (languagesElement) {
+        languagesElement.textContent =
+            data.languages;
+    }
+
+    if (typeElement) {
+        typeElement.textContent =
+            data.type;
+    }
+
+    if (programElement) {
+        programElement.innerHTML =
+            createProgramHtml(
+                data.program
+            );
+    }
+
+    if (descriptionElement) {
+        descriptionElement.textContent =
+            data.description;
+    }
+
+    if (includedElement) {
+        includedElement.innerHTML =
+            createListHtml(
+                data.included
+            );
+    }
+
+    if (notIncludedElement) {
+        notIncludedElement.innerHTML =
+            createListHtml(
+                data.notIncluded
+            );
+    }
+
+    if (meetingElement) {
+        meetingElement.innerHTML =
+            createMeetingPointHtml(
+                data.meetingPoint
+            );
+    }
+
+    if (notAllowedElement) {
+        notAllowedElement.innerHTML =
+            createListHtml(
+                data.notAllowed
+            );
+    }
+
+    if (usefulInfoElement) {
+        usefulInfoElement.innerHTML =
+            createListHtml(
+                data.usefulInfo
+            );
+    }
+
+    updateBikeTourOptions(
+        experience
+    );
+
+    updateBikeTourPriceDisplay(
+        experience
+    );
+}
+
+/* =========================================================
+   AGGIORNAMENTO OPZIONI BIKE
+   ========================================================= */
+
+function updateBikeTourOptions(
+    experience
+) {
+    const tour =
+        getSelectedBikeTour(
+            experience
+        );
+
+    if (!tour) {
+        return;
+    }
+
+    const electricWrapper =
+        document.getElementById(
+            "bike-electric-wrapper"
+        );
+
+    const childWrapper =
+        document.getElementById(
+            "bike-child-wrapper"
+        );
+
+    const electricOption =
+        document.getElementById(
+            "bike-electric-option"
+        );
+
+    const childSeatOption =
+        document.getElementById(
+            "bike-child-seat-option"
+        );
+
+    if (electricOption) {
+        electricOption.checked =
+            selectedBikeElectric;
+    }
+
+    if (childSeatOption) {
+        childSeatOption.checked =
+            selectedBikeChildSeat;
+    }
+
+    if (electricWrapper) {
+        electricWrapper.style.display =
+            bikeTourHasElectricBike(
+                tour
+            )
+                ? "flex"
+                : "none";
+    }
+
+    if (
+        !bikeTourHasElectricBike(
+            tour
+        )
+    ) {
+        selectedBikeElectric =
+            false;
+    }
+
+    const languages =
+        getBikeTourLanguages(
+            experience,
+            tour
+        );
+
+    const languageSelect =
+        document.getElementById(
+            "bike-language"
+        );
+
+    if (languageSelect) {
+        languageSelect.innerHTML =
+            languages
+                .map(
+                    language => `
+                        <option
+                            value="${language}"
+                            ${
+                                getBikeTourLanguageValue(
+                                    experience,
+                                    tour
+                                ) === language
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            ${language}
+                        </option>
+                    `
+                )
+                .join("");
+
+        const selectedLanguage =
+            getBikeTourLanguageValue(
+                experience,
+                tour
+            );
+
+        languageSelect.value =
+            selectedLanguage;
+
+        selectedBikeLanguage =
+            selectedLanguage;
+    }
+
+    if (childWrapper) {
+        childWrapper.style.display =
+            "flex";
+    }
+}
+
+/* =========================================================
+   PREZZO BIKE
+   ========================================================= */
+
+function updateBikeTourPriceDisplay(
+    experience
+) {
+    const tour =
+        getSelectedBikeTour(
+            experience
+        );
+
+    if (!tour) {
+        return;
+    }
+
+    const pricePerPerson =
+        getBikeTourPricePerPerson(
+            tour
+        );
+
+    const participantsSelect =
+        document.getElementById(
+            "pizza-participants"
+        );
+
+    const totalElement =
+        document.getElementById(
+            "pizza-total-price"
+        );
+
+    const modalPriceElement =
+        document.getElementById(
+            "modal-experience-price"
+        );
+
+    const modalTypeElement =
+        document.getElementById(
+            "modal-experience-type"
+        );
+
+    const participants =
+        participantsSelect
+            ? parseInt(
+                  participantsSelect.value,
+                  10
+              ) || 1
+            : 1;
+
+    if (modalPriceElement) {
+        modalPriceElement.textContent =
+            `${formatPrice(
+                pricePerPerson
+            )} / persona`;
+    }
+
+    if (modalTypeElement) {
+        modalTypeElement.textContent =
+            tour.duration || "";
+    }
+
+    if (totalElement) {
+        totalElement.textContent =
+            formatPrice(
+                pricePerPerson *
+                    participants
+            );
+    }
+}
+
+/* =========================================================
    MODAL
    ========================================================= */
 
@@ -1418,10 +2410,33 @@ function openExperienceModal(
         return;
     }
 
+    const selectedBikeTour =
+        isBikeExperience(
+            experience
+        )
+            ? getSelectedBikeTour(
+                  experience
+              )
+            : null;
+
+    const modalData =
+        isBikeExperience(
+            experience
+        )
+            ? getBikeModalData(
+                  experience,
+                  selectedBikeTour
+              )
+            : experience;
+
     const program =
-        experience.program ||
-        experience.preparation ||
-        [];
+        isBikeExperience(
+            experience
+        )
+            ? modalData.program
+            : experience.program ||
+              experience.preparation ||
+              [];
 
     const isCookingProgram =
         Boolean(
@@ -1435,155 +2450,136 @@ function openExperienceModal(
             : "Il programma";
 
     const programHtml =
-        program
-            .map(
-                (
-                    step,
-                    index
-                ) => {
-                    const isStringStep =
-                        typeof step ===
-                        "string";
+        isBikeExperience(
+            experience
+        )
+            ? createProgramHtml(
+                  program
+              )
+            : program
+                  .map(
+                      (
+                          step,
+                          index
+                      ) => {
 
-                    const stepTitle =
-                        isStringStep
-                            ? step
-                            : step.title ||
-                              "";
+                          const isStringStep =
+                              typeof step ===
+                              "string";
 
-                    const description =
-                        isStringStep
-                            ? ""
-                            : step.description ||
-                              step.text ||
-                              "";
+                          const stepTitle =
+                              isStringStep
+                                  ? step
+                                  : step.title ||
+                                    "";
 
-                    return `
-                    <div class="itinerary-stop">
+                          const description =
+                              isStringStep
+                                  ? ""
+                                  : step.description ||
+                                    step.text ||
+                                    "";
 
-                        <span class="itinerary-number">
-                            ${
-                                isCookingProgram
-                                    ? "Procedura"
-                                    : "Tappa"
-                            }
-                            ${String(
-                                index + 1
-                            ).padStart(
-                                2,
-                                "0"
-                            )}
-                        </span>
+                          return `
+                            <div class="itinerary-stop">
 
-                        <h4>
-                            ${stepTitle}
-                        </h4>
+                                <span class="itinerary-number">
+                                    ${
+                                        isCookingProgram
+                                            ? "Procedura"
+                                            : "Tappa"
+                                    }
+                                    ${String(
+                                        index + 1
+                                    ).padStart(
+                                        2,
+                                        "0"
+                                    )}
+                                </span>
 
-                        ${
-                            description
-                                ? `
-                                    <p>
-                                        ${description}
-                                    </p>
-                                `
-                                : ""
-                        }
+                                <h4>
+                                    ${stepTitle}
+                                </h4>
 
-                    </div>
-                `;
-                }
-            )
-            .join("");
+                                ${
+                                    description
+                                        ? `
+                                            <p>
+                                                ${description}
+                                            </p>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+                        `;
+                      }
+                  )
+                  .join("");
+
+    const included =
+        isBikeExperience(
+            experience
+        )
+            ? modalData.included
+            : experience.included ||
+              [];
+
+    const notIncluded =
+        isBikeExperience(
+            experience
+        )
+            ? modalData.notIncluded
+            : experience.notIncluded ||
+              [];
+
+    const notAllowed =
+        isBikeExperience(
+            experience
+        )
+            ? modalData.notAllowed
+            : experience.notAllowed ||
+              [];
+
+    const usefulInfo =
+        isBikeExperience(
+            experience
+        )
+            ? modalData.usefulInfo
+            : experience.usefulInfo ||
+              [];
+
+    const meetingPoint =
+        isBikeExperience(
+            experience
+        )
+            ? modalData.meetingPoint
+            : experience.meetingPoint;
 
     const includedHtml =
-        (
-            experience.included ||
-            []
-        )
-            .map(
-                item => `
-                    <li>
-                        ${item}
-                    </li>
-                `
-            )
-            .join("");
+        createListHtml(
+            included
+        );
 
     const notIncludedHtml =
-        (
-            experience.notIncluded ||
-            []
-        )
-            .map(
-                item => `
-                    <li>
-                        ${item}
-                    </li>
-                `
-            )
-            .join("");
+        createListHtml(
+            notIncluded
+        );
 
     const notAllowedHtml =
-        (
-            experience.notAllowed ||
-            []
-        )
-            .map(
-                item => `
-                    <li>
-                        ${item}
-                    </li>
-                `
-            )
-            .join("");
+        createListHtml(
+            notAllowed
+        );
 
     const usefulInfoHtml =
-        (
-            experience.usefulInfo ||
-            []
-        )
-            .map(
-                item => `
-                    <li>
-                        ${item}
-                    </li>
-                `
-            )
-            .join("");
-
-    /* =====================================================
-       PUNTI DI INCONTRO
-       ===================================================== */
-
-    const meetingPoints =
-        Array.isArray(
-            experience.meetingPoint
-        )
-            ? experience.meetingPoint
-            : experience.meetingPoint
-                ? [
-                      experience.meetingPoint
-                  ]
-                : [];
+        createListHtml(
+            usefulInfo
+        );
 
     const meetingPointHtml =
-        meetingPoints
-            .map(
-                point => `
-                    <div class="meeting-point-item">
-
-                        <span class="meeting-point-marker">
-                            ●
-                        </span>
-
-                        <span class="meeting-point-text">
-                            ${point}
-                        </span>
-
-                    </div>
-                `
-            )
-            .join("");
+        createMeetingPointHtml(
+            meetingPoint
+        );
 
     /* =====================================================
        PREZZI
@@ -1611,6 +2607,52 @@ function openExperienceModal(
             defaultMode
         );
 
+    const minParticipants =
+        Number.isInteger(
+            experience.minParticipants
+        )
+            ? experience.minParticipants
+            : 1;
+
+    const maxParticipants =
+        Number.isInteger(
+            experience.maxParticipants
+        )
+            ? experience.maxParticipants
+            : 10;
+
+    const participantOptionsHtml =
+        Array.from(
+            {
+                length:
+                    maxParticipants -
+                    minParticipants +
+                    1
+            },
+            (
+                _,
+                index
+            ) => {
+                const number =
+                    minParticipants +
+                    index;
+
+                return `
+                    <option
+                        value="${number}"
+                    >
+                        ${number}
+                        ${
+                            number ===
+                            1
+                                ? "persona"
+                                : "persone"
+                        }
+                    </option>
+                `;
+            }
+        ).join("");
+
     const priceHtml =
         initialPrice
             ? `${formatPrice(
@@ -1621,64 +2663,268 @@ function openExperienceModal(
     const initialTotal =
         initialPrice
             ? formatPrice(
-                  initialPrice
+                  getExperienceTotal(
+                      experience,
+                      minParticipants,
+                      defaultMode
+                  )
               )
             : "Richiedi preventivo";
 
-    const pricingSelectorHtml =
-        pricingOptions
+    /* =====================================================
+       SELETTORE TOUR IN BICI
+       ===================================================== */
+
+    const bikeTourSelectorHtml =
+        isBikeExperience(
+            experience
+        )
             ? `
                 <div
                     class="experience-pricing-selector"
-                    id="experience-pricing-selector"
+                    id="bike-tour-selector-wrapper"
                 >
 
                     <div class="experience-pricing-title">
-                        Come vuoi partecipare?
+                        Scegli il tuo tour
                     </div>
 
-                    <div class="experience-pricing-options">
+                    <div
+                        class="experience-pricing-options"
+                        style="display:block;"
+                    >
 
-                        ${pricingOptions
-                            .map(
-                                option => `
-                                    <button
-                                        type="button"
-                                        class="experience-pricing-option ${
-                                            option.id ===
-                                            defaultMode
-                                                ? "active"
-                                                : ""
-                                        }"
-                                        data-pricing-mode="${option.id}"
-                                    >
-
-                                        <span
-                                            class="experience-pricing-option-label"
-                                        >
-                                            ${option.label}
-                                        </span>
-
-                                        <strong>
-                                            ${formatPrice(
-                                                option.price
-                                            )}
-                                            / persona
-                                        </strong>
-
-                                        <small>
-                                            ${option.description}
-                                        </small>
-
-                                    </button>
-                                `
+                        <select
+                            id="bike-tour-selector"
+                            style="
+                                width:100%;
+                                padding:12px 14px;
+                                border-radius:10px;
+                                border:1px solid rgba(0,0,0,.12);
+                                background:#fff;
+                                font-size:14px;
+                            "
+                        >
+                            ${getBikeTours(
+                                experience
                             )
-                            .join("")}
+                                .map(
+                                    tour => `
+                                        <option
+                                            value="${tour.id}"
+                                            ${
+                                                tour.id ===
+                                                selectedBikeTourId
+                                                    ? "selected"
+                                                    : ""
+                                            }
+                                        >
+                                            ${tour.title}
+                                        </option>
+                                    `
+                                )
+                                .join("")}
+                        </select>
+
+                        <div
+                            id="bike-language-wrapper"
+                            style="
+                                margin-top:14px;
+                            "
+                        >
+
+                            <label
+                                for="bike-language"
+                                style="
+                                    display:block;
+                                    font-size:13px;
+                                    margin-bottom:7px;
+                                "
+                            >
+                                Lingua
+                            </label>
+
+                            <select
+                                id="bike-language"
+                                style="
+                                    width:100%;
+                                    padding:12px 14px;
+                                    border-radius:10px;
+                                    border:1px solid rgba(0,0,0,.12);
+                                    background:#fff;
+                                    font-size:14px;
+                                "
+                            >
+                                ${getBikeTourLanguages(
+                                    experience,
+                                    selectedBikeTour
+                                )
+                                    .map(
+                                        language => `
+                                            <option
+                                                value="${language}"
+                                                ${
+                                                    getBikeTourLanguageValue(
+                                                        experience,
+                                                        selectedBikeTour
+                                                    ) === language
+                                                        ? "selected"
+                                                        : ""
+                                                }
+                                            >
+                                                ${language}
+                                            </option>
+                                        `
+                                    )
+                                    .join("")}
+                            </select>
+
+                        </div>
+
+                        <div
+                            id="bike-tour-options"
+                            style="
+                                margin-top:14px;
+                                display:flex;
+                                flex-direction:column;
+                                gap:10px;
+                            "
+                        >
+
+                            <label
+                                id="bike-electric-wrapper"
+                                style="
+                                    display:flex;
+                                    align-items:center;
+                                    gap:10px;
+                                    cursor:pointer;
+                                "
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    id="bike-electric-option"
+                                    ${
+                                        selectedBikeElectric
+                                            ? "checked"
+                                            : ""
+                                    }
+                                >
+
+                                <span>
+                                    E-bike
+                                    <strong>
+                                        +15 € / persona
+                                    </strong>
+                                </span>
+
+                            </label>
+
+                            <label
+                                id="bike-child-wrapper"
+                                style="
+                                    display:flex;
+                                    align-items:center;
+                                    gap:10px;
+                                    cursor:pointer;
+                                "
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    id="bike-child-seat-option"
+                                    ${
+                                        selectedBikeChildSeat
+                                            ? "checked"
+                                            : ""
+                                    }
+                                >
+
+                                <span>
+                                    Seggiolino bambino
+                                    <strong>
+                                        +5 € / persona
+                                    </strong>
+                                </span>
+
+                            </label>
+
+                        </div>
 
                     </div>
                 </div>
             `
             : "";
+
+    const pricingSelectorHtml =
+        isBikeExperience(
+            experience
+        )
+            ? bikeTourSelectorHtml
+            : pricingOptions
+                ? `
+                    <div
+                        class="experience-pricing-selector"
+                        id="experience-pricing-selector"
+                    >
+
+                        <div class="experience-pricing-title">
+                            ${
+                                experience.id ===
+                                "fotografia"
+                                    ? "Scegli la durata"
+                                    : "Come vuoi partecipare?"
+                            }
+                        </div>
+
+                        <div class="experience-pricing-options">
+
+                            ${pricingOptions
+                                .map(
+                                    option => `
+                                        <button
+                                            type="button"
+                                            class="experience-pricing-option ${
+                                                option.id ===
+                                                defaultMode
+                                                    ? "active"
+                                                    : ""
+                                            }"
+                                            data-pricing-mode="${option.id}"
+                                        >
+
+                                            <span
+                                                class="experience-pricing-option-label"
+                                            >
+                                                ${option.label}
+                                            </span>
+
+                                            <strong>
+                                                ${formatPrice(
+                                                    option.price
+                                                )}
+                                                / persona
+                                            </strong>
+
+                                            ${
+                                                option.description
+                                                    ? `
+                                                        <small>
+                                                            ${option.description}
+                                                        </small>
+                                                    `
+                                                    : ""
+                                            }
+
+                                        </button>
+                                    `
+                                )
+                                .join("")}
+
+                        </div>
+                    </div>
+                `
+                : "";
 
     /* =====================================================
        HTML MODAL
@@ -1693,8 +2939,11 @@ function openExperienceModal(
 
                     <img
                         id="pizza-main-image"
-                        src="${experience.images[0]}"
-                        alt="${experience.title}"
+                        src="${modalExperienceImage(
+                            experience,
+                            selectedBikeTour
+                        )}"
+                        alt="${modalData.title}"
                     >
 
                 </div>
@@ -1705,22 +2954,61 @@ function openExperienceModal(
                         ${experience.categoryLabel}
                     </div>
 
-                    <h2 class="modal-title">
-                        ${experience.title}
+                    <h2
+                        class="modal-title"
+                        id="${
+                            isBikeExperience(
+                                experience
+                            )
+                                ? "bike-modal-title"
+                                : ""
+                        }"
+                    >
+                        ${modalData.title}
                     </h2>
 
-                    <p class="modal-short">
-                        ${experience.shortDescription}
+                    <p
+                        class="modal-short"
+                        id="${
+                            isBikeExperience(
+                                experience
+                            )
+                                ? "bike-modal-short"
+                                : ""
+                        }"
+                    >
+                        ${
+                            modalData.shortDescription ||
+                            ""
+                        }
                     </p>
 
                     <div class="modal-meta">
 
-                        <div class="modal-meta-item modal-meta-duration">
-                            ${experience.duration}
+                        <div
+                            class="modal-meta-item modal-meta-duration"
+                            id="${
+                                isBikeExperience(
+                                    experience
+                                )
+                                    ? "bike-modal-duration"
+                                    : ""
+                            }"
+                        >
+                            ${modalData.duration || ""}
                         </div>
 
-                        <div class="modal-meta-item modal-meta-languages">
-                            ${experience.languages}
+                        <div
+                            class="modal-meta-item modal-meta-languages"
+                            id="${
+                                isBikeExperience(
+                                    experience
+                                )
+                                    ? "bike-modal-languages"
+                                    : ""
+                            }"
+                        >
+                            ${modalData.languages || ""}
                         </div>
 
                         <div
@@ -1744,6 +3032,46 @@ function openExperienceModal(
             </div>
 
             ${pricingSelectorHtml}
+
+            <div
+                class="pizza-booking"
+                style="margin-top:20px;"
+            >
+
+                <div class="pizza-booking-fields">
+
+                    <div>
+
+                        <label for="pizza-date">
+                            Data
+                        </label>
+
+                        <input
+                            type="date"
+                            id="pizza-date"
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label for="pizza-participants">
+                            Persone
+                        </label>
+
+                        <select
+                            id="pizza-participants"
+                        >
+
+                            ${participantOptionsHtml}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
 
             <div
                 class="pizza-mobile-gallery"
@@ -1814,7 +3142,7 @@ function openExperienceModal(
                         class="pizza-thumbnail-gallery"
                     >
 
-                        ${experience.images
+                        ${(experience.images || [])
                             .slice(1)
                             .map(
                                 (
@@ -1838,7 +3166,7 @@ function openExperienceModal(
 
                                             <img
                                                 src="${image}"
-                                                alt="${experience.title} - Foto ${
+                                                alt="${modalData.title} - Foto ${
                                                     realIndex +
                                                     1
                                                 }"
@@ -1865,66 +3193,10 @@ function openExperienceModal(
 
             </section>
 
-            <section class="pizza-booking">
-
-                <div class="pizza-booking-fields">
-
-                    <div>
-
-                        <label for="pizza-date">
-                            Data
-                        </label>
-
-                        <input
-                            type="date"
-                            id="pizza-date"
-                        >
-
-                    </div>
-
-                    <div>
-
-                        <label for="pizza-participants">
-                            Persone
-                        </label>
-
-                        <select
-                            id="pizza-participants"
-                        >
-
-                            ${Array.from(
-                                {
-                                    length: 10
-                                },
-                                (
-                                    _,
-                                    index
-                                ) => {
-                                    const number =
-                                        index +
-                                        1;
-
-                                    return `
-                                        <option
-                                            value="${number}"
-                                        >
-                                            ${number}
-                                            ${
-                                                number ===
-                                                1
-                                                    ? "persona"
-                                                    : "persone"
-                                            }
-                                        </option>
-                                    `;
-                                }
-                            ).join("")}
-
-                        </select>
-
-                    </div>
-
-                </div>
+            <section
+                class="pizza-booking"
+                style="margin-top:0;"
+            >
 
                 <button
                     type="button"
@@ -1954,7 +3226,16 @@ function openExperienceModal(
                     ${programHeading}
                 </h3>
 
-                <div class="itinerary">
+                <div
+                    class="itinerary"
+                    id="${
+                        isBikeExperience(
+                            experience
+                        )
+                            ? "bike-modal-program"
+                            : ""
+                    }"
+                >
                     ${programHtml}
                 </div>
 
@@ -1966,8 +3247,19 @@ function openExperienceModal(
                     L'attività in breve
                 </h3>
 
-                <p>
-                    ${experience.shortDescription}
+                <p
+                    id="${
+                        isBikeExperience(
+                            experience
+                        )
+                            ? "bike-modal-short"
+                            : ""
+                    }"
+                >
+                    ${
+                        modalData.shortDescription ||
+                        ""
+                    }
                 </p>
 
             </section>
@@ -1978,8 +3270,17 @@ function openExperienceModal(
                     Descrizione completa
                 </h3>
 
-                <p style="white-space: pre-line;">
-                    ${experience.description}
+                <p
+                    style="white-space: pre-line;"
+                    id="${
+                        isBikeExperience(
+                            experience
+                        )
+                            ? "bike-modal-description"
+                            : ""
+                    }"
+                >
+                    ${modalData.description || ""}
                 </p>
 
             </section>
@@ -1994,23 +3295,45 @@ function openExperienceModal(
                             Cosa è incluso
                         </h3>
 
-                        <ul>
+                        <ul
+                            id="${
+                                isBikeExperience(
+                                    experience
+                                )
+                                    ? "bike-modal-included"
+                                    : ""
+                            }"
+                        >
                             ${includedHtml}
                         </ul>
 
                     </div>
 
-                    <div class="detail-box exclude">
+                    ${
+                        notIncludedHtml
+                            ? `
+                                <div class="detail-box exclude">
 
-                        <h3>
-                            Cosa non è incluso
-                        </h3>
+                                    <h3>
+                                        Cosa non è incluso
+                                    </h3>
 
-                        <ul>
-                            ${notIncludedHtml}
-                        </ul>
+                                    <ul
+                                        id="${
+                                            isBikeExperience(
+                                                experience
+                                            )
+                                                ? "bike-modal-not-included"
+                                                : ""
+                                        }"
+                                    >
+                                        ${notIncludedHtml}
+                                    </ul>
 
-                    </div>
+                                </div>
+                            `
+                            : ""
+                    }
 
                 </div>
 
@@ -2024,7 +3347,16 @@ function openExperienceModal(
                         Punti di incontro
                     </h3>
 
-                    <div class="meeting-points-list">
+                    <div
+                        class="meeting-points-list"
+                        id="${
+                            isBikeExperience(
+                                experience
+                            )
+                                ? "bike-modal-meeting"
+                                : ""
+                        }"
+                    >
                         ${meetingPointHtml}
                     </div>
 
@@ -2032,29 +3364,57 @@ function openExperienceModal(
 
             </section>
 
-            <section class="modal-section">
+            ${
+                notAllowedHtml
+                    ? `
+                        <section class="modal-section">
 
-                <h3>
-                    Non ammesso
-                </h3>
+                            <h3>
+                                Non ammesso
+                            </h3>
 
-                <ul>
-                    ${notAllowedHtml}
-                </ul>
+                            <ul
+                                id="${
+                                    isBikeExperience(
+                                        experience
+                                    )
+                                        ? "bike-modal-not-allowed"
+                                        : ""
+                                }"
+                            >
+                                ${notAllowedHtml}
+                            </ul>
 
-            </section>
+                        </section>
+                    `
+                    : ""
+            }
 
-            <section class="modal-section">
+            ${
+                usefulInfoHtml
+                    ? `
+                        <section class="modal-section">
 
-                <h3>
-                    Informazioni utili
-                </h3>
+                            <h3>
+                                Informazioni utili
+                            </h3>
 
-                <ul>
-                    ${usefulInfoHtml}
-                </ul>
+                            <ul
+                                id="${
+                                    isBikeExperience(
+                                        experience
+                                    )
+                                        ? "bike-modal-useful-info"
+                                        : ""
+                                }"
+                            >
+                                ${usefulInfoHtml}
+                            </ul>
 
-            </section>
+                        </section>
+                    `
+                    : ""
+            }
 
         </div>
     `;
@@ -2068,10 +3428,20 @@ function openExperienceModal(
         defaultMode
     );
 
-    setupPricingSelector(
-        experience,
-        defaultMode
-    );
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        setupBikeTourSelector(
+            experience
+        );
+    } else {
+        setupPricingSelector(
+            experience,
+            defaultMode
+        );
+    }
 
     const whatsappButton =
         document.getElementById(
@@ -2104,7 +3474,183 @@ function openExperienceModal(
 }
 
 /* =========================================================
-   SELETTORE CONDIVISA / PRIVATA
+   IMMAGINE PRINCIPALE MODAL
+   ========================================================= */
+
+function modalExperienceImage(
+    experience,
+    selectedTour
+) {
+    /*
+     * Il Tour in Bici utilizza
+     * sempre la galleria principale
+     * dell'esperienza.
+     */
+
+    if (
+        experience &&
+        Array.isArray(
+            experience.images
+        ) &&
+        experience.images.length
+    ) {
+        return experience.images[0];
+    }
+
+    if (
+        selectedTour &&
+        Array.isArray(
+            selectedTour.images
+        ) &&
+        selectedTour.images.length
+    ) {
+        return selectedTour.images[0];
+    }
+
+    return "";
+}
+
+/* =========================================================
+   SELETTORE TOUR IN BICI
+   ========================================================= */
+
+function setupBikeTourSelector(
+    experience
+) {
+    const selector =
+        document.getElementById(
+            "bike-tour-selector"
+        );
+
+    if (!selector) {
+        return;
+    }
+
+    selector.addEventListener(
+        "change",
+        function () {
+
+            selectedBikeTourId =
+                selector.value;
+
+            selectedBikeElectric =
+                false;
+
+            selectedBikeChildSeat =
+                false;
+
+            selectedBikeLanguage =
+                "";
+
+            /*
+             * Non chiudiamo e non
+             * riapriamo il modal.
+             * Aggiorniamo direttamente
+             * tutti i contenuti.
+             */
+
+            updateBikeTourModalContent(
+                experience
+            );
+
+            updateBikeTourCard(
+                experience
+            );
+        }
+    );
+
+    const languageSelect =
+        document.getElementById(
+            "bike-language"
+        );
+
+    if (languageSelect) {
+        languageSelect.addEventListener(
+            "change",
+            function () {
+
+                selectedBikeLanguage =
+                    languageSelect.value;
+
+            }
+        );
+    }
+
+    const electricOption =
+        document.getElementById(
+            "bike-electric-option"
+        );
+
+    if (electricOption) {
+        electricOption.addEventListener(
+            "change",
+            function () {
+
+                selectedBikeElectric =
+                    electricOption.checked;
+
+                updateBikeTourPriceDisplay(
+                    experience
+                );
+            }
+        );
+    }
+
+    const childSeatOption =
+        document.getElementById(
+            "bike-child-seat-option"
+        );
+
+    if (childSeatOption) {
+        childSeatOption.addEventListener(
+            "change",
+            function () {
+
+                selectedBikeChildSeat =
+                    childSeatOption.checked;
+
+                updateBikeTourPriceDisplay(
+                    experience
+                );
+            }
+        );
+    }
+
+    updateBikeTourOptions(
+        experience
+    );
+
+    updateBikeTourPriceDisplay(
+        experience
+    );
+}
+
+/* =========================================================
+   AGGIORNAMENTO CARD BIKE
+   ========================================================= */
+
+function updateBikeTourCard(
+    experience
+) {
+    if (
+        !isBikeExperience(
+            experience
+        )
+    ) {
+        return;
+    }
+
+    /*
+     * Manteniamo una sola card.
+     * La ricreiamo per aggiornare titolo,
+     * descrizione, durata e prezzo.
+     */
+
+    renderExperiences();
+}
+
+/* =========================================================
+   SELETTORE CONDIVISA / PRIVATA / MODALITÀ
    ========================================================= */
 
 function setupPricingSelector(
@@ -2239,8 +3785,21 @@ function setupExperienceGallery(
                 currentIndex
             ];
 
+        const currentBikeTour =
+            isBikeExperience(
+                experience
+            )
+                ? getSelectedBikeTour(
+                      experience
+                  )
+                : null;
+
         mainImage.alt =
-            `${experience.title} - Foto ${
+            `${
+                currentBikeTour
+                    ? currentBikeTour.title
+                    : experience.title
+            } - Foto ${
                 currentIndex + 1
             }`;
 
@@ -2681,6 +4240,19 @@ function setupExperienceBooking(
     participantsSelect.addEventListener(
         "change",
         function () {
+
+            if (
+                isBikeExperience(
+                    experience
+                )
+            ) {
+                updateBikeTourPriceDisplay(
+                    experience
+                );
+
+                return;
+            }
+
             updateExperiencePrice(
                 experience,
                 activeBookingMode
@@ -2745,6 +4317,18 @@ function updateExperiencePrice(
     activeBookingMode =
         selectedMode;
 
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        updateBikeTourPriceDisplay(
+            experience
+        );
+
+        return;
+    }
+
     const participantsSelect =
         document.getElementById(
             "pizza-participants"
@@ -2772,11 +4356,18 @@ function updateExperiencePrice(
         return;
     }
 
+    const minParticipants =
+        Number.isInteger(
+            experience.minParticipants
+        )
+            ? experience.minParticipants
+            : 1;
+
     const participants =
         parseInt(
             participantsSelect.value,
             10
-        ) || 1;
+        ) || minParticipants;
 
     const selectedPrice =
         getSelectedPrice(
@@ -2863,11 +4454,18 @@ function requestExperienceAvailability(
         return;
     }
 
+    const minParticipants =
+        Number.isInteger(
+            experience.minParticipants
+        )
+            ? experience.minParticipants
+            : 1;
+
     const participants =
         parseInt(
             participantsSelect.value,
             10
-        ) || 1;
+        ) || minParticipants;
 
     const selectedMode =
         activeBookingMode;
@@ -2889,14 +4487,68 @@ function requestExperienceAvailability(
             ? `${total} €`
             : "Richiedi preventivo";
 
-    const modeText =
-        getSelectedModeLabel(
-            experience,
-            selectedMode
-        );
+    let message;
 
-    const message =
-        `Ciao, vorrei richiedere disponibilità per: ${experience.title}
+    /*
+     * Messaggio specifico Tour in Bici.
+     */
+
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        const tour =
+            getSelectedBikeTour(
+                experience
+            );
+
+        const options =
+            getBikeTourWhatsAppMode(
+                tour
+            );
+
+        const language =
+            getBikeTourLanguageValue(
+                experience,
+                tour
+            );
+
+        message =
+            `Ciao, vorrei richiedere disponibilità per il Tour in Bici.
+
+Tour: ${tour ? tour.title : ""}
+
+Lingua: ${language}
+
+Opzione: ${options}
+
+Data richiesta: ${formattedDate}
+
+Partecipanti: ${participants}
+
+Prezzo per persona: ${
+                tour
+                    ? getBikeTourPricePerPerson(
+                          tour
+                      )
+                    : ""
+            } €
+
+Totale: ${totalText}
+
+Grazie.`;
+
+    } else {
+
+        const modeText =
+            getSelectedModeLabel(
+                experience,
+                selectedMode
+            );
+
+        message =
+            `Ciao, vorrei richiedere disponibilità per: ${experience.title}
 
 Modalità: ${modeText}
 
@@ -2907,6 +4559,7 @@ Partecipanti: ${participants}
 Totale: ${totalText}
 
 Grazie.`;
+    }
 
     const whatsappUrl =
         `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -2943,11 +4596,6 @@ function addExperienceToCatalog(
         experiences.push(
             experience
         );
-
-        /*
-         * Ridisegna il catalogo mantenendo
-         * il filtro attualmente selezionato.
-         */
 
         renderExperiences();
     }
@@ -3067,6 +4715,51 @@ document.addEventListener(
          */
 
         loadIschiaProcidaExperience()
+            .then(
+                function (
+                    experience
+                ) {
+                    addExperienceToCatalog(
+                        experience
+                    );
+                }
+            );
+
+        /*
+         * Ceramica
+         */
+
+        loadCeramicaExperience()
+            .then(
+                function (
+                    experience
+                ) {
+                    addExperienceToCatalog(
+                        experience
+                    );
+                }
+            );
+
+        /*
+         * Fotografia
+         */
+
+        loadFotografiaExperience()
+            .then(
+                function (
+                    experience
+                ) {
+                    addExperienceToCatalog(
+                        experience
+                    );
+                }
+            );
+
+        /*
+         * Tour in Bici
+         */
+
+        loadTourInBiciExperience()
             .then(
                 function (
                     experience
