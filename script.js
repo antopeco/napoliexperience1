@@ -3011,12 +3011,20 @@ function openExperienceModal(
                             ${modalData.languages || ""}
                         </div>
 
-                        <div
-                            class="modal-meta-item modal-meta-type"
-                            id="modal-experience-type"
-                        >
-                            ${initialType}
-                        </div>
+                      ${
+    isBikeExperience(
+        experience
+    )
+        ? ""
+        : `
+            <div
+                class="modal-meta-item modal-meta-type"
+                id="modal-experience-type"
+            >
+                ${initialType}
+            </div>
+        `
+}
 
                         <div
                             class="modal-meta-item modal-meta-price"
@@ -3024,48 +3032,6 @@ function openExperienceModal(
                         >
                             ${priceHtml}
                         </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            ${pricingSelectorHtml}
-
-            <div
-                class="pizza-booking"
-                style="margin-top:20px;"
-            >
-
-                <div class="pizza-booking-fields">
-
-                    <div>
-
-                        <label for="pizza-date">
-                            Data
-                        </label>
-
-                        <input
-                            type="date"
-                            id="pizza-date"
-                        >
-
-                    </div>
-
-                    <div>
-
-                        <label for="pizza-participants">
-                            Persone
-                        </label>
-
-                        <select
-                            id="pizza-participants"
-                        >
-
-                            ${participantOptionsHtml}
-
-                        </select>
 
                     </div>
 
@@ -3191,7 +3157,49 @@ function openExperienceModal(
 
                 </div>
 
-            </section>
+            </section>${pricingSelectorHtml}
+
+            <div
+                class="pizza-booking"
+                style="margin-top:20px;"
+            >
+
+                <div class="pizza-booking-fields">
+
+                    <div>
+
+                        <label for="pizza-date">
+                            Data
+                        </label>
+
+                        <input
+                            type="date"
+                            id="pizza-date"
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label for="pizza-participants">
+                            Persone
+                        </label>
+
+                        <select
+                            id="pizza-participants"
+                        >
+
+                            ${participantOptionsHtml}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            
 
             <section
                 class="pizza-booking"
