@@ -3620,3 +3620,263 @@ PULSANTE EN - MOBILE
 ```
 
 }
+/* =========================================================
+   TOUR IN BICI — MOBILE ONLY
+   Sovrascrive esclusivamente la card del Tour in Bici
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    /* MODAL BICI */
+    .modal:has(#bike-tour-selector),
+    .modal:has(#bike-participants-wrapper) {
+        padding: 0 !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-dialog,
+    .modal:has(#bike-participants-wrapper) .modal-dialog {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-body,
+    .modal:has(#bike-participants-wrapper) .modal-body {
+        width: 100% !important;
+        padding: 14px !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =========================================
+       SELEZIONE TOUR
+       ========================================= */
+
+    #bike-tour-selector-wrapper {
+        width: 100% !important;
+        margin: 0 0 18px !important;
+        padding: 15px !important;
+
+        background: #fafafa !important;
+        border: 1px solid #e7e7eb !important;
+        border-radius: 16px !important;
+
+        box-sizing: border-box !important;
+    }
+
+    #bike-tour-selector-wrapper select,
+    #bike-tour-selector {
+        width: 100% !important;
+        height: 46px !important;
+
+        padding: 0 40px 0 13px !important;
+
+        border: 1px solid #dedee4 !important;
+        border-radius: 11px !important;
+
+        background: #fff !important;
+
+        font-size: 13px !important;
+        font-weight: 600 !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* =========================================
+       GALLERIA
+       ========================================= */
+
+    .modal:has(#bike-tour-selector) .pizza-mobile-gallery,
+    .modal:has(#bike-participants-wrapper) .pizza-mobile-gallery {
+        width: 100% !important;
+        margin: 0 0 18px !important;
+
+        border-radius: 15px !important;
+        overflow: hidden !important;
+    }
+
+    .modal:has(#bike-tour-selector) .pizza-mobile-gallery img,
+    .modal:has(#bike-participants-wrapper) .pizza-mobile-gallery img {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 10 !important;
+        object-fit: cover !important;
+    }
+
+
+    /* =========================================
+       TITOLO
+       ========================================= */
+
+    .modal:has(#bike-tour-selector) .modal-hero-info,
+    .modal:has(#bike-participants-wrapper) .modal-hero-info {
+        width: 100% !important;
+        padding: 0 3px !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-title,
+    .modal:has(#bike-participants-wrapper) .modal-title {
+        margin: 0 0 8px !important;
+
+        font-size: 22px !important;
+        line-height: 1.15 !important;
+    }
+
+
+    /* =========================================
+       PREZZO + DURATA
+       ========================================= */
+
+    .modal:has(#bike-tour-selector) .modal-meta,
+    .modal:has(#bike-participants-wrapper) .modal-meta {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+
+        margin-top: 14px !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-meta > *,
+    .modal:has(#bike-participants-wrapper) .modal-meta > * {
+        min-width: 0 !important;
+        padding: 11px !important;
+
+        background: #fafafa !important;
+
+        border: 1px solid #e7e7eb !important;
+        border-radius: 12px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* =========================================
+       PRENOTAZIONE
+       ========================================= */
+
+    #bike-participants-wrapper {
+        width: 100% !important;
+        margin-top: 10px !important;
+
+        box-sizing: border-box !important;
+    }
+
+    #bike-participants-wrapper > div {
+        width: 100% !important;
+        min-height: 52px !important;
+
+        padding: 9px 0 !important;
+
+        border-bottom: 1px solid #eeeeF2 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    #bike-participants-wrapper > div:last-child {
+        border-bottom: none !important;
+    }
+
+
+    /* =========================================
+       PULSANTI + E -
+       ========================================= */
+
+    #bike-participants-wrapper button {
+        width: 34px !important;
+        min-width: 34px !important;
+        height: 34px !important;
+
+        padding: 0 !important;
+
+        border: 1px solid #dedee4 !important;
+        border-radius: 50% !important;
+
+        background: #fff !important;
+
+        font-size: 18px !important;
+    }
+
+
+    /* =========================================
+       DATA
+       ========================================= */
+
+    .modal:has(#bike-participants-wrapper) #pizza-date {
+        width: 100% !important;
+        height: 44px !important;
+
+        padding: 0 12px !important;
+
+        border: 1px solid #dedee4 !important;
+        border-radius: 11px !important;
+
+        box-sizing: border-box !important;
+
+        font-size: 13px !important;
+    }
+
+
+    /* =========================================
+       BOX BOOKING
+       ========================================= */
+
+    .modal:has(#bike-participants-wrapper) .pizza-booking {
+        width: 100% !important;
+
+        margin-top: 18px !important;
+        padding: 16px 14px !important;
+
+        background: #fafafa !important;
+
+        border: 1px solid #e7e7eb !important;
+        border-radius: 16px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* =========================================
+       BOTTONE RICHIESTA
+       ========================================= */
+
+    .modal:has(#bike-participants-wrapper) .whatsapp-button {
+        width: 100% !important;
+        min-height: 46px !important;
+
+        margin-top: 15px !important;
+
+        border-radius: 11px !important;
+
+        font-size: 12px !important;
+        font-weight: 700 !important;
+    }
+
+
+    /* =========================================
+       TOTALE
+       ========================================= */
+
+    .modal:has(#bike-participants-wrapper) .pizza-total {
+        display: flex !important;
+
+        align-items: center !important;
+        justify-content: space-between !important;
+
+        width: 100% !important;
+
+        margin-top: 14px !important;
+        padding-top: 13px !important;
+
+        border-top: 1px solid #e5e5e9 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-participants-wrapper) .pizza-total strong {
+        font-size: 20px !important;
+    }
+
+}
