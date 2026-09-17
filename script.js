@@ -507,35 +507,31 @@ function getPricingOptions(experience) {
 
     const options = [];
 
-    if (
-        pricing.shared !== undefined &&
-        pricing.shared !== null
-    ) {
-        options.push({
-            id: "shared",
-            label: "Condivisa",
-            price: Number(
-                pricing.shared
-            ),
-            description:
-                "Insieme ad altri partecipanti"
-        });
-    }
+ if (
+    pricing.shared !== undefined &&
+    pricing.shared !== null
+) {
+    options.push({
+        id: "shared",
+        label: "Condivisa",
+        price: Number(
+            pricing.shared
+        )
+    });
+}
 
-    if (
-        pricing.private !== undefined &&
-        pricing.private !== null
-    ) {
-        options.push({
-            id: "private",
-            label: "Privata",
-            price: Number(
-                pricing.private
-            ),
-            description:
-                "Solo il vostro gruppo"
-        });
-    }
+if (
+    pricing.private !== undefined &&
+    pricing.private !== null
+) {
+    options.push({
+        id: "private",
+        label: "Privata",
+        price: Number(
+            pricing.private
+        )
+    });
+}
 
     if (
         Array.isArray(
@@ -4785,6 +4781,181 @@ function renderFeaturedExperiences() {
                     ) {
                         openExperienceModal(
                             experience
+                        );
+                    }
+                }
+            );
+        }
+    );
+}
+function renderFeaturedExperiences() {
+
+    const featuredGrid =
+        document.getElementById(
+            "featured-grid"
+        );
+
+    if (!featuredGrid) {
+        return;
+    }
+
+    const experiencesByCategory = {};
+
+    experiences.forEach(
+        function (experience) {
+
+            if (
+                !experience ||
+                !experience.category
+            ) {
+                return;
+            }
+
+            if (
+                !experiencesByCategory[
+                    experience.category
+                ]
+            ) {
+                experiencesByCategory[
+                    experience.category
+                ] = [];
+            }
+
+            experiencesByCategory[
+                experience.category
+            ].push(
+                experience
+            );
+        }
+    );
+
+    const categories =
+        Object.keys(
+            experiencesByCategory
+        );
+
+    if (
+        categories.length < 3
+    ) {
+        return;
+    }
+
+    const shuffledCategories =
+        categories
+            .slice()
+            .sort(
+                function () {
+                    return (
+                        Math.random() -
+                        0.5
+                    );
+                }
+            );
+
+    const selectedCategories =
+        shuffledCategories.slice(
+            0,
+            3
+        );
+
+    const selectedExperiences =
+        selectedCategories.map(
+            function (category) {
+
+                const categoryExperiences =
+                    experiencesByCategory[
+                        category
+                    ];
+
+                return categoryExperiences[
+                    Math.floor(
+                        Math.random() *
+                        categoryExperiences.length
+                    )
+                ];
+            }
+        );
+
+    featuredGrid.innerHTML =
+        selectedExperiences
+            .map(
+                function (
+                    experience
+                ) {
+
+                    const image =
+                        experience.id ===
+                        "bike-tours"
+                            ? "images/bicitour4.jpg.avif"
+                            : (
+                                experience.images &&
+                                experience.images.length
+                            )
+                                ? experience.images[0]
+                                : "";
+
+                    return `
+                        <article
+                            class="featured-card"
+                            data-featured-id="${experience.id}"
+                        >
+
+                            <div
+                                class="featured-card-image"
+                            >
+
+                                <img
+                                    src="${image}"
+                                    alt="${experience.title}"
+                                >
+
+                            </div>
+
+                            <div
+                                class="featured-card-content"
+                            >
+
+                                <h3
+                                    class="featured-card-title"
+                                >
+                                    ${experience.title}
+                                </h3>
+
+                                <button
+                                    class="featured-card-button"
+                                    type="button"
+                                >
+                                    SCOPRI
+                                </button>
+
+                            </div>
+
+                        </article>
+                    `;
+                }
+            )
+            .join("");
+
+    const featuredCards =
+        featuredGrid.querySelectorAll(
+            ".featured-card"
+        );
+
+    featuredCards.forEach(
+        function (card) {
+
+            card.addEventListener(
+                "click",
+                function () {
+
+                    const experienceId =
+                        card.dataset.featuredId;
+
+                    if (
+                        experienceId
+                    ) {
+                        openExperienceModal(
+                            experienceId
                         );
                     }
                 }
