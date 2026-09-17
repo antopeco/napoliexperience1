@@ -3620,3 +3620,282 @@ PULSANTE EN - MOBILE
 ```
 
 }
+```css
+/* =========================================================
+   TOUR IN BICI — MOBILE
+   INCOLLARE ALLA FINE DI style.css
+   Non modifica script.js
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    /* -----------------------------------------------------
+       CONTENITORE DEL TOUR IN BICI
+       ----------------------------------------------------- */
+
+    .modal:has(#bike-tour-selector) {
+        padding: 0 !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-dialog {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-body {
+        width: 100% !important;
+        padding: 14px !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       1. SELEZIONE TOUR
+       Deve essere la PRIMA sezione
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) #bike-tour-selector-wrapper {
+        order: 1 !important;
+        width: 100% !important;
+        margin: 0 0 18px !important;
+        padding: 14px !important;
+        background: #fafafa !important;
+        border: 1px solid #e6e6eb !important;
+        border-radius: 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-tour-selector) #bike-tour-selector-wrapper label {
+        display: block !important;
+        margin-bottom: 8px !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        letter-spacing: .08em !important;
+        text-transform: uppercase !important;
+    }
+
+    .modal:has(#bike-tour-selector) #bike-tour-selector {
+        width: 100% !important;
+        height: 46px !important;
+        padding: 0 40px 0 13px !important;
+        border: 1px solid #dcdce2 !important;
+        border-radius: 11px !important;
+        background: #fff !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       2. IMMAGINI
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) .pizza-mobile-gallery {
+        order: 2 !important;
+        width: 100% !important;
+        margin: 0 0 20px !important;
+        border-radius: 16px !important;
+        overflow: hidden !important;
+    }
+
+    .modal:has(#bike-tour-selector) .pizza-mobile-gallery img {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 10 !important;
+        object-fit: cover !important;
+    }
+
+
+    /* =====================================================
+       3. TITOLO + BREVE DESCRIZIONE
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) .modal-hero-info {
+        order: 3 !important;
+        width: 100% !important;
+        padding: 0 3px !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-title {
+        margin: 0 0 8px !important;
+        font-size: 22px !important;
+        line-height: 1.15 !important;
+        font-weight: 700 !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-description {
+        margin: 0 !important;
+        font-size: 14px !important;
+        line-height: 1.55 !important;
+    }
+
+
+    /* =====================================================
+       4. PREZZO + DURATA
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) .modal-meta {
+        order: 4 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        width: 100% !important;
+        margin: 16px 0 20px !important;
+    }
+
+    .modal:has(#bike-tour-selector) .modal-meta > * {
+        min-width: 0 !important;
+        padding: 12px !important;
+        background: #fafafa !important;
+        border: 1px solid #e6e6eb !important;
+        border-radius: 13px !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       5. PRENOTAZIONE
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) .pizza-booking {
+        order: 5 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 17px 14px !important;
+        background: #fafafa !important;
+        border: 1px solid #e6e6eb !important;
+        border-radius: 17px !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-tour-selector) .pizza-booking h3,
+    .modal:has(#bike-tour-selector) .pizza-booking h4 {
+        margin-top: 0 !important;
+    }
+
+
+    /* =====================================================
+       DATA
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) #pizza-date {
+        width: 100% !important;
+        height: 44px !important;
+        padding: 0 12px !important;
+        border: 1px solid #dcdce2 !important;
+        border-radius: 11px !important;
+        background: #fff !important;
+        font-size: 13px !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       PARTECIPANTI
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) #bike-participants-wrapper {
+        width: 100% !important;
+        margin-top: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-tour-selector) #bike-participants-wrapper > div {
+        width: 100% !important;
+        min-height: 50px !important;
+        padding: 8px 0 !important;
+        border-bottom: 1px solid #e9e9ed !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-tour-selector) #bike-participants-wrapper > div:last-child {
+        border-bottom: none !important;
+    }
+
+
+    /* =====================================================
+       PULSANTI + E -
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) #bike-participants-wrapper button {
+        width: 34px !important;
+        min-width: 34px !important;
+        height: 34px !important;
+        padding: 0 !important;
+        border: 1px solid #dcdce2 !important;
+        border-radius: 50% !important;
+        background: #fff !important;
+        font-size: 17px !important;
+        line-height: 1 !important;
+    }
+
+
+    /* =====================================================
+       E-BIKE / SEGGIOLINI
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) #bike-electric-wrapper,
+    .modal:has(#bike-tour-selector) #bike-child-wrapper {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       LINGUA
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) #bike-language {
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 0 12px !important;
+        border: 1px solid #dcdce2 !important;
+        border-radius: 11px !important;
+        background: #fff !important;
+        font-size: 13px !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       RICHIEDI PREVENTIVO
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) .whatsapp-button {
+        width: 100% !important;
+        min-height: 46px !important;
+        margin-top: 16px !important;
+        border-radius: 11px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       PREZZO TOTALE
+       ===================================================== */
+
+    .modal:has(#bike-tour-selector) .pizza-total {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        margin-top: 15px !important;
+        padding-top: 13px !important;
+        border-top: 1px solid #e2e2e7 !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal:has(#bike-tour-selector) .pizza-total strong {
+        font-size: 20px !important;
+    }
+
+}
+```
+
