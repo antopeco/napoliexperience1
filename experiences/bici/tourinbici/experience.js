@@ -48,12 +48,20 @@ Seleziona il tour che preferisci per visualizzare tutti i dettagli, l'itinerario
 
     minParticipants: 1,
 
-    maxParticipants: 6,
+    /*
+     * Nessun limite massimo di partecipanti.
+     */
+
+    maxParticipants: null,
 
     /*
-     * Supplementi comuni a tutti i tour.
+     * Supplementi.
      *
-     * Tutti gli importi sono PER PERSONA.
+     * E-bike: supplemento di 15 € per ogni E-bike selezionata.
+     * Seggiolino: supplemento di 5 € per ogni seggiolino selezionato.
+     *
+     * Il numero massimo selezionabile di E-bike e seggiolini
+     * sarà determinato dal numero di biciclette adulte.
      */
 
     supplements: {
@@ -162,7 +170,8 @@ Una splendida vista su Castel dell'Ovo e sul Golfo di Napoli allieterà il vostr
             usefulInfo: [
                 "Durata: 3 ore",
                 "Distanza: 8–10 km",
-                "Difficoltà: Facile"
+                "Difficoltà: Facile",
+                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
             ]
         },
 
@@ -271,7 +280,8 @@ La nostra guida vi fornirà maggiori dettagli sulla storia della zona e sui prog
                 "Durata: mezza giornata",
                 "Distanza: 45 km",
                 "Difficoltà: Media-Impegnativa",
-                "Media con e-bike"
+                "Media con e-bike",
+                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
             ]
         },
 
@@ -344,7 +354,8 @@ Come ricompensa finale della nostra pedalata, raggiungiamo il Parco Virgilio, ch
                 "Durata: 3,5 ore",
                 "Distanza: 20 km",
                 "Difficoltà: Media",
-                "Facile con la bici elettrica"
+                "Facile con la bici elettrica",
+                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
             ]
         },
 
@@ -440,7 +451,8 @@ Le nostre guide esperte vi forniranno maggiori informazioni su questi luoghi mag
                 "Distanza: 45 km",
                 "Difficoltà: Media con e-bike",
                 "Calice di vino incluso",
-                "Pranzo facoltativo su prenotazione"
+                "Pranzo facoltativo su prenotazione",
+                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
             ]
         },
 
@@ -536,7 +548,8 @@ Viaggio di ritorno facoltativo con la ferrovia di Cumana, biglietti non inclusi.
                 "Distanza: 52 km",
                 "Difficoltà: Medio-Alta",
                 "Media con e-bike",
-                "Rientro facoltativo con la ferrovia di Cumana"
+                "Rientro facoltativo con la ferrovia di Cumana",
+                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
             ]
         }
     ]
