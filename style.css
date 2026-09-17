@@ -3436,3 +3436,149 @@ a {
         font-size: 8px;
     }
 }
+/* =========================================================
+   SELETTORE MODAL
+   CONDIVISA / PRIVATA / DURATA FOTOGRAFIA
+   ========================================================= */
+
+.experience-pricing-selector {
+    margin-top: 24px;
+}
+
+.experience-pricing-title {
+    margin-bottom: 12px;
+    color: #173b4d;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.experience-pricing-options {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.experience-pricing-option {
+    flex: 1;
+    min-height: 52px;
+    padding: 12px 16px;
+    border: 1.5px solid #e58a2b;
+    border-radius: 13px;
+    background: #ffffff;
+    color: #c96f16;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.experience-pricing-option:hover {
+    transform: translateY(-1px);
+    background: #fff7ee;
+    border-color: #d97818;
+}
+
+.experience-pricing-option.active {
+    background: #e58a2b;
+    border-color: #e58a2b;
+    color: #ffffff;
+    box-shadow:
+        0 7px 18px rgba(229, 138, 43, 0.22);
+}
+
+.experience-pricing-option-label {
+    display: block;
+    line-height: 1.25;
+}
+
+/* =========================================================
+   SMARTPHONE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .experience-pricing-selector {
+        margin-top: 20px;
+    }
+
+    .experience-pricing-title {
+        margin-bottom: 10px;
+        font-size: 12px;
+    }
+
+    .experience-pricing-options {
+        gap: 8px;
+    }
+
+    .experience-pricing-option {
+        min-height: 48px;
+        padding: 11px 10px;
+        border-radius: 11px;
+        font-size: 11px;
+    }
+}
+
+/* =========================================================
+   SMARTPHONE MOLTO PICCOLO
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .experience-pricing-option {
+        min-height: 46px;
+        padding: 10px 8px;
+        font-size: 10px;
+    }
+}
+/* =========================================================
+SELETTORI MODAL - SOLO MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+```
+.experience-pricing-options {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.experience-pricing-option {
+    flex: 1;
+    min-height: 52px;
+    padding: 12px 16px;
+
+    border: 1.5px solid #e58a2b;
+    border-radius: 13px;
+
+    background: #ffffff;
+    color: #173b4d;
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+
+    cursor: pointer;
+}
+
+.experience-pricing-option.active {
+    background: #e58a2b;
+    border-color: #e58a2b;
+    color: #ffffff;
+}
+
+.experience-pricing-option-label {
+    display: block;
+    line-height: 1.25;
+}
+```
+
+}
