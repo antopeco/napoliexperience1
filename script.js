@@ -290,9 +290,13 @@ function formatItalianDate(dateValue) {
 
 let selectedBikeTourId = "unesco";
 
-let selectedBikeElectric = false;
+let selectedBikeAdults = 1;
 
-let selectedBikeChildSeat = false;
+let selectedBikeChildren = 0;
+
+let selectedBikeElectricBikes = 0;
+
+let selectedBikeChildSeats = 0;
 
 let selectedBikeLanguage = "";
 
@@ -366,20 +370,15 @@ function getBikeTourPricePerPerson(tour) {
             tour
         );
 
-    if (
-        selectedBikeElectric &&
-        bikeTourHasElectricBike(
-            tour
-        )
-    ) {
-        price += 15;
-    }
+    price +=
+    Number(
+        selectedBikeElectricBikes
+    ) * 15;
 
-    if (
-        selectedBikeChildSeat
-    ) {
-        price += 5;
-    }
+price +=
+    Number(
+        selectedBikeChildSeats
+    ) * 5;
 
     return price;
 }
@@ -392,28 +391,24 @@ function getBikeTourWhatsAppMode(tour) {
     const options = [];
 
     if (
-        selectedBikeElectric &&
-        bikeTourHasElectricBike(
-            tour
-        )
-    ) {
-        options.push(
-            "E-bike"
-        );
-    }
+    selectedBikeElectricBikes > 0
+) {
+    options.push(
+        `${selectedBikeElectricBikes} E-bike`
+    );
+}
 
-    if (
-        selectedBikeChildSeat
-    ) {
-        options.push(
-            "Seggiolino bambino"
-        );
-    }
+if (
+    selectedBikeChildSeats > 0
+) {
+    options.push(
+        `${selectedBikeChildSeats} seggiolini`
+    );
+}
 
     if (!options.length) {
-        return "Bicicletta standard";
-    }
-
+    return "Biciclette standard";
+}
     return options.join(
         " + "
     );
@@ -1535,14 +1530,9 @@ function renderExperiences() {
                         selectedBikeTourId =
                             bikeSelector.value;
 
-                        selectedBikeElectric =
-                            false;
-
-                        selectedBikeChildSeat =
-                            false;
-
-                        selectedBikeLanguage =
-                            "";
+                        selectedBikeElectricBikes = 0;
+selectedBikeChildSeats = 0;
+selectedBikeLanguage = "";
 
                         renderExperiences();
                     }
@@ -2181,115 +2171,95 @@ function updateBikeTourModalContent(
    AGGIORNAMENTO OPZIONI BIKE
    ========================================================= */
 
-function updateBikeTourOptions(
-    experience
-) {
-    const tour =
-        getSelectedBikeTour(
-            experience
-        );
-
-    if (!tour) {
+function updateBikeTourOptions(experience) {
+    if (!isBikeExperience(experience)) {
         return;
     }
 
-    const electricWrapper =
+    const electricCount =
         document.getElementById(
-            "bike-electric-wrapper"
+            "bike-electric-count"
         );
 
-    const childWrapper =
+    const childSeatCount =
         document.getElementById(
-            "bike-child-wrapper"
+            "bike-child-seat-count"
         );
 
-    const electricOption =
+    const electricPlus =
         document.getElementById(
-            "bike-electric-option"
+            "bike-electric-plus"
         );
 
-    const childSeatOption =
+    const electricMinus =
         document.getElementById(
-            "bike-child-seat-option"
+            "bike-electric-minus"
         );
 
-    if (electricOption) {
-        electricOption.checked =
-            selectedBikeElectric;
-    }
+    const childSeatPlus =
+        document.getElementById(
+            "bike-child-seat-plus"
+        );
 
-    if (childSeatOption) {
-        childSeatOption.checked =
-            selectedBikeChildSeat;
-    }
+    const childSeatMinus =
+        document.getElementById(
+            "bike-child-seat-minus"
+        );
 
-    if (electricWrapper) {
-        electricWrapper.style.display =
-            bikeTourHasElectricBike(
-                tour
-            )
-                ? "flex"
-                : "none";
+    const maxQuantity =
+        Math.max(
+            0,
+            Number(
+                selectedBikeAdults
+            ) || 0
+        );
+
+    if (
+        selectedBikeElectricBikes >
+        maxQuantity
+    ) {
+        selectedBikeElectricBikes =
+            maxQuantity;
     }
 
     if (
-        !bikeTourHasElectricBike(
-            tour
-        )
+        selectedBikeChildSeats >
+        maxQuantity
     ) {
-        selectedBikeElectric =
-            false;
+        selectedBikeChildSeats =
+            maxQuantity;
     }
 
-    const languages =
-        getBikeTourLanguages(
-            experience,
-            tour
-        );
-
-    const languageSelect =
-        document.getElementById(
-            "bike-language"
-        );
-
-    if (languageSelect) {
-        languageSelect.innerHTML =
-            languages
-                .map(
-                    language => `
-                        <option
-                            value="${language}"
-                            ${
-                                getBikeTourLanguageValue(
-                                    experience,
-                                    tour
-                                ) === language
-                                    ? "selected"
-                                    : ""
-                            }
-                        >
-                            ${language}
-                        </option>
-                    `
-                )
-                .join("");
-
-        const selectedLanguage =
-            getBikeTourLanguageValue(
-                experience,
-                tour
-            );
-
-        languageSelect.value =
-            selectedLanguage;
-
-        selectedBikeLanguage =
-            selectedLanguage;
+    if (electricCount) {
+        electricCount.textContent =
+            selectedBikeElectricBikes;
     }
 
-    if (childWrapper) {
-        childWrapper.style.display =
-            "flex";
+    if (childSeatCount) {
+        childSeatCount.textContent =
+            selectedBikeChildSeats;
+    }
+
+    if (electricMinus) {
+        electricMinus.disabled =
+            selectedBikeElectricBikes <= 0;
+    }
+
+    if (electricPlus) {
+        electricPlus.disabled =
+            selectedBikeElectricBikes >=
+            maxQuantity;
+    }
+
+    if (childSeatMinus) {
+        childSeatMinus.disabled =
+            selectedBikeChildSeats <= 0;
+    }
+
+    if (childSeatPlus) {
+        childSeatPlus.disabled =
+            selectedBikeChildSeats >=
+            maxQuantity;
     }
 }
 
@@ -2309,15 +2279,30 @@ function updateBikeTourPriceDisplay(
         return;
     }
 
-    const pricePerPerson =
-        getBikeTourPricePerPerson(
+    const basePrice =
+        getBikeTourBasePrice(
             tour
         );
 
-    const participantsSelect =
-        document.getElementById(
-            "pizza-participants"
-        );
+    const electricBikePrice =
+        Number(
+            selectedBikeElectricBikes
+        ) * 15;
+
+    const childSeatPrice =
+        Number(
+            selectedBikeChildSeats
+        ) * 5;
+
+    const totalPrice =
+        (
+            basePrice *
+            Number(
+                selectedBikeAdults
+            )
+        ) +
+        electricBikePrice +
+        childSeatPrice;
 
     const totalElement =
         document.getElementById(
@@ -2334,18 +2319,30 @@ function updateBikeTourPriceDisplay(
             "modal-experience-type"
         );
 
-    const participants =
-        participantsSelect
-            ? parseInt(
-                  participantsSelect.value,
-                  10
-              ) || 1
-            : 1;
+    const adultsCountElement =
+        document.getElementById(
+            "bike-adults-count"
+        );
+
+    const childrenCountElement =
+        document.getElementById(
+            "bike-children-count"
+        );
+
+    if (adultsCountElement) {
+        adultsCountElement.textContent =
+            selectedBikeAdults;
+    }
+
+    if (childrenCountElement) {
+        childrenCountElement.textContent =
+            selectedBikeChildren;
+    }
 
     if (modalPriceElement) {
         modalPriceElement.textContent =
             `${formatPrice(
-                pricePerPerson
+                basePrice
             )} / persona`;
     }
 
@@ -2357,8 +2354,7 @@ function updateBikeTourPriceDisplay(
     if (totalElement) {
         totalElement.textContent =
             formatPrice(
-                pricePerPerson *
-                    participants
+                totalPrice
             );
     }
 }
@@ -2787,63 +2783,168 @@ function openExperienceModal(
                             "
                         >
 
-                            <label
-                                id="bike-electric-wrapper"
-                                style="
-                                    display:flex;
-                                    align-items:center;
-                                    gap:10px;
-                                    cursor:pointer;
-                                "
-                            >
+                            <div
+    id="bike-electric-wrapper"
+    style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+    "
+>
 
-                                <input
-                                    type="checkbox"
-                                    id="bike-electric-option"
-                                    ${
-                                        selectedBikeElectric
-                                            ? "checked"
-                                            : ""
-                                    }
-                                >
+    <div>
+        <div style="font-weight:600;">
+            E-bike
+        </div>
 
-                                <span>
-                                    E-bike
-                                    <strong>
-                                        +15 € / persona
-                                    </strong>
-                                </span>
+        <div
+            style="
+                font-size:13px;
+                opacity:0.7;
+                margin-top:2px;
+            "
+        >
+            +15 € ciascuna
+        </div>
+    </div>
 
-                            </label>
+    <div
+        style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+        "
+    >
 
-                            <label
-                                id="bike-child-wrapper"
-                                style="
-                                    display:flex;
-                                    align-items:center;
-                                    gap:10px;
-                                    cursor:pointer;
-                                "
-                            >
+        <button
+            type="button"
+            id="bike-electric-minus"
+            style="
+                width:34px;
+                height:34px;
+                border:1px solid #ddd;
+                border-radius:50%;
+                background:transparent;
+                cursor:pointer;
+                font-size:18px;
+            "
+        >
+            −
+        </button>
 
-                                <input
-                                    type="checkbox"
-                                    id="bike-child-seat-option"
-                                    ${
-                                        selectedBikeChildSeat
-                                            ? "checked"
-                                            : ""
-                                    }
-                                >
+        <span
+            id="bike-electric-count"
+            style="
+                min-width:20px;
+                text-align:center;
+                font-weight:600;
+            "
+        >
+            ${selectedBikeElectricBikes}
+        </span>
 
-                                <span>
-                                    Seggiolino bambino
-                                    <strong>
-                                        +5 € / persona
-                                    </strong>
-                                </span>
+        <button
+            type="button"
+            id="bike-electric-plus"
+            style="
+                width:34px;
+                height:34px;
+                border:1px solid #ddd;
+                border-radius:50%;
+                background:transparent;
+                cursor:pointer;
+                font-size:18px;
+            "
+        >
+            +
+        </button>
 
-                            </label>
+    </div>
+
+</div>
+
+
+<div
+    id="bike-child-wrapper"
+    style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+    "
+>
+
+    <div>
+        <div style="font-weight:600;">
+            Seggiolini
+        </div>
+
+        <div
+            style="
+                font-size:13px;
+                opacity:0.7;
+                margin-top:2px;
+            "
+        >
+            +5 € ciascuno
+        </div>
+    </div>
+
+    <div
+        style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+        "
+    >
+
+        <button
+            type="button"
+            id="bike-child-seat-minus"
+            style="
+                width:34px;
+                height:34px;
+                border:1px solid #ddd;
+                border-radius:50%;
+                background:transparent;
+                cursor:pointer;
+                font-size:18px;
+            "
+        >
+            −
+        </button>
+
+        <span
+            id="bike-child-seat-count"
+            style="
+                min-width:20px;
+                text-align:center;
+                font-weight:600;
+            "
+        >
+            ${selectedBikeChildSeats}
+        </span>
+
+        <button
+            type="button"
+            id="bike-child-seat-plus"
+            style="
+                width:34px;
+                height:34px;
+                border:1px solid #ddd;
+                border-radius:50%;
+                background:transparent;
+                cursor:pointer;
+                font-size:18px;
+            "
+        >
+            +
+        </button>
+
+    </div>
+
+</div>
 
                         </div>
 
@@ -3177,17 +3278,193 @@ function openExperienceModal(
 
                     <div>
 
-                        <label for="pizza-participants">
-                            Persone
-                        </label>
+                        ${
+    isBikeExperience(experience)
+        ? `
+            <div
+                id="bike-participants-wrapper"
+                style="
+                    display:flex;
+                    flex-direction:column;
+                    gap:14px;
+                "
+            >
 
-                        <select
-                            id="pizza-participants"
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        gap:15px;
+                    "
+                >
+
+                    <div>
+                        <div style="font-weight:600;">
+                            Adulti
+                        </div>
+
+                        <div
+                            style="
+                                font-size:13px;
+                                opacity:0.7;
+                                margin-top:2px;
+                            "
                         >
+                            1 bicicletta per adulto
+                        </div>
+                    </div>
 
-                            ${participantOptionsHtml}
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:10px;
+                        "
+                    >
 
-                        </select>
+                        <button
+                            type="button"
+                            id="bike-adults-minus"
+                            style="
+                                width:34px;
+                                height:34px;
+                                border-radius:50%;
+                                border:1px solid rgba(0,0,0,0.15);
+                                background:transparent;
+                                font-size:20px;
+                                cursor:pointer;
+                            "
+                        >
+                            −
+                        </button>
+
+                        <span
+                            id="bike-adults-count"
+                            style="
+                                min-width:20px;
+                                text-align:center;
+                                font-weight:600;
+                            "
+                        >
+                            ${selectedBikeAdults}
+                        </span>
+
+                        <button
+                            type="button"
+                            id="bike-adults-plus"
+                            style="
+                                width:34px;
+                                height:34px;
+                                border-radius:50%;
+                                border:1px solid rgba(0,0,0,0.15);
+                                background:transparent;
+                                font-size:20px;
+                                cursor:pointer;
+                            "
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        gap:15px;
+                    "
+                >
+
+                    <div>
+                        <div style="font-weight:600;">
+                            Bambini
+                        </div>
+
+                        <div
+                            style="
+                                font-size:13px;
+                                opacity:0.7;
+                                margin-top:2px;
+                            "
+                        >
+                            Fino a 8 anni · gratuito
+                        </div>
+                    </div>
+
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:10px;
+                        "
+                    >
+
+                        <button
+                            type="button"
+                            id="bike-children-minus"
+                            style="
+                                width:34px;
+                                height:34px;
+                                border-radius:50%;
+                                border:1px solid rgba(0,0,0,0.15);
+                                background:transparent;
+                                font-size:20px;
+                                cursor:pointer;
+                            "
+                        >
+                            −
+                        </button>
+
+                        <span
+                            id="bike-children-count"
+                            style="
+                                min-width:20px;
+                                text-align:center;
+                                font-weight:600;
+                            "
+                        >
+                            ${selectedBikeChildren}
+                        </span>
+
+                        <button
+                            type="button"
+                            id="bike-children-plus"
+                            style="
+                                width:34px;
+                                height:34px;
+                                border-radius:50%;
+                                border:1px solid rgba(0,0,0,0.15);
+                                background:transparent;
+                                font-size:20px;
+                                cursor:pointer;
+                            "
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        `
+        : `
+            <label for="pizza-participants">
+                Persone
+            </label>
+
+            <select
+                id="pizza-participants"
+            >
+                ${participantOptionsHtml}
+            </select>
+        `
+}
 
                     </div>
 
@@ -3537,21 +3814,14 @@ function setupBikeTourSelector(
             selectedBikeTourId =
                 selector.value;
 
-            selectedBikeElectric =
-                false;
+            selectedBikeElectricBikes =
+                0;
 
-            selectedBikeChildSeat =
-                false;
+            selectedBikeChildSeats =
+                0;
 
             selectedBikeLanguage =
                 "";
-
-            /*
-             * Non chiudiamo e non
-             * riapriamo il modal.
-             * Aggiorniamo direttamente
-             * tutti i contenuti.
-             */
 
             updateBikeTourModalContent(
                 experience
@@ -3580,18 +3850,30 @@ function setupBikeTourSelector(
         );
     }
 
-    const electricOption =
+    /*
+     * ADULTI
+     */
+
+    const adultsPlus =
         document.getElementById(
-            "bike-electric-option"
+            "bike-adults-plus"
         );
 
-    if (electricOption) {
-        electricOption.addEventListener(
-            "change",
+    const adultsMinus =
+        document.getElementById(
+            "bike-adults-minus"
+        );
+
+    if (adultsPlus) {
+        adultsPlus.addEventListener(
+            "click",
             function () {
 
-                selectedBikeElectric =
-                    electricOption.checked;
+                selectedBikeAdults++;
+
+                updateBikeTourOptions(
+                    experience
+                );
 
                 updateBikeTourPriceDisplay(
                     experience
@@ -3600,22 +3882,208 @@ function setupBikeTourSelector(
         );
     }
 
-    const childSeatOption =
-        document.getElementById(
-            "bike-child-seat-option"
-        );
-
-    if (childSeatOption) {
-        childSeatOption.addEventListener(
-            "change",
+    if (adultsMinus) {
+        adultsMinus.addEventListener(
+            "click",
             function () {
 
-                selectedBikeChildSeat =
-                    childSeatOption.checked;
+                if (
+                    selectedBikeAdults >
+                    1
+                ) {
+                    selectedBikeAdults--;
+
+                    updateBikeTourOptions(
+                        experience
+                    );
+
+                    updateBikeTourPriceDisplay(
+                        experience
+                    );
+                }
+            }
+        );
+    }
+
+    /*
+     * BAMBINI
+     */
+
+    const childrenPlus =
+        document.getElementById(
+            "bike-children-plus"
+        );
+
+    const childrenMinus =
+        document.getElementById(
+            "bike-children-minus"
+        );
+
+    if (childrenPlus) {
+        childrenPlus.addEventListener(
+            "click",
+            function () {
+
+                selectedBikeChildren++;
 
                 updateBikeTourPriceDisplay(
                     experience
                 );
+            }
+        );
+    }
+
+    if (childrenMinus) {
+        childrenMinus.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    selectedBikeChildren >
+                    0
+                ) {
+                    selectedBikeChildren--;
+
+                    updateBikeTourPriceDisplay(
+                        experience
+                    );
+                }
+            }
+        );
+    }
+
+    /*
+     * E-BIKE
+     */
+
+    const electricPlus =
+        document.getElementById(
+            "bike-electric-plus"
+        );
+
+    const electricMinus =
+        document.getElementById(
+            "bike-electric-minus"
+        );
+
+    if (electricPlus) {
+        electricPlus.addEventListener(
+            "click",
+            function () {
+
+                const maxQuantity =
+                    Math.max(
+                        0,
+                        Number(
+                            selectedBikeAdults
+                        ) || 0
+                    );
+
+                if (
+                    selectedBikeElectricBikes <
+                    maxQuantity
+                ) {
+                    selectedBikeElectricBikes++;
+
+                    updateBikeTourOptions(
+                        experience
+                    );
+
+                    updateBikeTourPriceDisplay(
+                        experience
+                    );
+                }
+            }
+        );
+    }
+
+    if (electricMinus) {
+        electricMinus.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    selectedBikeElectricBikes >
+                    0
+                ) {
+                    selectedBikeElectricBikes--;
+
+                    updateBikeTourOptions(
+                        experience
+                    );
+
+                    updateBikeTourPriceDisplay(
+                        experience
+                    );
+                }
+            }
+        );
+    }
+
+    /*
+     * SEGGIOLINI
+     */
+
+    const childSeatPlus =
+        document.getElementById(
+            "bike-child-seat-plus"
+        );
+
+    const childSeatMinus =
+        document.getElementById(
+            "bike-child-seat-minus"
+        );
+
+    if (childSeatPlus) {
+        childSeatPlus.addEventListener(
+            "click",
+            function () {
+
+                const maxQuantity =
+                    Math.max(
+                        0,
+                        Number(
+                            selectedBikeAdults
+                        ) || 0
+                    );
+
+                if (
+                    selectedBikeChildSeats <
+                    maxQuantity
+                ) {
+                    selectedBikeChildSeats++;
+
+                    updateBikeTourOptions(
+                        experience
+                    );
+
+                    updateBikeTourPriceDisplay(
+                        experience
+                    );
+                }
+            }
+        );
+    }
+
+    if (childSeatMinus) {
+        childSeatMinus.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    selectedBikeChildSeats >
+                    0
+                ) {
+                    selectedBikeChildSeats--;
+
+                    updateBikeTourOptions(
+                        experience
+                    );
+
+                    updateBikeTourPriceDisplay(
+                        experience
+                    );
+                }
             }
         );
     }
@@ -3628,7 +4096,6 @@ function setupBikeTourSelector(
         experience
     );
 }
-
 /* =========================================================
    AGGIORNAMENTO CARD BIKE
    ========================================================= */
@@ -4228,19 +4695,24 @@ function setupExperienceBooking(
         );
 
     const participantsSelect =
-        document.getElementById(
-            "pizza-participants"
-        );
+    document.getElementById(
+        "pizza-participants"
+    );
 
-    if (
-        !dateInput ||
-        !participantsSelect
-    ) {
-        return;
-    }
+if (!dateInput) {
+    return;
+}
+
+if (
+    !participantsSelect &&
+    !isBikeExperience(experience)
+) {
+    return;
+}
 
     setMinimumDate();
 
+    if (participantsSelect) {
     participantsSelect.addEventListener(
         "change",
         function () {
@@ -4263,6 +4735,7 @@ function setupExperienceBooking(
             );
         }
     );
+}
 
     updateExperiencePrice(
         experience,
