@@ -3243,3 +3243,196 @@ a {
     }
 
 }
+/* =========================================================
+   ESPERIENZE IN EVIDENZA
+   ========================================================= */
+
+.featured-experiences {
+    padding: 42px 0 34px;
+    background: var(--white);
+}
+
+.featured-heading {
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.featured-heading .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.featured-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+}
+
+.featured-card-image {
+    width: 100%;
+    height: 175px;
+    overflow: hidden;
+    background: #ececf0;
+}
+
+.featured-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+        transform 0.35s ease;
+}
+
+.featured-card:hover
+.featured-card-image img {
+    transform: scale(1.04);
+}
+
+.featured-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 13px;
+    padding: 17px 16px 18px;
+    text-align: center;
+}
+
+.featured-card-title {
+    width: 100%;
+    color: var(--text);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+}
+
+.featured-card-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 17px;
+    border: none;
+    border-radius: 999px;
+    background: var(--black);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.featured-card:hover
+.featured-card-button {
+    background: var(--accent);
+}
+
+@media (max-width: 980px) {
+
+    .featured-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .featured-card-image {
+        height: 150px;
+    }
+
+    .featured-card-title {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .featured-experiences {
+        padding: 30px 0 25px;
+    }
+
+    .featured-heading {
+        margin-bottom: 18px;
+    }
+
+    .featured-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .featured-card {
+        border-radius: 13px;
+    }
+
+    .featured-card-image {
+        height: 105px;
+    }
+
+    .featured-card-content {
+        gap: 9px;
+        padding: 10px 7px 11px;
+    }
+
+    .featured-card-title {
+        font-size: 12px;
+        line-height: 1.2;
+    }
+
+    .featured-card-button {
+        min-height: 31px;
+        padding: 6px 11px;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .featured-grid {
+        gap: 7px;
+    }
+
+    .featured-card-image {
+        height: 92px;
+    }
+
+    .featured-card-content {
+        padding:
+            9px 5px 10px;
+    }
+
+    .featured-card-title {
+        font-size: 11px;
+    }
+
+    .featured-card-button {
+        min-height: 29px;
+        padding:
+            5px 9px;
+        font-size: 8px;
+    }
+}
