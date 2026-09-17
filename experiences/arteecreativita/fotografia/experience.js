@@ -90,6 +90,7 @@ window.fotografiaExperience = {
         "6 ore: 170 € a persona",
         "Orario indicativo dalle 9:30",
         "L'orario può essere concordato con i clienti",
+        "La conferma dell’attività prevede un acconto di 20 € per persona.",
         "Il percorso viene personalizzato insieme all'operatore",
         "Non è necessario possedere una macchina fotografica professionale",
         "È possibile utilizzare qualsiasi dispositivo di scatto utile all'attività, incluso lo smartphone",
