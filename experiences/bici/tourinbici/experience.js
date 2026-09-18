@@ -171,7 +171,7 @@ Una splendida vista su Castel dell'Ovo e sul Golfo di Napoli allieterà il vostr
                 "Durata: 3 ore",
                 "Distanza: 8–10 km",
                 "Difficoltà: Facile",
-                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
+                "Per bloccare l'attività è richiesto un acconto. Il restante importo sarà saldato direttamente in struttura."
             ]
         },
 
