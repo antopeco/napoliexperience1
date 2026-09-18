@@ -8,7 +8,7 @@ window.bikeToursExperience = {
 
     categoryLabel: "Tour in Bici",
 
-    price: 40,
+    price: 50,
 
     priceType: "perPerson",
 
@@ -81,7 +81,7 @@ Seleziona il tour che preferisci per visualizzare tutti i dettagli, l'itinerario
             title:
                 "Napoli, sito patrimonio mondiale dell'UNESCO",
 
-            price: 40,
+            price: 50,
 
             duration: "3 ore",
 
@@ -171,7 +171,7 @@ Una splendida vista su Castel dell'Ovo e sul Golfo di Napoli allieterà il vostr
                 "Durata: 3 ore",
                 "Distanza: 8–10 km",
                 "Difficoltà: Facile",
-                "Per bloccare l'attività è richiesto un acconto. Il restante importo sarà saldato direttamente in struttura."
+                "Per bloccare l'attività è richiesto un acconto Il restante importo sarà saldato direttamente in struttura."
             ]
         },
 
@@ -181,7 +181,7 @@ Una splendida vista su Castel dell'Ovo e sul Golfo di Napoli allieterà il vostr
             title:
                 "Posillipo e Pozzuoli",
 
-            price: 70,
+            price: 80,
 
             duration: "3 ore",
 
@@ -291,7 +291,7 @@ La nostra guida vi fornirà maggiori dettagli sulla storia della zona e sui prog
             title:
                 "Il Golfo di Napoli e il Colle di Posillipo",
 
-            price: 50,
+            price: 60,
 
             duration: "3 ore",
 
@@ -365,7 +365,7 @@ Come ricompensa finale della nostra pedalata, raggiungiamo il Parco Virgilio, ch
             title:
                 "Un lago, un vigneto e un assaggio dei Campi Flegrei",
 
-            price: 85,
+            price: 95,
 
             duration: "3 ore",
 
@@ -462,7 +462,7 @@ Le nostre guide esperte vi forniranno maggiori informazioni su questi luoghi mag
             title:
                 "Vie navigabili per Miseno",
 
-            price: 75,
+            price: 85,
 
             duration: "3 ore",
 
@@ -549,7 +549,7 @@ Viaggio di ritorno facoltativo con la ferrovia di Cumana, biglietti non inclusi.
                 "Difficoltà: Medio-Alta",
                 "Media con e-bike",
                 "Rientro facoltativo con la ferrovia di Cumana",
-                "Per bloccare l'attività è richiesto un acconto Il restante importo sarà saldato direttamente in struttura."
+                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
             ]
         }
     ]
