@@ -6,7 +6,7 @@ window.fotografiaExperience = {
     category: "art",
     categoryLabel: "ARTE E CREATIVITÀ",
 
-    price: 140,
+    price: 150,
     priceType: "perPerson",
 
     minParticipants: 1,
@@ -102,13 +102,13 @@ window.fotografiaExperience = {
             {
                 id: "3-hours",
                 label: "Tour fotografico 3 ore",
-                price: 140,
+                price: 150,
                 priceType: "perPerson"
             },
             {
                 id: "6-hours",
                 label: "Tour fotografico 6 ore",
-                price: 170,
+                price: 175,
                 priceType: "perPerson"
             }
         ]
