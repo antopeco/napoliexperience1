@@ -1,4 +1,4 @@
-window.pastaTiramisuExperience = {
+window.pizzaTiramisuExperience = {
     id: "pasta-tiramisu",
 
     title: "Lezione di cucina a Napoli: Pasta fresca e Tiramisù con chef locale",
