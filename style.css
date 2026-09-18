@@ -2014,13 +2014,10 @@ a {
 
 
     .experience-card-title {
-
-        margin-bottom: 8px;
-
-        font-size: 20px;
-
-        line-height: 1.2;
-    }
+    margin-bottom: 6px;
+    font-size: 14px;
+    line-height: 1.2;
+}
 
 
     .experience-card-description {
