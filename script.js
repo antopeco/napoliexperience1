@@ -5704,3 +5704,83 @@ bikeExtrasObserver.observe(
         subtree: true
     }
 );
+
+
+/* =========================================================
+   FIX ARTE E CREATIVITÀ - GOOGLE TRANSLATE
+   ========================================================= */
+
+(function () {
+    const artFiles = [
+        {
+            url: "https://antopeco.github.io/napoliexperience1/experiences/arteecreativita/ceramica/experience.js",
+            name: "ceramicaExperience"
+        },
+        {
+            url: "https://antopeco.github.io/napoliexperience1/experiences/arteecreativita/fotografia/experience.js",
+            name: "fotografiaExperience"
+        }
+    ];
+
+    function loadArtFile(file) {
+        return new Promise(function (resolve) {
+            if (window[file.name]) {
+                resolve(window[file.name]);
+                return;
+            }
+
+            const script = document.createElement("script");
+            script.src = file.url;
+            script.async = false;
+
+            script.onload = function () {
+                resolve(window[file.name] || null);
+            };
+
+            script.onerror = function () {
+                console.error("Errore caricamento Arte e Creatività:", file.url);
+                resolve(null);
+            };
+
+            document.head.appendChild(script);
+        });
+    }
+
+    function installArtExperiences() {
+        Promise.all(artFiles.map(loadArtFile)).then(function (items) {
+            items.forEach(function (experience) {
+                if (!experience) {
+                    return;
+                }
+
+                if (!experiences.some(function (item) {
+                    return item.id === experience.id;
+                })) {
+                    experiences.push(experience);
+                }
+            });
+
+            renderExperiences();
+            renderFeaturedExperiences();
+
+            const artButton = document.querySelector('.filter-button[data-filter="art"]');
+
+            if (artButton) {
+                artButton.addEventListener("click", function (event) {
+                    event.stopImmediatePropagation();
+                    activeCategory = "art";
+                    document.querySelectorAll(".filter-button").forEach(function (button) {
+                        button.classList.toggle("active", button === artButton);
+                    });
+                    renderExperiences();
+                }, true);
+            }
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", installArtExperiences);
+    } else {
+        installArtExperiences();
+    }
+})();
