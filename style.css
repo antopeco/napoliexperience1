@@ -529,23 +529,8 @@ a {
 
 
 .experience-card-description {
-
-    margin-bottom: 22px;
-
-    color: var(--muted);
-
-    font-size: 14px;
-
-    display: -webkit-box;
-
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
+    display: none;
 }
-
 
 .experience-card-footer {
 
@@ -1894,7 +1879,7 @@ a {
 
         inset: 0;
 
-        display: flex;
+        display: none;
 
         align-items: center;
 
@@ -3617,4 +3602,107 @@ PULSANTE EN - MOBILE
     color: #e58a2b;
 }
 
+}
+/* =========================================================
+   X MODAL - POSIZIONE MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .modal-close {
+        top: 42px;
+        right: 12px;
+    }
+
+}
+/* =========================================================
+   X MODAL - MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .modal-close {
+        position: absolute;
+        top: 42px;
+        right: 12px;
+
+        z-index: 50;
+
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(4px);
+    }
+
+}
+/* =========================================================
+   MOBILE - CARD ESPERIENZE COMPATTE
+   Layout orizzontale stile lista risultati
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .catalog-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .experience-card {
+        display: grid;
+        grid-template-columns: 118px minmax(0, 1fr);
+        width: 100%;
+        height: 142px;
+        min-height: 142px;
+        overflow: hidden;
+        border-radius: 14px;
+    }
+
+    .experience-card-image {
+        width: 118px;
+        height: 142px;
+        min-height: 142px;
+        object-fit: cover;
+    }
+
+    .experience-card-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 12px 12px 10px;
+    }
+
+}
+/* =========================================================
+   GALLERIA MOBILE - SOLO PALLINI
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .gallery-arrow {
+        display: none !important;
+    }
+
+    .gallery-dots button,
+    .gallery-dots .dot {
+        background: rgba(108, 60, 150, 0.45) !important;
+        opacity: 0.85;
+    }
+
+    .gallery-dots button.active,
+    .gallery-dots .dot.active {
+        background: rgba(108, 60, 150, 0.78) !important;
+        opacity: 1;
+    }
+
+}
+/* =========================================================
+   FRECCE AI LATI DELLE IMMAGINI - NASCOSTE
+   ========================================================= */
+
+.experience-card .gallery-arrow,
+.experience-card .image-arrow,
+.experience-card .slider-arrow,
+.experience-card .carousel-arrow {
+    display: none !important;
 }
