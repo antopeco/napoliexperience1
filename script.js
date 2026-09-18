@@ -370,15 +370,28 @@ function getBikeTourPricePerPerson(tour) {
             tour
         );
 
-    price +=
-    Number(
-        selectedBikeElectricBikes
-    ) * 15;
+    /*
+     * Maggiorazione catalogo:
+     * +10 € per persona sul prezzo reale del tour.
+     */
 
-price +=
-    Number(
-        selectedBikeChildSeats
-    ) * 5;
+    price += 10;
+
+    /*
+     * Extra invariati:
+     * E-bike: +15 €
+     * Seggiolino: +5 €
+     */
+
+    price +=
+        Number(
+            selectedBikeElectricBikes
+        ) * 15;
+
+    price +=
+        Number(
+            selectedBikeChildSeats
+        ) * 5;
 
     return price;
 }
@@ -1286,45 +1299,52 @@ function renderExperiences() {
                 );
 
             /*
-             * Tour in Bici:
-             * una sola card dinamica.
-             */
+ * Tour in Bici:
+ * la card principale mostra
+ * solo il prezzo minimo disponibile.
+ */
 
-            if (
-                isBikeExperience(
-                    experience
+if (
+    isBikeExperience(
+        experience
+    )
+) {
+    cardTitle =
+        experience.title;
+
+    cardDescription =
+        experience.shortDescription;
+
+    cardDuration =
+        experience.duration;
+
+    const bikeTours =
+        getBikeTours(
+            experience
+        );
+
+    if (bikeTours.length) {
+        const minimumBikePrice =
+            Math.min(
+                ...bikeTours.map(
+                    tour =>
+                        getBikeTourBasePrice(
+                            tour
+                        )
                 )
-            ) {
-                const selectedTour =
-                    getSelectedBikeTour(
-                        experience
-                    );
+            );
 
-                if (selectedTour) {
-                    cardTitle =
-                        selectedTour.title;
-
-                    cardDescription =
-                        selectedTour.shortDescription ||
-                        selectedTour.description ||
-                        experience.shortDescription;
-
-                    cardDuration =
-                        selectedTour.duration;
-
-                    cardPrice =
-                        getBikeTourPricePerPerson(
-                            selectedTour
-                        );
-                }
-            }
+        cardPrice =
+            minimumBikePrice + 10;
+    }
+}
 
             const priceHtml =
-                cardPrice
-                    ? `${formatPrice(
-                          cardPrice
-                      )} / persona`
-                    : "Richiedi preventivo";
+    isBikeExperience(experience)
+        ? "Da 50 € / persona"
+        : cardPrice
+            ? `${formatPrice(cardPrice)} / persona`
+            : "Richiedi preventivo";
 
             card.innerHTML = `
                 <div class="experience-card-image">
@@ -5605,5 +5625,82 @@ document.addEventListener(
                     );
                 }
             );
+    }
+);
+// Nasconde il selettore dalla card preliminare "Tour in Bici"
+const hideBikeCardSelector = () => {
+    document
+        .querySelectorAll(".bike-card-selector-wrapper")
+        .forEach((selector) => {
+            selector.style.display = "none";
+        });
+};
+
+hideBikeCardSelector();
+
+const bikeCardObserver = new MutationObserver(() => {
+    hideBikeCardSelector();
+});
+
+bikeCardObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+// Sposta E-bike e Seggiolini sotto Adulti
+const moveBikeExtrasUnderAdults = () => {
+    const participants = document.getElementById(
+        "bike-participants-wrapper"
+    );
+
+    const electric = document.getElementById(
+        "bike-electric-wrapper"
+    );
+
+    const childSeat = document.getElementById(
+        "bike-child-wrapper"
+    );
+
+    if (
+        !participants ||
+        !electric ||
+        !childSeat
+    ) {
+        return;
+    }
+
+    const adultsRow = participants.children[0];
+
+    if (!adultsRow) {
+        return;
+    }
+
+    // Sposta solo se non sono già nella posizione corretta
+    if (adultsRow.nextElementSibling !== electric) {
+        adultsRow.insertAdjacentElement(
+            "afterend",
+            electric
+        );
+    }
+
+    if (electric.nextElementSibling !== childSeat) {
+        electric.insertAdjacentElement(
+            "afterend",
+            childSeat
+        );
+    }
+};
+
+moveBikeExtrasUnderAdults();
+
+const bikeExtrasObserver =
+    new MutationObserver(() => {
+        moveBikeExtrasUnderAdults();
+    });
+
+bikeExtrasObserver.observe(
+    document.body,
+    {
+        childList: true,
+        subtree: true
     }
 );
