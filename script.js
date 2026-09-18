@@ -382,6 +382,22 @@ price +=
 
     return price;
 }
+function getBikeTourPublicPrice(tour) {
+    const realPrice =
+        getBikeTourPricePerPerson(
+            tour
+        );
+
+    if (!realPrice) {
+        return 0;
+    }
+
+    return (
+        Math.round(
+            realPrice * 1.125 * 100
+        ) / 100
+    );
+}
 
 function getBikeTourWhatsAppMode(tour) {
     if (!tour) {
@@ -757,10 +773,23 @@ function getExperienceTotal(
         return 0;
     }
 
-    return (
+    const realTotal =
         Number(price) *
-        participants
-    );
+        participants;
+
+    if (
+        isBikeExperience(
+            experience
+        )
+    ) {
+        return (
+            Math.round(
+                realTotal * 1.125 * 100
+            ) / 100
+        );
+    }
+
+    return realTotal;
 }
 
 /* =========================================================
@@ -1313,9 +1342,9 @@ function renderExperiences() {
                         selectedTour.duration;
 
                     cardPrice =
-                        getBikeTourPricePerPerson(
-                            selectedTour
-                        );
+    getBikeTourPublicPrice(
+        selectedTour
+    );
                 }
             }
 
@@ -2588,10 +2617,18 @@ function openExperienceModal(
         );
 
     const initialPrice =
-        getSelectedPrice(
-            experience,
-            defaultMode
-        );
+    isBikeExperience(
+        experience
+    )
+        ? getBikeTourPublicPrice(
+              getSelectedBikeTour(
+                  experience
+              )
+          )
+        : getSelectedPrice(
+              experience,
+              defaultMode
+          );
 
     const initialType =
         getSelectedModeType(
@@ -5006,7 +5043,7 @@ Partecipanti: ${participants}
 
 Prezzo per persona: ${
                 tour
-                    ? getBikeTourPricePerPerson(
+                    ? getBikeTourPublicPrice(
                           tour
                       )
                     : ""
