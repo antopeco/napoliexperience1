@@ -549,7 +549,7 @@ Viaggio di ritorno facoltativo con la ferrovia di Cumana, biglietti non inclusi.
                 "Difficoltà: Medio-Alta",
                 "Media con e-bike",
                 "Rientro facoltativo con la ferrovia di Cumana",
-                "Per bloccare l'attività è richiesto un acconto del 10%. Il restante importo sarà saldato direttamente in struttura."
+                "Per bloccare l'attività è richiesto un acconto Il restante importo sarà saldato direttamente in struttura."
             ]
         }
     ]
