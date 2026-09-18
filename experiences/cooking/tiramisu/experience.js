@@ -1,8 +1,6 @@
 window.pizzaTiramisuExperience = {
-    id: "pasta-tiramisu",
-
-    title: "Lezione di cucina a Napoli: Pasta fresca e Tiramisù con chef locale",
-
+    id: "pizza-tiramisu",
+    title: "Lezione di Pizza e Tiramisù a Napoli: corso di cucina con chef locali",
     category: "cooking",
     categoryLabel: "Corsi di Cucina",
 
@@ -17,56 +15,66 @@ window.pizzaTiramisuExperience = {
     defaultMode: "shared",
 
     duration: "3 ore",
+    languages: "ITA / ENG / SPA / FRA",
 
-    languages: "ITA / ENG / FRA / SPA",
-
-    type: "Esperienza condivisa",
+    type: "Esperienza condivisa / privata",
 
     images: [
-        "images/pizzatiramisu1.jpg.webp",
-        "images/pizzatiramisu2.jpg.webp",
-        "images/pizzatiramisu3.jpg.webp",
-        "images/pizzatiramisu4.jpg.webp",
-        "images/pizzatiramisu5.jpg.webp"
+        "images/pizza-tiramisu-img-1-768x480.jpg.webp",
+        "images/pizza-tiramisu-img-2-768x480.jpg.webp",
+        "images/pizza-tiramisu-img-3-768x480.jpg.webp",
+        "images/pizza-tiramisu-img-4-768x480.jpg.webp",
+        "images/pizza-tiramisu-img-5-768x480.jpg.webp"
     ],
 
     shortDescription:
-        "Una lezione di cucina a Napoli di 3 ore dedicata alla preparazione della pasta fresca fatta a mano e del tiramisù tradizionale, guidata da uno chef locale. Al termine degusterai tutti i piatti preparati, con bevanda inclusa.",
+        "Una lezione di pizza e tiramisù a Napoli di 3 ore in un laboratorio di cucina locale. Prepari l'impasto e la pizza napoletana e realizzi il tiramisù tradizionale, guidato da chef locali. Dopo la lezione degusti la pizza e il tiramisù preparati, con bevande incluse.",
 
     description:
-        "Questa lezione di cucina a Napoli è pensata per chi vuole imparare a preparare piatti classici della cucina italiana attraverso un'esperienza pratica. L'attività si svolge in un laboratorio di cucina locale ed è guidata da uno chef napoletano.\n\n" +
-
-        "Dopo l'accoglienza e la consegna di cappello e grembiule, la lezione inizia con un'introduzione agli ingredienti utilizzati durante il corso, come ricotta fresca, Parmigiano stagionato e pomodori San Marzano DOP. Lo chef spiega le basi delle tecniche tradizionali italiane utilizzate per ottenere la consistenza perfetta e accompagna i partecipanti in ogni fase della preparazione.\n\n" +
-
-        "Durante il corso prepari l'impasto della pasta fresca interamente a mano. Dall'impasto realizzi due piatti: fettuccine Alfredo e ravioli ripieni di ricotta. In parallelo prepari le salse di accompagnamento, la salsa Alfredo e la classica salsa di pomodoro San Marzano.\n\n" +
-
-        "La seconda parte dell'esperienza è dedicata al tiramisù, il dolce Italiano più famoso. Prepari la crema al mascarpone e assembli il dolce strato dopo strato con savoiardi, caffè e cacao, creando una porzione personale.\n\n" +
-
-        "Al termine della lezione ti siedi e degusti tutti i piatti preparati in un ambiente informale e rilassato. Durante l'attività lo chef condivide spiegazioni e curiosità legate alla cucina e alla cultura gastronomica napoletana.\n\n" +
-
-        "Il corso è adatto a tutti i livelli di esperienza, anche a chi è alla prima lezione di cucina.",
+        "Questa lezione di pizza e tiramisù a Napoli è pensata per chi vuole imparare a preparare due piatti simbolo della cucina italiana attraverso un corso pratico. L'attività si svolge in un laboratorio di cucina locale ed è guidata da chef locali. Dopo l'accoglienza e la consegna di grembiule e cappello da chef, la lezione inizia con la parte dedicata alla pizza napoletana. Lo chef guida i partecipanti nella preparazione dell'impasto, spiegando le basi della lavorazione e della lievitazione. Si passa poi alla preparazione della tipica salsa di pomodoro San Marzano, alla stesura dell'impasto a mano e alla farcitura della pizza, fino alla cottura in forno. Dopo la degustazione della pizza, il corso prosegue con la lezione di tiramisù. Prepari la crema al mascarpone, impari a bilanciare gli ingredienti e a ottenere la giusta consistenza. Successivamente passi all'assemblaggio del dolce, con savoiardi inzuppati nel caffè e strati di crema, completando il tiramisù con cacao. Al termine dell'attività è prevista la degustazione del tiramisù preparato durante la lezione, accompagnato da un bicchierino di limoncello. Le bevande sono incluse durante l'esperienza. Il corso è adatto sia a principianti sia a chi ha già esperienza in cucina. La lezione è strutturata per permettere a tutti di partecipare attivamente e seguire ogni fase della preparazione.",
 
     program: [
-        "Introduzione agli ingredienti locali: ricotta, Parmigiano e pomodori San Marzano",
-        "Preparazione dell'impasto di pasta fresca a mano",
-        "Realizzazione delle fettuccine Alfredo",
-        "Preparazione dei ravioli ripieni di ricotta",
-        "Preparazione delle salse: Alfredo e salsa di pomodoro San Marzano",
-        "Preparazione e assemblaggio del tiramisù",
-        "Degustazione finale dei piatti preparati"
+        {
+            title: "Preparazione dell'impasto",
+            description:
+                "Preparazione dell'impasto della pizza napoletana con la guida dello chef."
+        },
+        {
+            title: "Preparazione della salsa di pomodoro",
+            description:
+                "Preparazione della salsa di pomodoro utilizzata per la pizza."
+        },
+        {
+            title: "Stesura, farcitura e cottura",
+            description:
+                "Stesura dell'impasto, farcitura della pizza napoletana e cottura in forno."
+        },
+        {
+            title: "Preparazione della crema al mascarpone",
+            description:
+                "Preparazione della crema al mascarpone seguendo le indicazioni dello chef."
+        },
+        {
+            title: "Assemblaggio del tiramisù",
+            description:
+                "Assemblaggio del tiramisù con savoiardi, caffè e crema al mascarpone."
+        },
+        {
+            title: "Degustazione finale",
+            description:
+                "Degustazione della pizza e del tiramisù preparati durante la lezione, con limoncello."
+        }
     ],
 
     included: [
-        "Corso di cucina con chef locale professionista",
-        "Preparazione pratica di pasta fresca e tiramisù",
-        "Preparazione di fettuccine Alfredo e ravioli di ricotta",
-        "Preparazione di due salse con lo chef: salsa Alfredo e salsa di pomodoro San Marzano",
-        "Degustazione di tutti i piatti preparati",
-        "Acqua illimitata",
-        "Bevanda analcolica o calice di vino bianco/rosso o birra",
-        "Cappello e grembiule da chef",
-        "Diploma personalizzato Pasta & Tiramisù",
-        "Ricette digitali tramite QR code"
+        "Lezione di pizza napoletana",
+        "Lezione di tiramisù",
+        "Chef locali",
+        "Preparazione dell'impasto e della pizza",
+        "Preparazione e degustazione del tiramisù",
+        "Bevande alcoliche",
+        "Limoncello",
+        "Grembiule e cappello da chef"
     ],
 
     notIncluded: [
@@ -81,12 +89,13 @@ window.pizzaTiramisuExperience = {
     ],
 
     usefulInfo: [
+        "Durata dell'attività: 3 ore",
+        "Lingue: Italiano / Inglese / Spagnolo / Francese",
+        "Esperienza condivisa o privata",
         "Accessibile con passeggino",
         "Animali domestici ammessi",
-        "Animali di servizio ammessi",
-        "Trasporti pubblici nelle vicinanze",
+        "Non accessibile in sedia a rotelle",
         "Ai minori di 18 anni non vengono servite bevande alcoliche",
-        "Il laboratorio si trova nel centro storico di Napoli, a circa 5 minuti a piedi dalla stazione della metropolitana Duomo",
-        "Per ottenere il rimborso completo è necessario cancellare almeno 24 ore prima dell'inizio dell'attività"
+        "Il laboratorio si trova nel centro storico di Napoli, a circa 5 minuti a piedi dalla stazione metro Duomo",
     ]
 };
