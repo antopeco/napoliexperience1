@@ -1084,23 +1084,38 @@ function experienceMatchesCategory(
    IDENTIFICAZIONE CATEGORIA DEL PULSANTE
    ========================================================= */
 
-function getButtonCategory(
-    button
-) {
+function getButtonCategory(button) {
     if (!button) {
         return "all";
     }
 
+    /*
+     * Usa sempre il valore tecnico di data-filter.
+     * Google Translate modifica il testo visibile
+     * del pulsante, ma non deve modificare questa categoria.
+     */
+    const dataFilter =
+        button.getAttribute("data-filter");
+
+    if (dataFilter) {
+        const category =
+            canonicalizeCategory(dataFilter);
+
+        if (category) {
+            return category;
+        }
+    }
+
+    /*
+     * Fallback per eventuali pulsanti che non hanno
+     * data-filter.
+     */
     const dataCategory =
-        button.getAttribute(
-            "data-category"
-        );
+        button.getAttribute("data-category");
 
     if (dataCategory) {
         const categoryFromData =
-            canonicalizeCategory(
-                dataCategory
-            );
+            canonicalizeCategory(dataCategory);
 
         if (categoryFromData) {
             return categoryFromData;
@@ -1113,9 +1128,7 @@ function getButtonCategory(
             : "";
 
     const categoryFromText =
-        canonicalizeCategory(
-            buttonText
-        );
+        canonicalizeCategory(buttonText);
 
     if (categoryFromText) {
         return categoryFromText;
