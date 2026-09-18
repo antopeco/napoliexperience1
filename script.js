@@ -5784,3 +5784,27 @@ bikeExtrasObserver.observe(
         installArtExperiences();
     }
 })();
+
+
+/* =========================================================
+   FIX PULSANTE RICHIEDI DISPONIBILITÀ - TOUR IN BICI
+   ========================================================= */
+
+(function () {
+    document.addEventListener("click", function (event) {
+        const button = event.target.closest("#pizza-whatsapp-button");
+
+        if (!button) {
+            return;
+        }
+
+        if (!activeBookingExperience) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        requestExperienceAvailability(activeBookingExperience);
+    }, true);
+})();
