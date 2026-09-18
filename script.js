@@ -5704,107 +5704,406 @@ bikeExtrasObserver.observe(
         subtree: true
     }
 );
+/* =========================================================
+   FIX ARTE E CREATIVITÀ - VERSIONE FINALE
+   ========================================================= */
 
+(function () {
 
+    function forceArtCategory() {
+
+        const artButton =
+            document.querySelector(
+                '.filter-button[data-filter="art"]'
+            );
+
+        if (!artButton) {
+            return;
+        }
+
+        artButton.addEventListener(
+            "click",
+            function () {
+
+                setTimeout(
+                    function () {
+
+                        activeCategory = "art";
+
+                        renderExperiences();
+
+                    },
+                    0
+                );
+
+            },
+            false
+        );
+
+    }
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            forceArtCategory
+        );
+
+    } else {
+
+        forceArtCategory();
+
+    }
+
+})();
 /* =========================================================
    FIX ARTE E CREATIVITÀ - GOOGLE TRANSLATE
    ========================================================= */
 
 (function () {
-    const artFiles = [
+
+    const artExperiences = [
         {
-            url: "https://antopeco.github.io/napoliexperience1/experiences/arteecreativita/ceramica/experience.js",
-            name: "ceramicaExperience"
+            path: "https://antopeco.github.io/napoliexperience1/experiences/arteecreativita/ceramica/experience.js",
+            globalName: "ceramicaExperience"
         },
         {
-            url: "https://antopeco.github.io/napoliexperience1/experiences/arteecreativita/fotografia/experience.js",
-            name: "fotografiaExperience"
+            path: "https://antopeco.github.io/napoliexperience1/experiences/arteecreativita/fotografia/experience.js",
+            globalName: "fotografiaExperience"
         }
     ];
 
-    function loadArtFile(file) {
+    function loadArtExperience(item) {
+
         return new Promise(function (resolve) {
-            if (window[file.name]) {
-                resolve(window[file.name]);
+
+            if (window[item.globalName]) {
+                resolve(
+                    window[item.globalName]
+                );
                 return;
             }
 
-            const script = document.createElement("script");
-            script.src = file.url;
-            script.async = false;
+            const script =
+                document.createElement("script");
 
-            script.onload = function () {
-                resolve(window[file.name] || null);
-            };
+            script.src = item.path;
 
-            script.onerror = function () {
-                console.error("Errore caricamento Arte e Creatività:", file.url);
-                resolve(null);
-            };
+            script.onload =
+                function () {
+
+                    if (
+                        window[item.globalName]
+                    ) {
+                        resolve(
+                            window[item.globalName]
+                        );
+                    } else {
+                        console.error(
+                            "Esperienza Arte non trovata:",
+                            item.globalName
+                        );
+
+                        resolve(null);
+                    }
+                };
+
+            script.onerror =
+                function () {
+
+                    console.error(
+                        "Errore caricamento esperienza Arte:",
+                        item.path
+                    );
+
+                    resolve(null);
+                };
 
             document.head.appendChild(script);
         });
     }
 
-    function installArtExperiences() {
-        Promise.all(artFiles.map(loadArtFile)).then(function (items) {
-            items.forEach(function (experience) {
-                if (!experience) {
-                    return;
-                }
+    function loadAllArtExperiences() {
 
-                if (!experiences.some(function (item) {
-                    return item.id === experience.id;
-                })) {
-                    experiences.push(experience);
-                }
-            });
+        Promise.all(
+            artExperiences.map(
+                loadArtExperience
+            )
+        ).then(
+            function (loadedExperiences) {
 
-            renderExperiences();
-            renderFeaturedExperiences();
+                loadedExperiences.forEach(
+                    function (experience) {
 
-            const artButton = document.querySelector('.filter-button[data-filter="art"]');
+                        if (!experience) {
+                            return;
+                        }
 
-            if (artButton) {
-                artButton.addEventListener("click", function (event) {
-                    event.stopImmediatePropagation();
+                        const exists =
+                            experiences.some(
+                                function (item) {
+                                    return (
+                                        item.id ===
+                                        experience.id
+                                    );
+                                }
+                            );
+
+                        if (!exists) {
+                            experiences.push(
+                                experience
+                            );
+                        }
+                    }
+                );
+
+                /*
+                 * Se la pagina è stata tradotta,
+                 * forziamo comunque la categoria
+                 * interna "art".
+                 */
+
+                if (
+                    typeof activeCategory !==
+                    "undefined"
+                ) {
                     activeCategory = "art";
-                    document.querySelectorAll(".filter-button").forEach(function (button) {
-                        button.classList.toggle("active", button === artButton);
-                    });
-                    renderExperiences();
-                }, true);
+                }
+
+                renderExperiences();
             }
-        });
+        );
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", installArtExperiences);
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadAllArtExperiences
+        );
+
     } else {
-        installArtExperiences();
+
+        loadAllArtExperiences();
+
     }
+
 })();
-
-
 /* =========================================================
-   FIX PULSANTE RICHIEDI DISPONIBILITÀ - TOUR IN BICI
+   FIX WHATSAPP - TOUR IN BICI
+   Gestione diretta del pulsante disponibilità
    ========================================================= */
 
 (function () {
-    document.addEventListener("click", function (event) {
-        const button = event.target.closest("#pizza-whatsapp-button");
 
-        if (!button) {
-            return;
-        }
+    document.addEventListener(
+        "click",
+        function (event) {
 
-        if (!activeBookingExperience) {
-            return;
-        }
+            const button =
+                event.target.closest(
+                    "#pizza-whatsapp-button"
+                );
 
-        event.preventDefault();
-        event.stopPropagation();
+            if (!button) {
+                return;
+            }
 
-        requestExperienceAvailability(activeBookingExperience);
-    }, true);
+            if (!activeBookingExperience) {
+                return;
+            }
+
+            const experience =
+                activeBookingExperience;
+
+            /*
+             * Per tutte le esperienze NON bici
+             * lasciamo funzionare il sistema originale.
+             */
+            if (
+                getExperienceCategory(experience) !==
+                "bici"
+            ) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            const dateInput =
+                document.getElementById("pizza-date");
+
+            const date =
+                dateInput
+                    ? dateInput.value
+                    : "";
+
+            if (!date) {
+                alert(
+                    "Seleziona una data prima di richiedere la disponibilità."
+                );
+                return;
+            }
+
+            /*
+             * Recupera il tour bici selezionato.
+             */
+            const tour =
+                typeof getSelectedBikeTour === "function"
+                    ? getSelectedBikeTour(experience)
+                    : null;
+
+            if (!tour) {
+                alert(
+                    "Seleziona un tour in bici."
+                );
+                return;
+            }
+
+            /*
+             * Partecipanti.
+             */
+            const adults =
+                Number(selectedBikeAdults) || 0;
+
+            const children =
+                Number(selectedBikeChildren) || 0;
+
+            const participants =
+                adults + children;
+
+            if (participants <= 0) {
+                alert(
+                    "Seleziona almeno un partecipante."
+                );
+                return;
+            }
+
+            /*
+             * Extra bici.
+             */
+            const electricBikes =
+                Number(selectedBikeElectricBikes) || 0;
+
+            const childSeats =
+                Number(selectedBikeChildSeats) || 0;
+
+            /*
+             * Prezzo visualizzato per persona.
+             */
+            const pricePerPerson =
+                typeof getBikeTourPricePerPerson === "function"
+                    ? Number(
+                        getBikeTourPricePerPerson(tour)
+                    ) || 0
+                    : 0;
+
+            /*
+             * Totale.
+             */
+            const total =
+                pricePerPerson *
+                participants;
+
+            /*
+             * Lingua.
+             */
+            let language = "";
+
+            if (
+                typeof selectedBikeLanguage !==
+                "undefined"
+            ) {
+                language =
+                    selectedBikeLanguage || "";
+            }
+
+            /*
+             * Costruzione messaggio WhatsApp.
+             */
+            let message =
+                "Ciao, vorrei richiedere la disponibilità per un tour in bici.%0A%0A";
+
+            message +=
+                "Esperienza: " +
+                (experience.title || "Tour in bici") +
+                "%0A";
+
+            message +=
+                "Tour: " +
+                (tour.title || tour.name || "Tour bici") +
+                "%0A";
+
+            message +=
+                "Data: " +
+                date +
+                "%0A";
+
+            message +=
+                "Adulti: " +
+                adults +
+                "%0A";
+
+            message +=
+                "Bambini: " +
+                children +
+                "%0A";
+
+            message +=
+                "E-bike: " +
+                electricBikes +
+                "%0A";
+
+            message +=
+                "Seggiolino: " +
+                childSeats +
+                "%0A";
+
+            if (language) {
+                message +=
+                    "Lingua: " +
+                    language +
+                    "%0A";
+            }
+
+            message +=
+                "Prezzo per persona: €" +
+                pricePerPerson.toFixed(2) +
+                "%0A";
+
+            message +=
+                "Totale: €" +
+                total.toFixed(2) +
+                "%0A%0A";
+
+            message +=
+                "Vorrei sapere se l'attività è disponibile.";
+
+            /*
+             * Apertura WhatsApp.
+             */
+            const whatsappUrl =
+                "https://wa.me/" +
+                WHATSAPP_NUMBER +
+                "?text=" +
+                encodeURIComponent(
+                    decodeURIComponent(message)
+                );
+
+            window.open(
+                whatsappUrl,
+                "_blank"
+            );
+
+        },
+        true
+    );
+
 })();
